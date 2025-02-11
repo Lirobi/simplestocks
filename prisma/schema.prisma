@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Use environment variables for security
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String   @unique
+  password    String   // Ensure to hash passwords before storing
+  phone       String
+  birthDate   DateTime
+  role        String   @default("Employee") // e.g., Admin, Manager, Employee
+  business    Business? @relation(fields: [businessId], references: [id])
+  businessId  Int?
+  createdAt   DateTime @default(now())
+  lastLogin   DateTime?
+  status      String?  @default("Active") // Active/Inactive
+  address     String
+  city        String
+  postalCode  String
+  country     String
+  inventoryTransactions InventoryTransaction[]
+  sales       Sale[]
+  notifications Notification[]
+  auditLogs    AuditLog[]
+}
+
+model Business {
+  id                Int       @id @default(autoincrement())
+  name              String
+  address           String
+  city              String
+  postalCode        String
+  country           String
+  taxId             String?   // SIRET for France
+  subscriptionPlan  String    @default("Basic") // Basic, Pro, Enterprise
+  subscriptionStart DateTime?
+  subscriptionEnd   DateTime?
+  paymentStatus     String    @default("Unpaid") // Paid/Unpaid
+  users             User[]
+  products          Product[]
+  suppliers         Supplier[]
+  orders            PurchaseOrder[]
+  sales             Sale[]
+  categories        Category[]
+  reports           Report[]
+  settings          Setting[]
+  auditLogs         AuditLog[]
+  inventoryTransactions InventoryTransaction[]
+}
+
+model Product {
+  id              Int       @id @default(autoincrement())
+  name            String
+  description     String?
+  sku             String    @unique
+  barcode         String?
+  category        Category? @relation(fields: [categoryId], references: [id])
+  categoryId      Int?
+  unitPrice       Float
+  costPrice       Float
+  quantity        Int       @default(0)
+  minStockLevel   Int       @default(10) // Threshold for reorder alerts
+  supplier        Supplier? @relation(fields: [supplierId], references: [id])
+  supplierId      Int?
+  business        Business  @relation(fields: [businessId], references: [id])
+  businessId      Int
+  transactions    InventoryTransaction[]
+  sales          Sale[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Supplier {
+  id          Int       @id @default(autoincrement())
+  name        String
+  contactName String?
+  email       String?
+  phone       String?
+  address     String?
+  city        String?
+  postalCode  String?
+  country     String?
+  paymentTerms String?  // e.g., Net 30
+  business    Business  @relation(fields: [businessId], references: [id])
+  businessId  Int
+  products    Product[]
+  orders      PurchaseOrder[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model InventoryTransaction {
+  id          Int       @id @default(autoincrement())
+  type        String    // e.g., Purchase, Sale, Adjustment
+  quantity    Int
+  transactionDate DateTime @default(now())
+  notes       String?
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   Int
+  business    Business  @relation(fields: [businessId], references: [id])
+  businessId  Int
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+}
+
+model PurchaseOrder {
+  id                Int       @id @default(autoincrement())
+  orderDate         DateTime  @default(now())
+  expectedDelivery  DateTime?
+  totalCost         Float
+  status            String    @default("Pending") // Pending, Received, Cancelled
+  notes             String?
+  supplier          Supplier  @relation(fields: [supplierId], references: [id])
+  supplierId        Int
+  business          Business  @relation(fields: [businessId], references: [id])
+  businessId        Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model Sale {
+  id          Int       @id @default(autoincrement())
+  quantitySold Int
+  salePrice   Float
+  saleDate    DateTime  @default(now())
+  customerName String?
+  paymentMethod String? // e.g., Cash, Card, Online
+  notes       String?
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   Int
+  business    Business  @relation(fields: [businessId], references: [id])
+  businessId  Int
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  business    Business  @relation(fields: [businessId], references: [id])
+  businessId  Int
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Report {
+  id          Int       @id @default(autoincrement())
+  type        String    // e.g., Sales Report, Stock Report
+  generatedAt DateTime  @default(now())
+  data        String?   // JSON or file path
+  business    Business  @relation(fields: [businessId], references: [id])
+  businessId  Int
+}
+
+model Notification {
+  id          Int       @id @default(autoincrement())
+  message     String
+  type        String    // e.g., Reorder Alert, Subscription Reminder
+  status      String    @default("Unread") // Read/Unread
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime  @default(now())
+}
+
+model Setting {
+  id          Int       @id @default(autoincrement())
+  key         String    // e.g., Currency, Timezone
+  value       String    // e.g., EUR, Europe/Paris
+  business    Business  @relation(fields: [businessId], references: [id])
+  businessId  Int
+}
+
+model AuditLog {
+  id          Int       @id @default(autoincrement())
+  action      String    // e.g., Product Added, Stock Updated
+  timestamp   DateTime  @default(now())
+  details     String?   // JSON of changes made
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  business    Business  @relation(fields: [businessId], references: [id])
+  businessId  Int
+}

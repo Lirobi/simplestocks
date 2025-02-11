@@ -1,0 +1,27 @@
+2025-02-10 21:29:28.975 CET [19075] LOG:  starting PostgreSQL 17.2 (Postgres.app) on aarch64-apple-darwin23.6.0, compiled by Apple clang version 15.0.0 (clang-1500.3.9.4), 64-bit
+2025-02-10 21:29:28.977 CET [19075] LOG:  listening on IPv6 address "::1", port 5433
+2025-02-10 21:29:28.977 CET [19075] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2025-02-10 21:29:28.978 CET [19075] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2025-02-10 21:29:28.980 CET [19080] LOG:  database system was shut down at 2025-02-10 21:29:28 CET
+2025-02-10 21:29:28.982 CET [19075] LOG:  database system is ready to accept connections
+2025-02-10 21:34:28.980 CET [19078] LOG:  checkpoint starting: time
+2025-02-10 21:36:08.364 CET [19078] LOG:  checkpoint complete: wrote 987 buffers (6.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=99.372 s, sync=0.010 s, total=99.384 s; sync files=317, longest=0.001 s, average=0.001 s; distance=4592 kB, estimate=4592 kB; lsn=0/1983DA8, redo lsn=0/1983D18
+2025-02-10 21:48:52.061 CET [20649] LOG:  could not receive data from client: Connection reset by peer
+2025-02-10 21:49:28.379 CET [19078] LOG:  checkpoint starting: time
+2025-02-10 21:49:39.456 CET [19078] LOG:  checkpoint complete: wrote 110 buffers (0.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=11.061 s, sync=0.008 s, total=11.077 s; sync files=107, longest=0.001 s, average=0.001 s; distance=547 kB, estimate=4187 kB; lsn=0/1A0CB88, redo lsn=0/1A0CAF8
+2025-02-10 21:54:28.462 CET [19078] LOG:  checkpoint starting: time
+2025-02-10 21:54:32.126 CET [19078] LOG:  checkpoint complete: wrote 37 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.658 s, sync=0.002 s, total=3.664 s; sync files=13, longest=0.001 s, average=0.001 s; distance=99 kB, estimate=3778 kB; lsn=0/1A25A90, redo lsn=0/1A25A38
+2025-02-10 21:57:30.689 CET [22316] LOG:  could not receive data from client: Connection reset by peer
+2025-02-10 21:59:28.128 CET [19078] LOG:  checkpoint starting: time
+2025-02-10 21:59:29.659 CET [19078] LOG:  checkpoint complete: wrote 15 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.526 s, sync=0.001 s, total=1.532 s; sync files=9, longest=0.001 s, average=0.001 s; distance=18 kB, estimate=3402 kB; lsn=0/1A2A578, redo lsn=0/1A2A520
+2025-02-11 14:14:47.772 CET [37535] LOG:  could not receive data from client: Connection reset by peer
+2025-02-11 14:15:42.588 CET [37626] LOG:  could not receive data from client: Connection reset by peer
+2025-02-11 14:19:03.908 CET [19078] LOG:  checkpoint starting: time
+2025-02-11 14:19:06.783 CET [19078] LOG:  checkpoint complete: wrote 29 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.863 s, sync=0.003 s, total=2.878 s; sync files=22, longest=0.001 s, average=0.001 s; distance=153 kB, estimate=3078 kB; lsn=0/1A50D68, redo lsn=0/1A50D10
+2025-02-11 14:26:24.983 CET [38767] LOG:  could not receive data from client: Connection reset by peer
+2025-02-11 14:29:03.784 CET [19078] LOG:  checkpoint starting: time
+2025-02-11 14:29:05.215 CET [19078] LOG:  checkpoint complete: wrote 15 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.427 s, sync=0.002 s, total=1.432 s; sync files=10, longest=0.001 s, average=0.001 s; distance=31 kB, estimate=2773 kB; lsn=0/1A58CA8, redo lsn=0/1A58C50
+2025-02-11 14:39:03.204 CET [19078] LOG:  checkpoint starting: time
+2025-02-11 14:39:03.620 CET [19078] LOG:  checkpoint complete: wrote 5 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.410 s, sync=0.002 s, total=0.418 s; sync files=5, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=2496 kB; lsn=0/1A59160, redo lsn=0/1A59108
+2025-02-11 15:19:12.473 PostgresPermissionDialog[43244:682547] +[IMKClient subclass]: chose IMKClient_Modern
+2025-02-11 15:19:12.474 PostgresPermissionDialog[43244:682547] +[IMKInputSession subclass]: chose IMKInputSession_Modern
