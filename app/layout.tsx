@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,9 +11,9 @@ export const metadata: Metadata = {
 // TODO: Add Header and Footer here
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -48,7 +45,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} antialiased`}>
+      <body className={inter.className}>
         {children}
       </body>
     </html>

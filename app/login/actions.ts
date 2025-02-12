@@ -2,6 +2,7 @@
 import { login, createToken, verifyToken } from "@/lib/auth/auth";
 import { cookies } from "next/headers";
 import { User } from "@/lib/types/User";
+
 export async function loginUser(emailOrFormData: string | FormData, passwordParam?: string) {
     try {
         let email: string;
@@ -21,8 +22,16 @@ export async function loginUser(emailOrFormData: string | FormData, passwordPara
 
         const user = await login(email, password);
         const token = await createToken(user.id.toString()); // Convert id to string
-        const cookieStore = await cookies();
-        cookieStore.set("token", token);
+
+        const cookieStore = cookies();
+        // Secure cookie settings applied
+        cookieStore.set("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            path: "/"
+        });
+
         return { success: true, user };
     } catch (error) {
         return {
@@ -48,8 +57,8 @@ export async function getUser(): Promise<User | null> {
 
 export async function deleteToken() {
     try {
-        const cookieStore = await cookies();
-        cookieStore.delete("token");
+        const cookieStore = cookies();
+        cookieStore.delete("token", { path: "/" });
     } catch (error) {
         throw new Error("Failed to delete token");
     }

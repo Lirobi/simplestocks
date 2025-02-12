@@ -2,14 +2,17 @@ import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
 import { compare } from 'bcrypt';
 import { redirect } from 'next/navigation';
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
+
+// Updated JWT secret key handling
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
+if (!SECRET_KEY) {
+    throw new Error("JWT_SECRET_KEY environment variable is not defined. Please set a secure JWT secret key.");
+}
 
 export async function verifyToken(token: string) {
     try {
         // Verify the token using the secret key
-
         const decoded = jwt.verify(token, SECRET_KEY);
-
         const user = await prisma.user.findUnique({
             where: { id: parseInt(decoded.userId) }
         });
@@ -22,7 +25,6 @@ export async function verifyToken(token: string) {
         return null; // Return null if the token is invalid
     }
 }
-
 
 export function createToken(userId: string) {
     const token = jwt.sign({ userId }, SECRET_KEY, { expiresIn: '1d' });

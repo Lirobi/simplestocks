@@ -17,24 +17,30 @@ interface RegisterUserParams {
 }
 
 // A utiliser au passage à l'étape suivante du formulaire pour s'assurer que l'user ne va pas utiliser un email déjà utilisé
-export async function checkIfEmailAlreadyUsed(email: string): Promise<boolean> {
+export async function checkIfEmailAlreadyUsed(email: string) {
     try {
         const user = await prisma.user.findUnique({
-            where: { email: email.toLowerCase() }
+            where: { email }
         });
-        if (user) {
-            return true;
-        } else {
-            return false;
-        }
+        return !!user;
     } catch (error) {
-        console.error('Error checking if email is already used:', error);
-        throw new Error('Error checking if email is already used');
+        console.error('Error checking email:', error);
+        throw new Error('Failed to check email');
     }
 }
 
-
-export async function registerUser(params: RegisterUserParams) {
+export async function registerUser(params: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    birthDate: Date;
+    address: string;
+    city: string;
+    postalCode: string;
+    country: string;
+}) {
     const {
         email,
         password,
@@ -48,28 +54,28 @@ export async function registerUser(params: RegisterUserParams) {
         country
     } = params;
 
-    // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-        where: { email: email.toLowerCase() }
-    });
-
-    if (existingUser) {
-        throw new Error('User already exists');
-    }
-
-    // Hash the password
-    const hashedPassword = await hash(password, 12);
-
     try {
-        // Create the user
+        // Check if user already exists
+        const existingUser = await prisma.user.findUnique({
+            where: { email }
+        });
+
+        if (existingUser) {
+            throw new Error('Email already exists');
+        }
+
+        // Hash password
+        const hashedPassword = await hash(password, 12);
+
+        // Create user
         const user = await prisma.user.create({
             data: {
-                email: email.toLowerCase(),
+                email,
                 password: hashedPassword,
-                firstName: firstName[0].toUpperCase() + firstName.slice(1),
-                lastName: lastName[0].toUpperCase() + lastName.slice(1),
-                phone: phoneNumber,
-                birthDate: new Date(birthDate),
+                firstName,
+                lastName,
+                phoneNumber,
+                birthDate,
                 address,
                 city,
                 postalCode,
@@ -77,11 +83,11 @@ export async function registerUser(params: RegisterUserParams) {
             }
         });
 
-        // Remove password from the returned object
+        // Remove password from response
         const { password: _, ...userWithoutPassword } = user;
         return userWithoutPassword;
     } catch (error) {
-        console.error('Error creating user:', error);
-        throw new Error('Error creating user');
+        console.error('Error registering user:', error);
+        throw error;
     }
 } 

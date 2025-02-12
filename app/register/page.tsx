@@ -28,10 +28,9 @@ export default function Register() {
         e.preventDefault();
         if (step === 0) {
             if (email && password && confirmPassword) {
-                let passwordSafetyIndex = 0;
                 const emailAlreadyUsed = await checkIfEmailAlreadyUsed(email);
                 if (emailAlreadyUsed) {
-                    setError("Email already used");
+                    setError("Registration failed. Please check your details.");
                     return;
                 }
                 if (password !== confirmPassword) {
@@ -83,7 +82,6 @@ export default function Register() {
         } else if (step === 2) {
             if (address && city && postalCode && country) {
                 try {
-                    console.log(email, password, firstName, lastName, phoneNumber, birthDate, address, city, postalCode, country);
                     registerUser({
                         email,
                         password,
