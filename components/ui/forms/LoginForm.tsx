@@ -18,7 +18,7 @@ export default function AuthenticateForm({ onSubmit }: AuthenticateFormProps) {
     }
 
     return (
-        <div className="flex flex-col gap-4 bg-gray-100 p-4 rounded-md justify-center items-center max-md:scale-125 scale-150">
+        <div className="flex flex-col gap-4 bg-background-light dark:bg-background-dark p-4 rounded-md justify-center items-center max-md:scale-125 scale-150">
             <h1 className="text-2xl font-bold">Login</h1>
 
             <form className="flex flex-col gap-2 w-fit" onSubmit={handleSubmit}>

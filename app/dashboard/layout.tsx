@@ -13,7 +13,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <div className="z-50">
                 <DashboardHeader user={user} />
             </div>
-            <div className="flex h-full ">
+            <div className="flex h-full">
                 <DashboardSidebar />
                 {children}
             </div>

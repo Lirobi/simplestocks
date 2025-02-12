@@ -125,3 +125,11 @@
 2025-02-12 14:35:53.680 CET [19078] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.306 s, sync=0.001 s, total=0.311 s; sync files=3, longest=0.001 s, average=0.001 s; distance=5 kB, estimate=1332 kB; lsn=0/1A6D480, redo lsn=0/1A6D428
 2025-02-12 14:40:53.677 CET [19078] LOG:  checkpoint starting: time
 2025-02-12 14:40:53.783 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.102 s, sync=0.001 s, total=0.107 s; sync files=2, longest=0.001 s, average=0.001 s; distance=5 kB, estimate=1200 kB; lsn=0/1A6EB00, redo lsn=0/1A6EAA8
+2025-02-12 14:45:53.782 CET [19078] LOG:  checkpoint starting: time
+2025-02-12 14:45:53.894 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.105 s, sync=0.001 s, total=0.112 s; sync files=2, longest=0.001 s, average=0.001 s; distance=5 kB, estimate=1080 kB; lsn=0/1A701D8, redo lsn=0/1A70180
+2025-02-12 16:52:30.970 CET [19078] LOG:  checkpoint starting: time
+2025-02-12 16:52:31.685 CET [19078] LOG:  checkpoint complete: wrote 8 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.710 s, sync=0.001 s, total=0.718 s; sync files=8, longest=0.001 s, average=0.001 s; distance=8 kB, estimate=973 kB; lsn=0/1A724A0, redo lsn=0/1A72410
+2025-02-12 16:58:05.602 CET [23527] FATAL:  sorry, too many clients already
+2025-02-12 16:58:05.605 CET [23528] FATAL:  sorry, too many clients already
+2025-02-12 16:58:16.844 CET [23538] FATAL:  sorry, too many clients already
+2025-02-12 16:58:16.847 CET [23539] FATAL:  sorry, too many clients already
