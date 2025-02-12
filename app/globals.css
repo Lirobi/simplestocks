@@ -3,9 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #f85151;
+  --background: #e5e5e5; /* neutral-200 */
+  --foreground: #262626; /* neutral-800 */  
+  --primary: #f87171; /* red-400 */
+  --secondary: #737373; /* neutral-700 */
+  --background-secondary: #d4d4d4; /* neutral-300 */
+  --background-tertiary: #a3a3a3; /* neutral-400 */
+  --line: #262626; /* neutral-500 */
+}
+
+:root.dark {
+  --background: #262626; /* neutral-800 */
+  --foreground: #e5e5e5; /* neutral-200 */
+  --primary: #f87171; /* red-400 */
+  --secondary: #d4d4d4; /* neutral-300 */
+  --background-secondary: #404040; /* neutral-700 */
+  --background-tertiary: #525252; /* neutral-600 */
+  --line: #737373; /* neutral-500 */
 }
 
 body {
@@ -37,3 +51,4 @@ body {
 .animated-underline:hover::after {
     width: 100%;
 }
+

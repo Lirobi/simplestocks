@@ -3,11 +3,14 @@ import prisma from '@/lib/prisma';
 import { compare } from 'bcrypt';
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
-export function verifyToken(token: string) {
+export async function verifyToken(token: string) {
     try {
         // Verify the token using the secret key
         const decoded = jwt.verify(token, SECRET_KEY);
-        return decoded; // Return the decoded payload (e.g., user data)
+        const user = await prisma.user.findUnique({
+            where: { id: parseInt(decoded.userId) }
+        });
+        return user; // Return the decoded payload (e.g., user data)
     } catch (error) {
         console.error('Token verification failed:', error);
         return null; // Return null if the token is invalid

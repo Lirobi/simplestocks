@@ -15,7 +15,7 @@ export default function RegisterPersonalInformationForm({ nextStep, setFirstName
         <div>
             <h1 className="text-2xl font-bold">Personal Information</h1>
             <form className="flex flex-col gap-4">
-                <div className="flex gap-4">
+                <div className="flex gap-4 max-md:flex-col">
                     <AuthenticateFormInput type="text" label="First Name" setValue={setFirstName} />
                     <AuthenticateFormInput type="text" label="Last Name" setValue={setLastName} />
                 </div>

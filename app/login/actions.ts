@@ -1,7 +1,7 @@
 'use server'
 import { login, createToken, verifyToken } from "@/lib/auth/auth";
 import { cookies } from "next/headers";
-
+import { User } from "@/lib/types/User";
 export async function loginUser(emailOrFormData: string | FormData, passwordParam?: string) {
     try {
         let email: string;
@@ -32,12 +32,16 @@ export async function loginUser(emailOrFormData: string | FormData, passwordPara
     }
 }
 
-export async function getUser() {
+export async function getUser(): Promise<User | null> {
     const cookieStore = await cookies();
     const token = cookieStore.get("token");
     if (token) {
         const user = await verifyToken(token.value);
-        return user;
+        return {
+            ...user,
+            updatedAt: new Date(),
+            business: user.businessId || null,
+        } as User;
     }
     return null;
 }

@@ -13,10 +13,10 @@ interface RegisterAdditionalInformationFormProps {
 export default function RegisterAdditionalInformationForm({ nextStep, setAddress, setCity, setPostalCode, setCountry, error }: RegisterAdditionalInformationFormProps) {
     return (
         <div>
-            <h1 className="text-2xl font-bold">Personal Information</h1>
+            <h1 className="text-2xl font-bold">Additional Information</h1>
             <form className="flex flex-col gap-4">
                 <AuthenticateFormInput type="text" label="Address" setValue={setAddress} />
-                <div className="flex gap-4">
+                <div className="flex gap-4 max-md:flex-col">
                     <AuthenticateFormInput type="text" label="City" setValue={setCity} />
                     <AuthenticateFormInput type="text" label="Postal Code" setValue={setPostalCode} />
                 </div>
