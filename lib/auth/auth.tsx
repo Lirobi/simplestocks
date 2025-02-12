@@ -26,9 +26,11 @@ export async function verifyToken(token: string) {
     }
 }
 
-export function createToken(userId: string) {
-    const token = jwt.sign({ userId }, SECRET_KEY, { expiresIn: '1d' });
-    return token;
+export async function createToken(userId: string) {
+    if (!SECRET_KEY) throw new Error("JWT secret not configured");
+    return jwt.sign({ userId }, SECRET_KEY, {
+        expiresIn: '15m' // Token expiration matches cookie maxAge
+    });
 }
 
 export async function login(email: string, password: string) {

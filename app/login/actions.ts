@@ -24,19 +24,20 @@ export async function loginUser(emailOrFormData: string | FormData, passwordPara
         const token = await createToken(user.id.toString()); // Convert id to string
 
         const cookieStore = cookies();
-        // Secure cookie settings applied
         cookieStore.set("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            path: "/"
+            sameSite: "lax",
+            path: "/",
+            maxAge: 900
         });
 
         return { success: true, user };
     } catch (error) {
+        console.error('Login error:', error);
         return {
             success: false,
-            error: error instanceof Error ? error.message : 'Authentication failed'
+            error: 'Authentication failed. Please check your credentials.'
         };
     }
 }
@@ -55,11 +56,13 @@ export async function getUser(): Promise<User | null> {
     return null;
 }
 
-export async function deleteToken() {
-    try {
-        const cookieStore = cookies();
-        cookieStore.delete("token", { path: "/" });
-    } catch (error) {
-        throw new Error("Failed to delete token");
-    }
+export async function logoutUser() {
+    const cookieStore = cookies();
+    cookieStore.set("token", "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        expires: new Date(0) // Immediate expiration
+    });
 }

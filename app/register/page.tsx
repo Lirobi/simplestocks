@@ -28,41 +28,46 @@ export default function Register() {
         e.preventDefault();
         if (step === 0) {
             if (email && password && confirmPassword) {
-                const emailAlreadyUsed = await checkIfEmailAlreadyUsed(email);
-                if (emailAlreadyUsed) {
-                    setError("Registration failed. Please check your details.");
-                    return;
-                }
-                if (password !== confirmPassword) {
-                    setError("Passwords do not match");
-                    return;
-                } else if (password.length < 8) {
-                    setError("Password must be at least 8 characters long");
-                    return;
-                } else {
-                    let numbersCount = 0;
-                    let uppercaseCount = 0;
-                    let lowercaseCount = 0;
-                    let specialCharactersCount = 0;
-                    for (const char of password) {
-                        if (/[0-9]/.test(char)) {
-                            numbersCount++;
-                        }
-                        if (/[A-Z]/.test(char)) {
-                            uppercaseCount++;
-                        }
-                        if (/[a-z]/.test(char)) {
-                            lowercaseCount++;
-                        }
-                        if (/[^0-9A-Za-z]/.test(char)) {
-                            specialCharactersCount++;
-                        }
-                    }
-
-                    if (numbersCount < 1 || uppercaseCount < 1 || lowercaseCount < 1 || specialCharactersCount < 1) {
-                        setError("Password is not safe");
+                try {
+                    const emailAlreadyUsed = await checkIfEmailAlreadyUsed(email);
+                    if (emailAlreadyUsed) {
+                        setError("Registration failed. Please check your details.");
                         return;
                     }
+                    if (password !== confirmPassword) {
+                        setError("Passwords do not match");
+                        return;
+                    } else if (password.length < 8) {
+                        setError("Password must be at least 8 characters long");
+                        return;
+                    } else {
+                        let numbersCount = 0;
+                        let uppercaseCount = 0;
+                        let lowercaseCount = 0;
+                        let specialCharactersCount = 0;
+                        for (const char of password) {
+                            if (/[0-9]/.test(char)) {
+                                numbersCount++;
+                            }
+                            if (/[A-Z]/.test(char)) {
+                                uppercaseCount++;
+                            }
+                            if (/[a-z]/.test(char)) {
+                                lowercaseCount++;
+                            }
+                            if (/[^0-9A-Za-z]/.test(char)) {
+                                specialCharactersCount++;
+                            }
+                        }
+
+                        if (numbersCount < 1 || uppercaseCount < 1 || lowercaseCount < 1 || specialCharactersCount < 1) {
+                            setError("Password is not safe");
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    setError("Registration failed. Please check your details.");
+                    return;
                 }
             } else {
                 setError("Please fill in all fields");
