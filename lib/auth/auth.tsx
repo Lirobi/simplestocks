@@ -31,7 +31,7 @@ export function createToken(userId: string) {
 
 export async function login(email: string, password: string) {
     try {
-        const user = await findUserByEmail(email);
+        const user = await findUserByEmail(email.toLowerCase());
 
         if (!user) {
             throw new Error('Invalid email or password'); // Better error message for security
@@ -50,19 +50,6 @@ export async function login(email: string, password: string) {
         console.error('Login error:', error);
         throw new Error('Authentication failed. Please try again.');
     }
-}
-
-interface RegisterUser {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    birthDate: string;
-    address: string;
-    city: string;
-    postalCode: string;
-    country: string;
 }
 
 async function findUserByEmail(email: string) {

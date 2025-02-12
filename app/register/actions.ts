@@ -16,6 +16,24 @@ interface RegisterUserParams {
     country: string;
 }
 
+// A utiliser au passage à l'étape suivante du formulaire pour s'assurer que l'user ne va pas utiliser un email déjà utilisé
+export async function checkIfEmailAlreadyUsed(email: string): Promise<boolean> {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email: email.toLowerCase() }
+        });
+        if (user) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error('Error checking if email is already used:', error);
+        throw new Error('Error checking if email is already used');
+    }
+}
+
+
 export async function registerUser(params: RegisterUserParams) {
     const {
         email,
@@ -32,7 +50,7 @@ export async function registerUser(params: RegisterUserParams) {
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
-        where: { email }
+        where: { email: email.toLowerCase() }
     });
 
     if (existingUser) {
@@ -46,10 +64,10 @@ export async function registerUser(params: RegisterUserParams) {
         // Create the user
         const user = await prisma.user.create({
             data: {
-                email,
+                email: email.toLowerCase(),
                 password: hashedPassword,
-                firstName,
-                lastName,
+                firstName: firstName[0].toUpperCase() + firstName.slice(1),
+                lastName: lastName[0].toUpperCase() + lastName.slice(1),
                 phone: phoneNumber,
                 birthDate: new Date(birthDate),
                 address,

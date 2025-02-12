@@ -1,5 +1,6 @@
 import AuthenticateFormButton from "../../buttons/AuthenticateFormButton";
 import AuthenticateFormInput from "../../inputs/AuthenticateFormInput";
+import PhoneNumberInput from "@/components/ui/inputs/PhoneNumberInput";
 
 interface RegisterPersonalInformationFormProps {
     nextStep: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -19,7 +20,7 @@ export default function RegisterPersonalInformationForm({ nextStep, setFirstName
                     <AuthenticateFormInput type="text" label="First Name" setValue={setFirstName} />
                     <AuthenticateFormInput type="text" label="Last Name" setValue={setLastName} />
                 </div>
-                <AuthenticateFormInput type="text" label="Phone" setValue={setPhoneNumber} />
+                <PhoneNumberInput setValue={setPhoneNumber} />
                 <AuthenticateFormInput type="date" label="Birth Date" setValue={setBirthDate} />
                 {error && <p className="text-red-500">{error}</p>}
                 <AuthenticateFormButton onSubmit={nextStep} text="Next step" />

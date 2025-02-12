@@ -4,7 +4,7 @@ import RegisterPersonalInformationForm from "@/components/ui/forms/registerforms
 import RegisterAdditionalInformationForm from "@/components/ui/forms/registerforms/RegisterAdditionalInformationForm";
 import { useState } from "react";
 import RegisterFormsContainer from "@/components/ui/forms/registerforms/RegisterFormsContainer";
-import { registerUser } from "./actions";
+import { checkIfEmailAlreadyUsed, registerUser } from "./actions";
 import { useRouter } from "next/navigation";
 
 
@@ -24,13 +24,46 @@ export default function Register() {
     const [country, setCountry] = useState("");
     const [error, setError] = useState("");
 
-    const nextStep = (e: React.FormEvent<HTMLFormElement>) => {
+    const nextStep = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (step === 0) {
             if (email && password && confirmPassword) {
+                let passwordSafetyIndex = 0;
+                const emailAlreadyUsed = await checkIfEmailAlreadyUsed(email);
+                if (emailAlreadyUsed) {
+                    setError("Email already used");
+                    return;
+                }
                 if (password !== confirmPassword) {
                     setError("Passwords do not match");
                     return;
+                } else if (password.length < 8) {
+                    setError("Password must be at least 8 characters long");
+                    return;
+                } else {
+                    let numbersCount = 0;
+                    let uppercaseCount = 0;
+                    let lowercaseCount = 0;
+                    let specialCharactersCount = 0;
+                    for (const char of password) {
+                        if (/[0-9]/.test(char)) {
+                            numbersCount++;
+                        }
+                        if (/[A-Z]/.test(char)) {
+                            uppercaseCount++;
+                        }
+                        if (/[a-z]/.test(char)) {
+                            lowercaseCount++;
+                        }
+                        if (/[^0-9A-Za-z]/.test(char)) {
+                            specialCharactersCount++;
+                        }
+                    }
+
+                    if (numbersCount < 1 || uppercaseCount < 1 || lowercaseCount < 1 || specialCharactersCount < 1) {
+                        setError("Password is not safe");
+                        return;
+                    }
                 }
             } else {
                 setError("Please fill in all fields");
@@ -38,6 +71,11 @@ export default function Register() {
             }
         } else if (step === 1) {
             if (firstName && lastName && phoneNumber && birthDate) {
+                if (phoneNumber.length !== 10) {
+                    setError("Phone number must be 10 digits");
+                    return;
+
+                }
             } else {
                 setError("Please fill in all fields");
                 return;

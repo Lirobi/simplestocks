@@ -1,5 +1,6 @@
 import AuthenticateFormInput from "../../inputs/AuthenticateFormInput";
 import AuthenticateFormButton from "../../buttons/AuthenticateFormButton";
+import PostalCodeInput from "../../inputs/PostalCodeInput";
 
 interface RegisterAdditionalInformationFormProps {
     nextStep: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -11,18 +12,23 @@ interface RegisterAdditionalInformationFormProps {
 }
 
 export default function RegisterAdditionalInformationForm({ nextStep, setAddress, setCity, setPostalCode, setCountry, error }: RegisterAdditionalInformationFormProps) {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        nextStep(e);
+    };
+
     return (
         <div>
             <h1 className="text-2xl font-bold">Additional Information</h1>
-            <form className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <AuthenticateFormInput type="text" label="Address" setValue={setAddress} />
                 <div className="flex gap-4 max-md:flex-col">
                     <AuthenticateFormInput type="text" label="City" setValue={setCity} />
-                    <AuthenticateFormInput type="text" label="Postal Code" setValue={setPostalCode} />
+                    <PostalCodeInput setValue={setPostalCode} />
                 </div>
                 <AuthenticateFormInput type="text" label="Country" setValue={setCountry} />
                 {error && <p className="text-red-500">{error}</p>}
-                <AuthenticateFormButton onSubmit={nextStep} text="Register" />
+                <AuthenticateFormButton type="submit" text="Register" />
             </form>
         </div>
     );

@@ -5,9 +5,9 @@ import { Product } from "@prisma/client";
 import { useState } from "react";
 import { getProducts, getCategories, deleteProduct, changeProductQuantity } from "./actions";
 import ContextMenu from "../contextmenus/ContextMenu";
-import { ContextMenuAction } from "@/lib/types/ContextMenuProps";
 import BaseToast from "../toasts/BaseToast";
 import NumberPopup from "../popups/NumberPopup";
+import { redirect } from "next/navigation";
 
 export default function ProductsTable() {
     const [defaultProducts, setDefaultProducts] = useState<Product[]>([]);
@@ -224,7 +224,11 @@ export default function ProductsTable() {
                                         setShowNumberPopup(true);
                                     }
                                 },
-                                { label: "Edit", onClick: () => console.log("Edit", selectedProduct) },
+                                {
+                                    label: "Edit", onClick: () => {
+                                        redirect(`/dashboard/products/edit/${selectedProduct.id}`)
+                                    }
+                                },
                                 { label: "Delete", onClick: () => handleDeleteProduct(selectedProduct.id) }
                             ]}
                             coordinates={contextMenuPosition}
