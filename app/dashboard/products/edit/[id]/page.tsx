@@ -9,6 +9,8 @@ import { getCategories } from "@/components/ui/data/actions";
 import BaseTextArea from "@/components/ui/inputs/BaseTextArea";
 import BaseButton from "@/components/ui/buttons/BaseButton";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
 export default function EditProductPage() {
 
     const params = useParams();
@@ -34,6 +36,7 @@ export default function EditProductPage() {
     const handleEditProduct = async () => {
         const updatedProduct = await updateProduct(product?.id, product);
         setProduct(updatedProduct);
+        redirect("/dashboard/products");
     }
 
 
@@ -63,7 +66,7 @@ export default function EditProductPage() {
                     <BaseFormInput label="Name" className="" value={product?.name} onChange={(e) => setProduct({ ...product, name: e.target.value })} />
                     <BaseFormInput label="Price" className="" value={product?.unitPrice.toString()} onChange={(e) => setProduct({ ...product, unitPrice: parseInt(e.target.value) })} />
                     <BaseFormInput label="Quantity" className="" value={product?.quantity.toString()} onChange={(e) => setProduct({ ...product, quantity: parseInt(e.target.value) })} />
-                    <BaseSelect label="Category" className="" value={product?.categoryId.toString()} onChange={(e) => setProduct({ ...product, categoryId: parseInt(e.target.value) })} options={categories.map((category) => ({ label: category.name, value: category.id.toString() }))} />
+                    <BaseSelect label="Category" className="" value={product?.categoryId?.toString()} onChange={(e) => setProduct({ ...product, categoryId: parseInt(e.target.value) })} options={categories.map((category) => ({ label: category.name, value: category.id.toString() }))} />
                 </div>
                 <BaseTextArea label="Description" className="w-full" value={product?.description} onChange={(e) => setProduct({ ...product, description: e.target.value })} />
                 <BaseButton className="w-full py-4 text-xl font-bold" onClick={handleEditProduct}>Edit Product</BaseButton>

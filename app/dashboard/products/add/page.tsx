@@ -35,7 +35,7 @@ export default function AddProduct() {
     }, []);
 
     const handleAddProduct = async () => {
-        if (name === "" || price === 0 || quantity === 0 || category === "" || description === "") {
+        if (name === "" || price === 0 || quantity === 0 || description === "") {
             setError("Please fill all the fields : " + name + " " + price + " " + quantity + " " + category + " " + description);
             return;
         }
@@ -68,7 +68,10 @@ export default function AddProduct() {
                     <BaseFormInput label="Name" name="name" type="text" className="w-full" placeholder="Enter product name" onChange={(e) => setName(e.target.value)} />
                     <BaseNumberInput label="Price" name="price" className="max-w-fit" onChange={(e) => setPrice(parseInt(e.target.value))} />
                     <BaseNumberInput label="Quantity" name="quantity" className="max-w-fit" onChange={(e) => setQuantity(parseInt(e.target.value))} />
-                    <BaseSelect label="Category" name="category" className="max-w-fit" options={categories.map((category) => ({ label: category.name, value: category.id.toString() }))} onChange={(e) => setCategory(e.target.value)} />
+                    <BaseSelect label="Category" name="category" className="max-w-fit" options={categories.map((category) => ({ label: category.name, value: category.id.toString() }))} onChange={(e) => {
+                        setCategory(e.target.value);
+
+                    }} />
                 </div>
                 <BaseTextArea label="Description" name="description" placeholder="Enter product description" onChange={(e) => setDescription(e.target.value)} />
                 <BaseButton className="w-full py-4 text-xl font-bold" onClick={handleAddProduct}>Add Product</BaseButton>

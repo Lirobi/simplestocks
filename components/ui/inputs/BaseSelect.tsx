@@ -39,7 +39,7 @@ export default function BaseSelect({
                 id={name}
                 name={name}
                 value={value}
-                onChange={onChange}
+                onChange={(e) => onChange(e)}
                 disabled={disabled}
                 className={`
                     w-full px-3 py-2 rounded-lg

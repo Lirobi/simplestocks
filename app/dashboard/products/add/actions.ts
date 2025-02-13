@@ -19,8 +19,6 @@ export async function addProduct(name: string, price: number, quantity: number, 
             costPrice: price, // Using same price for now
             quantity,
             minStockLevel: 10, // Using default from schema
-            businessId: 1, // Hardcoded for now
-            supplierId: 1, // Hardcoded for now
         },
         include: {
             category: true
