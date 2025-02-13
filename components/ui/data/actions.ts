@@ -26,3 +26,26 @@ export async function changeProductQuantity(id: number, quantity: number) {
     });
     return product;
 }
+
+
+export async function addCategory(name: string, description: string) {
+    const category = await prisma.category.create({
+        data: { name, description, businessId: 1 },
+    });
+    return category;
+}
+
+export async function deleteCategory(id: number) {
+    const category = await prisma.category.delete({
+        where: { id },
+    });
+    return category;
+}
+
+export async function updateCategory(id: number, name: string, description: string) {
+    const category = await prisma.category.update({
+        where: { id },
+        data: { name, description },
+    });
+    return category;
+}

@@ -14,7 +14,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 <DashboardHeader user={user} />
             </div>
             <div className="flex h-full">
-                <DashboardSidebar />
+                <DashboardSidebar defaultOpen={true} />
                 {children}
             </div>
         </div>

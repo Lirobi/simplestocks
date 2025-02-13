@@ -23,7 +23,7 @@ export async function loginUser(emailOrFormData: string | FormData, passwordPara
         const user = await login(email, password);
         const token = await createToken(user.id.toString()); // Convert id to string
 
-        const cookieStore = cookies();
+        const cookieStore = await cookies();
         cookieStore.set("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -57,7 +57,7 @@ export async function getUser(): Promise<User | null> {
 }
 
 export async function logoutUser() {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     cookieStore.set("token", "", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",

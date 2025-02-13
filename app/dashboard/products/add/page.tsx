@@ -10,6 +10,7 @@ import { addProduct, getCategories } from "./actions";
 import { Category } from "@prisma/client";
 import BaseButton from "@/components/ui/buttons/BaseButton";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 
 export default function AddProduct() {
@@ -46,6 +47,21 @@ export default function AddProduct() {
 
     return (
         <div className="w-full h-full flex flex-col overflow-auto dark:bg-backgroundSecondary-dark bg-background-light">
+            <Link href="/dashboard/products" className="text-primary pl-10 pt-4 underline">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 inline-block"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 19l-7-7 7-7" />
+                </svg>
+                Back to products
+            </Link>
             <h1 className="text-3xl font-bold p-10 pb-4">Add Product</h1>
             <form className="w-full px-10">
                 <div className="flex w-full gap-4">

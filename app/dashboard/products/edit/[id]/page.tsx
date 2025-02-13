@@ -8,6 +8,7 @@ import BaseSelect from "@/components/ui/inputs/BaseSelect";
 import { getCategories } from "@/components/ui/data/actions";
 import BaseTextArea from "@/components/ui/inputs/BaseTextArea";
 import BaseButton from "@/components/ui/buttons/BaseButton";
+import Link from "next/link";
 export default function EditProductPage() {
 
     const params = useParams();
@@ -38,6 +39,23 @@ export default function EditProductPage() {
 
     return (
         <div className="w-full h-full flex flex-col overflow-auto dark:bg-backgroundSecondary-dark bg-background-light">
+            <Link href="/dashboard/products" className="text-primary pl-10 pt-4 underline">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 inline-block"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 19l-7-7 7-7" />
+                </svg>
+                Back to products
+            </Link>
+
+
             <h1 className="text-3xl font-bold p-10 pb-4">Edit Product</h1>
             <div className="w-full h-full flex flex-col p-10">
 

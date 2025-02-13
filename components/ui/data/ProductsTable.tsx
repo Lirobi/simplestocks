@@ -8,6 +8,7 @@ import ContextMenu from "../contextmenus/ContextMenu";
 import BaseToast from "../toasts/BaseToast";
 import NumberPopup from "../popups/NumberPopup";
 import { redirect } from "next/navigation";
+import BaseButton from "../buttons/BaseButton";
 
 export default function ProductsTable() {
     const [defaultProducts, setDefaultProducts] = useState<Product[]>([]);
@@ -165,7 +166,11 @@ export default function ProductsTable() {
 
     return (
         <div className="w-full h-full flex flex-col overflow-auto dark:bg-backgroundSecondary-dark bg-background-light">
-            <h1 className="text-3xl font-bold p-10 pb-4">Products</h1>
+            <div className="flex justify-between items-center pr-10">
+
+                <h1 className="text-3xl font-bold p-10 pb-4">Products</h1>
+                <BaseButton onClick={() => redirect("/dashboard/products/add")}>Add Product</BaseButton>
+            </div>
             <div className="w-full px-10 mb-4 sticky top-2 z-20 ">
                 <div className="relative">
                     <input
@@ -211,16 +216,15 @@ export default function ProductsTable() {
                     {showContextMenu && selectedProduct && (
                         <ContextMenu
                             actions={[
-                                { label: "View", onClick: () => console.log("View", selectedProduct) },
                                 {
                                     label: "Remove from stock", onClick: () => {
-                                        setNumberPopupMessage("Remove from stock");
+                                        setNumberPopupMessage("Decrease stock");
                                         setShowNumberPopup(true);
                                     }
                                 },
                                 {
                                     label: "Add to stock", onClick: () => {
-                                        setNumberPopupMessage("Add to stock");
+                                        setNumberPopupMessage("Increase stock");
                                         setShowNumberPopup(true);
                                     }
                                 },
@@ -235,9 +239,9 @@ export default function ProductsTable() {
                         />
                     )}
                     {toast && <BaseToast message={toast.message} type={toast.type} />}
-                    {showNumberPopup && <NumberPopup message={numberPopupMessage} setNumber={setQuantity} onConfirm={() => handleChangeProductQuantity(numberPopupSign)} />}
+                    {showNumberPopup && <NumberPopup message={numberPopupMessage} onClose={() => setShowNumberPopup(false)} setNumber={setQuantity} onConfirm={() => handleChangeProductQuantity(numberPopupSign)} />}
                     <table className="w-full h-fit">
-                        <thead className="top-0 bg-background">
+                        <thead className="top-0 ">
                             <tr>
                                 <th className="w-fit p-2 cursor-pointer"></th>
                                 <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("id")}>

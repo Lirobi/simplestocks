@@ -3,8 +3,8 @@ import { useState } from "react";
 import SidebarDropdown from "./SidebarDropdown";
 import { redirect } from "next/navigation";
 import SidebarButton from "./SidebarButton";
-export default function DashboardSidebar() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+export default function DashboardSidebar(defaultOpen: boolean = false) {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(defaultOpen);
 
     const [sidebarDropdownItems, setSidebarDropdownItems] = useState([
         {
@@ -27,9 +27,11 @@ export default function DashboardSidebar() {
             <div className="flex gap-4 justify-between items-center h-full">
                 <div className={`flex flex-col gap-2 transition-all duration-300 h-full ease-in-out  ${isSidebarOpen ? "opacity-100 inline-block p-2" : "opacity-0 hidden"}`}>
                     <SidebarButton title="Home" onClick={() => redirect("/dashboard")} />
-                    {isSidebarOpen && sidebarDropdownItems.map((item) => (
+                    <SidebarButton title="Products" onClick={() => redirect("/dashboard/products")} />
+                    <SidebarButton title="Categories" onClick={() => redirect("/dashboard/categories")} />
+                    {/* isSidebarOpen && sidebarDropdownItems.map((item) => (
                         <SidebarDropdown key={item.title} title={item.title} items={item.items} />
-                    ))}
+                    )) */}
                 </div>
                 <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="transition-all duration-500 h-full min-h-fit hover:bg-backgroundTertiary-light dark:hover:bg-backgroundTertiary-dark my-2 rounded-lg">
                     <div className="flex justify-end items-center px-2 ">

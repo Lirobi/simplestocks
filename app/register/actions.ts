@@ -74,7 +74,7 @@ export async function registerUser(params: {
                 password: hashedPassword,
                 firstName,
                 lastName,
-                phoneNumber,
+                phone: phoneNumber,
                 birthDate,
                 address,
                 city,
