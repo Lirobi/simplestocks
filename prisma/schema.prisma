@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") // Use environment variables for security
+  url      = env("PRODUCTION_DATABASE_URL") // Use environment variables for security
 }
 
 model User {
@@ -69,8 +69,8 @@ model Product {
   minStockLevel   Int       @default(10) // Threshold for reorder alerts
   supplier        Supplier? @relation(fields: [supplierId], references: [id])
   supplierId      Int?
-  business        Business  @relation(fields: [businessId], references: [id])
-  businessId      Int
+  business        Business?  @relation(fields: [businessId], references: [id])
+  businessId      Int?
   transactions    InventoryTransaction[]
   sales          Sale[]
   createdAt       DateTime  @default(now())
@@ -145,8 +145,8 @@ model Category {
   id          Int       @id @default(autoincrement())
   name        String
   description String?
-  business    Business  @relation(fields: [businessId], references: [id])
-  businessId  Int
+  business    Business?  @relation(fields: [businessId], references: [id])
+  businessId  Int?
   products    Product[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
