@@ -75,7 +75,7 @@ export async function registerUser(params: {
                 firstName,
                 lastName,
                 phone: phoneNumber,
-                birthDate,
+                birthDate: new Date(birthDate),
                 address,
                 city,
                 postalCode,
