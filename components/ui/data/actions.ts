@@ -30,7 +30,7 @@ export async function changeProductQuantity(id: number, quantity: number) {
 
 export async function addCategory(name: string, description: string) {
     const category = await prisma.category.create({
-        data: { name, description, businessId: 1 },
+        data: { name, description },
     });
     return category;
 }
