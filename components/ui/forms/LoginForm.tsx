@@ -6,9 +6,10 @@ import ClickableText from "../buttons/ClickableText";
 
 interface AuthenticateFormProps {
     onSubmit: (email: string, password: string) => void;
+    error?: string;
 }
 
-export default function AuthenticateForm({ onSubmit }: AuthenticateFormProps) {
+export default function AuthenticateForm({ onSubmit, error }: AuthenticateFormProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -24,6 +25,7 @@ export default function AuthenticateForm({ onSubmit }: AuthenticateFormProps) {
             <form className="flex flex-col gap-2 w-fit" onSubmit={handleSubmit}>
                 <AuthenticateFormInput label="Email" type="email" setValue={setEmail} />
                 <AuthenticateFormInput label="Password" type="password" setValue={setPassword} />
+                {error && <p className="text-red-500">{error}</p>}
                 <AuthenticateFormButton text="Login" onSubmit={handleSubmit} />
             </form>
             <ClickableText text="Forgot Password?" onClick={() => { }} />

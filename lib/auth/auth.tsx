@@ -29,7 +29,7 @@ export async function verifyToken(token: string) {
 export async function createToken(userId: string) {
     if (!SECRET_KEY) throw new Error("JWT secret not configured");
     return jwt.sign({ userId }, SECRET_KEY, {
-        expiresIn: process.env.JWT_EXPIRATION_TIME || '1h' // Token expiration matches cookie maxAge
+        expiresIn: process.env.JWT_EXPIRATION_TIME || '1d' // Token expiration matches cookie maxAge
     });
 }
 

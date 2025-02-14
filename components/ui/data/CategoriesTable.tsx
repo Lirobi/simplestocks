@@ -67,8 +67,14 @@ export default function CategoriesTable() {
             setCategories(categories.filter((c) => c.id !== category.id));
             setDefaultCategories(defaultCategories.filter((c) => c.id !== category.id));
             setToast({ message: "Category deleted successfully", type: "success" });
+            setTimeout(() => {
+                setToast(null);
+            }, 3000);
         } catch (error) {
             setToast({ message: "Error deleting category", type: "error" });
+            setTimeout(() => {
+                setToast(null);
+            }, 3000);
         }
     }
 
@@ -88,6 +94,9 @@ export default function CategoriesTable() {
             setDefaultCategories(defaultCategories.map((c) => c.id === categoryToEdit.id ? { ...c, name, description } : c));
             setShowAddCategoryPopup(false);
             setToast({ message: "Category updated successfully", type: "success" });
+            setTimeout(() => {
+                setToast(null);
+            }, 3000);
         }
     }
 
@@ -173,8 +182,8 @@ export default function CategoriesTable() {
                                     </svg>
                                 </td>
                                 <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{category.id}</td>
-                                <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-center">{category.name}</td>
-                                <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-center">{category.description}</td>
+                                <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-wrap break-all max-w-[25vw] text-center">{category.name}</td>
+                                <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-wrap break-all max-w-[25vw] text-center">{category.description}</td>
                             </tr>
                         ))}
                     </tbody>

@@ -30,7 +30,7 @@ export default function ProductsTable() {
     const [numberPopupSign, setNumberPopupSign] = useState<"+" | "-">("+");
 
 
-    const handleProductsRowContextMenu = (e: React.MouseEvent<HTMLTableRowElement>, product: Product) => {
+    const handleProductsRowContextMenu = (e: React.MouseEvent<HTMLTableCellElement> | React.MouseEvent<HTMLTableRowElement>, product: Product) => {
         e.preventDefault();
         e.stopPropagation(); // Prevent event bubbling
 
@@ -127,27 +127,31 @@ export default function ProductsTable() {
         return sortConfig.direction === 'asc' ? ' ↓' : ' ↑';
     };
 
-    const handleChangeProductQuantity = async (sign: "+" | "-") => {
+    const handleChangeProductQuantity = async () => {
+        const sign = numberPopupSign;
         const newQuantity = sign === "+" ? selectedProduct.quantity + quantity : selectedProduct.quantity - quantity;
-        if (newQuantity > selectedProduct.quantity && sign === "-") {
-            setToast({ message: "Quantity is greater than the stock", type: "error" });
+        if (newQuantity < 0) {
+            setToast({ message: "Quantity cannot be negative", type: "error" });
+            setTimeout(() => {
+                setToast(null);
+            }, 3000);
         } else {
             setShowNumberPopup(false);
             try {
                 await changeProductQuantity(selectedProduct.id, newQuantity);
                 setProducts(products.map((product) => product.id === selectedProduct.id ? { ...product, quantity: newQuantity } : product));
-                setToast({ message: `Removed ${quantity} from stock`, type: "success" });
+                setToast({ message: `${selectedProduct.name} stock ${sign === "+" ? "increased" : "decreased"} by ${quantity}`, type: "success" });
             } catch (error) {
-                setToast({ message: "Error removing product from stock", type: "error" });
+                setToast({ message: "Error changing quantity", type: "error" });
+            } finally {
+                setTimeout(() => {
+                    setToast(null);
+                }, 3000);
             }
         }
     };
 
 
-
-    const handleAddToStock = (product: Product) => {
-        console.log("Add to stock", product);
-    };
 
     const handleDeleteProduct = async (id: number) => {
         try {
@@ -217,14 +221,16 @@ export default function ProductsTable() {
                         <ContextMenu
                             actions={[
                                 {
-                                    label: "Remove from stock", onClick: () => {
-                                        setNumberPopupMessage("Decrease stock");
+                                    label: "Increase stock", onClick: () => {
+                                        setNumberPopupMessage("Increase stock");
+                                        setNumberPopupSign("+");
                                         setShowNumberPopup(true);
                                     }
                                 },
                                 {
-                                    label: "Add to stock", onClick: () => {
-                                        setNumberPopupMessage("Increase stock");
+                                    label: "Decrease stock", onClick: () => {
+                                        setNumberPopupMessage("Decrease stock");
+                                        setNumberPopupSign("-");
                                         setShowNumberPopup(true);
                                     }
                                 },
@@ -239,7 +245,7 @@ export default function ProductsTable() {
                         />
                     )}
                     {toast && <BaseToast message={toast.message} type={toast.type} />}
-                    {showNumberPopup && <NumberPopup message={numberPopupMessage} onClose={() => setShowNumberPopup(false)} setNumber={setQuantity} onConfirm={() => handleChangeProductQuantity(numberPopupSign)} />}
+                    {showNumberPopup && <NumberPopup message={numberPopupMessage} onClose={() => setShowNumberPopup(false)} setNumber={setQuantity} onConfirm={() => handleChangeProductQuantity()} />}
                     <table className="w-full h-fit">
                         <thead className="top-0 ">
                             <tr>
@@ -269,7 +275,7 @@ export default function ProductsTable() {
                                 <tr
                                     key={product.id}
                                     className="border-line group relative"
-                                    onContextMenu={(e) => handleProductsRowContextMenu(e, product)}
+                                    onContextMenu={(e: React.MouseEvent<HTMLTableRowElement>) => handleProductsRowContextMenu(e, product)}
                                 >
                                     <td className="flex justify-center items-center py-2 px-1.5 cursor-pointer rounded-md opacity-0 group-hover:opacity-100 dark:group-hover:bg-backgroundTertiary-dark light:group-hover:bg-backgroundTertiary-light transition-opacity w-fit"
                                         onClick={(e: React.MouseEvent<HTMLTableCellElement>) => handleProductsRowContextMenu(e, product)}>
@@ -278,9 +284,9 @@ export default function ProductsTable() {
                                         </svg>
                                     </td>
                                     <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{product.id}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{product.name}</td>
+                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-wrap break-all max-w-[25vw]">{product.name}</td>
                                     <td className="border border-line dark:border-line-dark border-line-light w-fit text-center px-2">{product.unitPrice}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{product.description}</td>
+                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-wrap break-all max-w-[25vw]">{product.description}</td>
                                     <td className="border border-line dark:border-line-dark border-line-light w-fit text-center px-2">{product.quantity}</td>
                                     <td className="border border-line dark:border-line-dark border-line-light w-fit text-center px-2"><p className="text-sm bg-primary rounded-md m-2 px-2">{categories.find((category) => category.id === product.categoryId)?.name}</p></td>
                                 </tr>

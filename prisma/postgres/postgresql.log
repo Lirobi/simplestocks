@@ -153,3 +153,26 @@
 2025-02-13 10:44:24.268 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.110 s; sync files=2, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=519 kB; lsn=0/1A79BE8, redo lsn=0/1A79B90
 2025-02-13 11:34:24.267 CET [19078] LOG:  checkpoint starting: time
 2025-02-13 11:34:24.679 CET [19078] LOG:  checkpoint complete: wrote 5 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.406 s, sync=0.001 s, total=0.413 s; sync files=5, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=467 kB; lsn=0/1A7A560, redo lsn=0/1A7A508
+2025-02-14 11:02:16.850 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 11:02:17.269 CET [19078] LOG:  checkpoint complete: wrote 5 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.411 s, sync=0.002 s, total=0.421 s; sync files=5, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=421 kB; lsn=0/1A7AE70, redo lsn=0/1A7AE18
+2025-02-14 12:10:48.609 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 12:10:48.716 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=379 kB; lsn=0/1A7C908, redo lsn=0/1A7C8B0
+2025-02-14 12:15:48.709 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 12:15:48.818 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.110 s; sync files=2, longest=0.001 s, average=0.001 s; distance=7 kB, estimate=342 kB; lsn=0/1A7E688, redo lsn=0/1A7E630
+2025-02-14 12:19:01.077 CET [71292] ERROR:  null value in column "businessId" of relation "Product" violates not-null constraint
+2025-02-14 12:19:01.077 CET [71292] DETAIL:  Failing row contains (39, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., s1q3ngdmjes, null, 3, 1, 1, 1, 10, null, null, 2025-02-14 11:19:01.064, 2025-02-14 11:19:01.064).
+2025-02-14 12:19:01.077 CET [71292] STATEMENT:  INSERT INTO "public"."Product" ("name","description","sku","categoryId","unitPrice","costPrice","quantity","minStockLevel","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING "public"."Product"."id"
+2025-02-14 12:20:48.920 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 12:20:51.675 CET [19078] LOG:  checkpoint complete: wrote 28 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.749 s, sync=0.002 s, total=2.756 s; sync files=21, longest=0.001 s, average=0.001 s; distance=120 kB, estimate=320 kB; lsn=0/1A9C8A8, redo lsn=0/1A9C850
+2025-02-14 12:25:48.676 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 12:25:48.985 CET [19078] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.306 s, sync=0.001 s, total=0.309 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5 kB, estimate=288 kB; lsn=0/1A9DDA8, redo lsn=0/1A9DD50
+2025-02-14 12:30:48.985 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 12:30:49.194 CET [19078] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.205 s, sync=0.001 s, total=0.209 s; sync files=3, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=260 kB; lsn=0/1A9E4C0, redo lsn=0/1A9E468
+2025-02-14 12:40:48.195 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 12:40:48.302 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=7 kB, estimate=234 kB; lsn=0/1AA02F8, redo lsn=0/1AA02A0
+2025-02-14 12:45:48.303 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 12:45:48.410 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=8 kB, estimate=212 kB; lsn=0/1AA2440, redo lsn=0/1AA23E8
+2025-02-14 12:48:02.230 CET [72896] FATAL:  sorry, too many clients already
+2025-02-14 12:48:02.233 CET [72897] FATAL:  sorry, too many clients already
+2025-02-14 12:50:48.411 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 12:50:48.518 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=3 kB, estimate=191 kB; lsn=0/1AA33F8, redo lsn=0/1AA33A0

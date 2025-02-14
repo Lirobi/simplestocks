@@ -21,6 +21,9 @@ export async function loginUser(emailOrFormData: string | FormData, passwordPara
         }
 
         const user = await login(email, password);
+        if (!user) {
+            throw new Error('Invalid email or password');
+        }
         const token = await createToken(user.id.toString()); // Convert id to string
 
         const cookieStore = await cookies();
