@@ -10,7 +10,20 @@ import { useSearchParams } from "next/navigation";
 import { Invite } from "@prisma/client";
 import { getInvite } from "@/lib/invites/invites";
 import { redirect } from "next/navigation";
-export default function Register() {
+import { Suspense } from 'react'
+import Loading from '@/app/loading'
+
+// Create a client component wrapper
+function RegisterFormWrapper() {
+    return (
+        <Suspense fallback={<Loading />}>
+            <RegisterForm />
+        </Suspense>
+    )
+}
+
+// Move existing page logic to a client component
+function RegisterForm() {
     const router = useRouter();
     const [step, setStep] = useState(0);
     const [email, setEmail] = useState("");
@@ -29,9 +42,11 @@ export default function Register() {
 
     const [invite, setInvite] = useState<Invite | null>(null);
 
-    const inviteUrl = useSearchParams().get("invite_url");
+    const searchParams = useSearchParams();
+    const inviteUrl = searchParams.get("invite_url");
+
     useEffect(() => {
-        if (inviteUrl && inviteUrl !== "") {
+        if (inviteUrl) {
             const fetchInvite = async () => {
                 const invite = await getInvite(inviteUrl);
                 if (invite) {
@@ -45,7 +60,7 @@ export default function Register() {
         } else {
             redirect("/join/error");
         }
-    }, []);
+    }, [inviteUrl]);
 
     const nextStep = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -174,4 +189,13 @@ export default function Register() {
             </div>
         </div >
     );
+}
+
+// Update default export to use the wrapper
+export default function RegisterPage() {
+    return (
+        <div className="flex justify-center items-center h-screen overflow-hidden">
+            <RegisterFormWrapper />
+        </div>
+    )
 }
