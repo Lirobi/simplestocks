@@ -1,10 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SidebarDropdown from "./SidebarDropdown";
 import { redirect } from "next/navigation";
 import SidebarButton from "./SidebarButton";
+import { getUser } from "@/app/login/actions";
 export default function DashboardSidebar(defaultOpen: boolean = false) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(defaultOpen);
+
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const [sidebarDropdownItems, setSidebarDropdownItems] = useState([
         {
@@ -22,6 +25,16 @@ export default function DashboardSidebar(defaultOpen: boolean = false) {
             ]
         }
     ]);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await getUser();
+            if (user.role.toUpperCase() === "ADMIN") {
+                setIsAdmin(true);
+            }
+        }
+        fetchUser();
+    }, []);
     return (
         <div className={`h-full flex flex-col transition-all duration-300 w-fit ease-in-out bg-background shadow-md`}>
             <div className="flex gap-4 justify-between items-center h-full">
@@ -29,6 +42,9 @@ export default function DashboardSidebar(defaultOpen: boolean = false) {
                     <SidebarButton title="Home" onClick={() => redirect("/dashboard")} />
                     <SidebarButton title="Products" onClick={() => redirect("/dashboard/products")} />
                     <SidebarButton title="Categories" onClick={() => redirect("/dashboard/categories")} />
+                    {isAdmin && (
+                        <SidebarButton title="Management" onClick={() => redirect("/dashboard/business")} />
+                    )}
                     {/* isSidebarOpen && sidebarDropdownItems.map((item) => (
                         <SidebarDropdown key={item.title} title={item.title} items={item.items} />
                     )) */}

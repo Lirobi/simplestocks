@@ -2,13 +2,17 @@
 
 import prisma from "@/lib/prisma";
 
-export async function getCategories() {
-    const categories = await prisma.category.findMany();
+export async function getCategories(businessId: number) {
+    const categories = await prisma.category.findMany({
+        where: {
+            businessId
+        }
+    });
     return categories;
 }
 
 
-export async function addProduct(name: string, price: number, quantity: number, categoryId: string, description: string) {
+export async function addProduct(name: string, price: number, quantity: number, categoryId: string, description: string, businessId: number) {
     const product = await prisma.product.create({
         data: {
             name,
@@ -19,6 +23,7 @@ export async function addProduct(name: string, price: number, quantity: number, 
             costPrice: price, // Using same price for now
             quantity,
             minStockLevel: 10, // Using default from schema
+            businessId
         },
         include: {
             category: true

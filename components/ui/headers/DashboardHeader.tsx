@@ -57,6 +57,13 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
         { label: "Help Center", onClick: () => console.log("Help clicked") }
     ];
 
+    if (user.email === "test@test.fr" || user.email === "lilian.bischung@gmail.com") {
+        menuItems.push({ label: "Admin Panel", onClick: () => redirect("/admin") });
+    }
+    if (user.role === "Admin") {
+        menuItems.push({ label: "Manage Business", onClick: () => redirect("/dashboard/business") });
+    }
+
     return (
         <div className="flex justify-between items-center p-4 dark:bg-background-dark bg-background-light h-fit shadow-lg">
             <div className="flex items-center gap-4">

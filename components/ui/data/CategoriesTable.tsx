@@ -1,13 +1,12 @@
 "use client"
-import { getCategories } from "@/app/dashboard/products/add/actions";
+import { getCategories } from "./actions";
 import BaseButton from "../buttons/BaseButton";
-import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Category } from "@prisma/client";
 import EditCategoryPopup from "../popups/EditCategoryPopup";
 import { addCategory, deleteCategory, updateCategory } from "./actions";
 import BaseToast from "../toasts/BaseToast";
-
+import { getUser } from "@/app/login/actions";
 
 export default function CategoriesTable() {
     const [search, setSearch] = useState("");
@@ -38,7 +37,8 @@ export default function CategoriesTable() {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const categories = await getCategories();
+            const user = await getUser();
+            const categories = await getCategories(user.businessId);
             setCategories(categories);
             setDefaultCategories(categories);
         }
@@ -80,7 +80,8 @@ export default function CategoriesTable() {
 
     const handleAddCategoryConfirm = async () => {
         if (currentAction === "Add") {
-            const newCategory = await addCategory(name, description);
+            const user = await getUser();
+            const newCategory = await addCategory(name, description, user.businessId);
             setCategories([...categories, newCategory]);
             setDefaultCategories([...defaultCategories, newCategory]);
             setShowAddCategoryPopup(false);

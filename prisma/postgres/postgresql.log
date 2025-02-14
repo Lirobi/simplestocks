@@ -176,3 +176,95 @@
 2025-02-14 12:48:02.233 CET [72897] FATAL:  sorry, too many clients already
 2025-02-14 12:50:48.411 CET [19078] LOG:  checkpoint starting: time
 2025-02-14 12:50:48.518 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=3 kB, estimate=191 kB; lsn=0/1AA33F8, redo lsn=0/1AA33A0
+2025-02-14 13:13:02.839 CET [74824] FATAL:  sorry, too many clients already
+2025-02-14 13:13:02.840 CET [74825] FATAL:  sorry, too many clients already
+2025-02-14 13:13:03.792 CET [74833] FATAL:  sorry, too many clients already
+2025-02-14 13:13:03.794 CET [74834] FATAL:  sorry, too many clients already
+2025-02-14 13:13:16.954 CET [74840] FATAL:  sorry, too many clients already
+2025-02-14 13:13:16.957 CET [74841] FATAL:  sorry, too many clients already
+2025-02-14 13:25:48.560 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 13:25:48.666 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.102 s, sync=0.001 s, total=0.107 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=172 kB; lsn=0/1AA3C30, redo lsn=0/1AA3BD8
+2025-02-14 13:38:29.631 CET [76950] FATAL:  sorry, too many clients already
+2025-02-14 13:38:29.633 CET [76951] FATAL:  sorry, too many clients already
+2025-02-14 13:38:34.121 CET [76960] FATAL:  sorry, too many clients already
+2025-02-14 13:38:34.123 CET [76961] FATAL:  sorry, too many clients already
+2025-02-14 13:41:44.637 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 13:41:44.743 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.106 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=155 kB; lsn=0/1AA4560, redo lsn=0/1AA4508
+2025-02-14 13:46:44.741 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 13:46:45.051 CET [19078] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.306 s, sync=0.001 s, total=0.311 s; sync files=4, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=139 kB; lsn=0/1AA4920, redo lsn=0/1AA48C8
+2025-02-14 13:51:44.059 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 13:51:44.371 CET [19078] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.306 s, sync=0.002 s, total=0.312 s; sync files=4, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=126 kB; lsn=0/1AA4D80, redo lsn=0/1AA4D28
+2025-02-14 13:51:57.884 CET [77768] ERROR:  update or delete on table "Business" violates foreign key constraint "Supplier_businessId_fkey" on table "Supplier"
+2025-02-14 13:51:57.884 CET [77768] DETAIL:  Key (id)=(1) is still referenced from table "Supplier".
+2025-02-14 13:51:57.884 CET [77768] STATEMENT:  DELETE FROM "public"."Business" WHERE ("public"."Business"."id" = $1 AND 1=1) RETURNING "public"."Business"."id", "public"."Business"."name", "public"."Business"."address", "public"."Business"."city", "public"."Business"."postalCode", "public"."Business"."country", "public"."Business"."taxId", "public"."Business"."subscriptionPlan", "public"."Business"."subscriptionStart", "public"."Business"."subscriptionEnd", "public"."Business"."paymentStatus"
+2025-02-14 13:52:33.486 CET [77792] ERROR:  update or delete on table "Business" violates foreign key constraint "Supplier_businessId_fkey" on table "Supplier"
+2025-02-14 13:52:33.486 CET [77792] DETAIL:  Key (id)=(1) is still referenced from table "Supplier".
+2025-02-14 13:52:33.486 CET [77792] STATEMENT:  DELETE FROM "public"."Business" WHERE ("public"."Business"."id" = $1 AND 1=1) RETURNING "public"."Business"."id", "public"."Business"."name", "public"."Business"."address", "public"."Business"."city", "public"."Business"."postalCode", "public"."Business"."country", "public"."Business"."taxId", "public"."Business"."subscriptionPlan", "public"."Business"."subscriptionStart", "public"."Business"."subscriptionEnd", "public"."Business"."paymentStatus"
+2025-02-14 13:56:44.373 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 13:56:45.090 CET [19078] LOG:  checkpoint complete: wrote 8 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.712 s, sync=0.002 s, total=0.718 s; sync files=8, longest=0.001 s, average=0.001 s; distance=3 kB, estimate=113 kB; lsn=0/1AA5C58, redo lsn=0/1AA5BC8
+2025-02-14 14:01:44.090 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 14:01:44.298 CET [19078] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.204 s, sync=0.001 s, total=0.209 s; sync files=3, longest=0.001 s, average=0.001 s; distance=3 kB, estimate=102 kB; lsn=0/1AA69C0, redo lsn=0/1AA6968
+2025-02-14 14:06:44.297 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 14:06:44.405 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=3 kB, estimate=92 kB; lsn=0/1AA76B8, redo lsn=0/1AA7660
+2025-02-14 14:11:44.404 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 14:11:44.512 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=3 kB, estimate=83 kB; lsn=0/1AA84B0, redo lsn=0/1AA8458
+2025-02-14 14:12:27.508 CET [78815] FATAL:  sorry, too many clients already
+2025-02-14 14:12:27.510 CET [78816] FATAL:  sorry, too many clients already
+2025-02-14 14:12:27.687 CET [78817] FATAL:  sorry, too many clients already
+2025-02-14 14:12:27.688 CET [78818] FATAL:  sorry, too many clients already
+2025-02-14 14:12:27.859 CET [78819] FATAL:  sorry, too many clients already
+2025-02-14 14:12:27.860 CET [78820] FATAL:  sorry, too many clients already
+2025-02-14 14:12:31.369 CET [78828] FATAL:  sorry, too many clients already
+2025-02-14 14:12:31.371 CET [78829] FATAL:  sorry, too many clients already
+2025-02-14 14:12:49.978 CET [78844] FATAL:  sorry, too many clients already
+2025-02-14 14:12:49.980 CET [78845] FATAL:  sorry, too many clients already
+2025-02-14 14:12:52.781 CET [78862] FATAL:  sorry, too many clients already
+2025-02-14 14:12:52.782 CET [78863] FATAL:  sorry, too many clients already
+2025-02-14 14:13:28.077 CET [78890] FATAL:  sorry, too many clients already
+2025-02-14 14:13:28.080 CET [78891] FATAL:  sorry, too many clients already
+2025-02-14 14:13:37.339 CET [78912] FATAL:  sorry, too many clients already
+2025-02-14 14:13:37.340 CET [78913] FATAL:  sorry, too many clients already
+2025-02-14 14:13:44.007 CET [78928] FATAL:  sorry, too many clients already
+2025-02-14 14:13:44.008 CET [78929] FATAL:  sorry, too many clients already
+2025-02-14 14:13:47.498 CET [78943] FATAL:  sorry, too many clients already
+2025-02-14 14:13:47.500 CET [78944] FATAL:  sorry, too many clients already
+2025-02-14 14:13:52.133 CET [78955] FATAL:  sorry, too many clients already
+2025-02-14 14:13:52.134 CET [78956] FATAL:  sorry, too many clients already
+2025-02-14 14:13:54.809 CET [78959] FATAL:  sorry, too many clients already
+2025-02-14 14:13:54.812 CET [78960] FATAL:  sorry, too many clients already
+2025-02-14 14:13:57.578 CET [78970] FATAL:  sorry, too many clients already
+2025-02-14 14:13:57.580 CET [78971] FATAL:  sorry, too many clients already
+2025-02-14 14:14:09.155 CET [78990] FATAL:  sorry, too many clients already
+2025-02-14 14:14:09.157 CET [78991] FATAL:  sorry, too many clients already
+2025-02-14 14:14:19.878 CET [79002] FATAL:  sorry, too many clients already
+2025-02-14 14:14:19.880 CET [79003] FATAL:  sorry, too many clients already
+2025-02-14 14:14:20.824 CET [79006] FATAL:  sorry, too many clients already
+2025-02-14 14:14:20.825 CET [79007] FATAL:  sorry, too many clients already
+2025-02-14 14:14:24.020 CET [79013] FATAL:  sorry, too many clients already
+2025-02-14 14:14:24.021 CET [79014] FATAL:  sorry, too many clients already
+2025-02-14 14:14:32.079 CET [79041] FATAL:  sorry, too many clients already
+2025-02-14 14:14:32.081 CET [79042] FATAL:  sorry, too many clients already
+2025-02-14 14:14:35.015 CET [79050] FATAL:  sorry, too many clients already
+2025-02-14 14:14:35.017 CET [79051] FATAL:  sorry, too many clients already
+2025-02-14 14:21:44.509 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 14:21:44.715 CET [19078] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.203 s, sync=0.001 s, total=0.207 s; sync files=3, longest=0.001 s, average=0.001 s; distance=4 kB, estimate=75 kB; lsn=0/1AA9568, redo lsn=0/1AA9510
+2025-02-14 14:26:44.691 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 14:26:44.797 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.102 s, sync=0.001 s, total=0.107 s; sync files=2, longest=0.001 s, average=0.001 s; distance=4 kB, estimate=68 kB; lsn=0/1AAA7E0, redo lsn=0/1AAA788
+2025-02-14 14:31:44.795 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 14:31:51.547 CET [19078] LOG:  checkpoint complete: wrote 67 buffers (0.4%); 0 WAL file(s) added, 0 removed, 0 recycled; write=6.745 s, sync=0.004 s, total=6.753 s; sync files=46, longest=0.001 s, average=0.001 s; distance=399 kB, estimate=399 kB; lsn=0/1B0E498, redo lsn=0/1B0E440
+2025-02-14 14:41:44.542 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 14:41:45.778 CET [19078] LOG:  checkpoint complete: wrote 13 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.229 s, sync=0.002 s, total=1.237 s; sync files=11, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=359 kB; lsn=0/1B0FFB0, redo lsn=0/1B0FF58
+2025-02-14 14:48:24.700 CET [81183] FATAL:  sorry, too many clients already
+2025-02-14 14:48:24.701 CET [81184] FATAL:  sorry, too many clients already
+2025-02-14 14:48:25.203 CET [81185] FATAL:  sorry, too many clients already
+2025-02-14 14:48:25.205 CET [81186] FATAL:  sorry, too many clients already
+2025-02-14 14:48:28.404 CET [81194] FATAL:  sorry, too many clients already
+2025-02-14 14:48:28.406 CET [81195] FATAL:  sorry, too many clients already
+2025-02-14 14:48:31.440 CET [81200] FATAL:  sorry, too many clients already
+2025-02-14 14:48:31.442 CET [81201] FATAL:  sorry, too many clients already
+2025-02-14 15:01:44.791 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 15:01:45.819 CET [19078] LOG:  checkpoint complete: wrote 11 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.020 s, sync=0.003 s, total=1.029 s; sync files=11, longest=0.001 s, average=0.001 s; distance=12 kB, estimate=325 kB; lsn=0/1B13140, redo lsn=0/1B130E8
+2025-02-14 15:11:44.819 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 15:11:45.743 CET [19078] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.919 s, sync=0.001 s, total=0.925 s; sync files=10, longest=0.001 s, average=0.001 s; distance=9 kB, estimate=293 kB; lsn=0/1B15620, redo lsn=0/1B155C8
+2025-02-14 15:16:44.743 CET [19078] LOG:  checkpoint starting: time
+2025-02-14 15:16:44.850 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=264 kB; lsn=0/1B16FC8, redo lsn=0/1B16F70

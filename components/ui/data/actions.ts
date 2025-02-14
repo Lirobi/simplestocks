@@ -1,13 +1,23 @@
 "use server";
 import prisma from "@/lib/prisma";
 
-export async function getProducts() {
-    const products = await prisma.product.findMany();
+
+
+export async function getProducts(businessId: number) {
+    const products = await prisma.product.findMany({
+        where: {
+            businessId
+        }
+    });
     return products;
 }
 
-export async function getCategories() {
-    const categories = await prisma.category.findMany();
+export async function getCategories(businessId: number) {
+    const categories = await prisma.category.findMany({
+        where: {
+            businessId
+        }
+    });
     return categories;
 }
 
@@ -28,9 +38,9 @@ export async function changeProductQuantity(id: number, quantity: number) {
 }
 
 
-export async function addCategory(name: string, description: string) {
+export async function addCategory(name: string, description: string, businessId: number) {
     const category = await prisma.category.create({
-        data: { name, description },
+        data: { name, description, businessId },
     });
     return category;
 }

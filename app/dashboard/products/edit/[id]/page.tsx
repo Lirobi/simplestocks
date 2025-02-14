@@ -10,7 +10,7 @@ import BaseTextArea from "@/components/ui/inputs/BaseTextArea";
 import BaseButton from "@/components/ui/buttons/BaseButton";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
+import { getUser } from "@/app/login/actions";
 export default function EditProductPage() {
 
     const params = useParams();
@@ -24,7 +24,8 @@ export default function EditProductPage() {
         }
 
         const fetchCategories = async () => {
-            const categories = await getCategories();
+            const user = await getUser();
+            const categories = await getCategories(user.businessId);
             setCategories(categories);
         }
 

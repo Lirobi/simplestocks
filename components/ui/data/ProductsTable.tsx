@@ -9,6 +9,7 @@ import BaseToast from "../toasts/BaseToast";
 import NumberPopup from "../popups/NumberPopup";
 import { redirect } from "next/navigation";
 import BaseButton from "../buttons/BaseButton";
+import { getUser } from "@/app/login/actions";
 
 export default function ProductsTable() {
     const [defaultProducts, setDefaultProducts] = useState<Product[]>([]);
@@ -67,8 +68,9 @@ export default function ProductsTable() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const products = await getProducts();
-                const categories = await getCategories();
+                const user = await getUser();
+                const products = await getProducts(user.businessId);
+                const categories = await getCategories(user.businessId);
                 setProducts(products);
                 setDefaultProducts(products);
                 setCategories(categories);

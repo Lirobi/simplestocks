@@ -2,6 +2,8 @@
 import { login, createToken, verifyToken } from "@/lib/auth/auth";
 import { cookies } from "next/headers";
 import { User } from "@/lib/types/User";
+import prisma from "@/lib/prisma";
+
 
 export async function loginUser(emailOrFormData: string | FormData, passwordParam?: string) {
     try {
@@ -25,7 +27,10 @@ export async function loginUser(emailOrFormData: string | FormData, passwordPara
             throw new Error('Invalid email or password');
         }
         const token = await createToken(user.id.toString()); // Convert id to string
-
+        const setUserLastLogin = await prisma.user.update({
+            where: { id: user.id },
+            data: { lastLogin: new Date() }
+        });
         const cookieStore = await cookies();
         cookieStore.set("token", token, {
             httpOnly: true,

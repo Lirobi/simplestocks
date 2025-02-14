@@ -2,12 +2,14 @@
 import RegisterCredentialsForm from "@/components/ui/forms/registerforms/RegisterCredentialsForm";
 import RegisterPersonalInformationForm from "@/components/ui/forms/registerforms/RegisterPersonalInformationForm";
 import RegisterAdditionalInformationForm from "@/components/ui/forms/registerforms/RegisterAdditionalInformationForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RegisterFormsContainer from "@/components/ui/forms/registerforms/RegisterFormsContainer";
 import { checkIfEmailAlreadyUsed, registerUser } from "./actions";
 import { useRouter } from "next/navigation";
-
-
+import { useSearchParams } from "next/navigation";
+import { Invite } from "@prisma/client";
+import { getInvite } from "@/lib/invites/invites";
+import { redirect } from "next/navigation";
 export default function Register() {
     const router = useRouter();
     const [step, setStep] = useState(0);
@@ -22,7 +24,28 @@ export default function Register() {
     const [city, setCity] = useState("");
     const [postalCode, setPostalCode] = useState("");
     const [country, setCountry] = useState("");
+    const [businessId, setBusinessId] = useState(0);
     const [error, setError] = useState("");
+
+    const [invite, setInvite] = useState<Invite | null>(null);
+
+    const inviteUrl = useSearchParams().get("invite_url");
+    useEffect(() => {
+        if (inviteUrl && inviteUrl !== "") {
+            const fetchInvite = async () => {
+                const invite = await getInvite(inviteUrl);
+                if (invite) {
+                    setBusinessId(invite.businessId);
+                } else {
+                    redirect("/join/error");
+                }
+                setInvite(invite);
+            }
+            fetchInvite();
+        } else {
+            redirect("/join/error");
+        }
+    }, []);
 
     const nextStep = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -93,11 +116,12 @@ export default function Register() {
                         firstName,
                         lastName,
                         phoneNumber,
-                        birthDate,
+                        birthDate: new Date(birthDate),
                         address,
                         city,
                         postalCode,
-                        country
+                        country,
+                        businessId: businessId
                     });
                     router.push('/login'); // Redirect to login after successful registration
                 } catch (err) {

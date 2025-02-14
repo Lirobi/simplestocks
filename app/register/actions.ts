@@ -40,6 +40,7 @@ export async function registerUser(params: {
     city: string;
     postalCode: string;
     country: string;
+    businessId: number;
 }) {
     const {
         email,
@@ -51,7 +52,8 @@ export async function registerUser(params: {
         address,
         city,
         postalCode,
-        country
+        country,
+        businessId
     } = params;
 
     try {
@@ -79,7 +81,8 @@ export async function registerUser(params: {
                 address,
                 city,
                 postalCode,
-                country
+                country,
+                businessId
             }
         });
 
@@ -90,4 +93,4 @@ export async function registerUser(params: {
         console.error('Error registering user:', error);
         throw error;
     }
-} 
+}

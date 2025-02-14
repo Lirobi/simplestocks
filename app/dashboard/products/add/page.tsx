@@ -11,7 +11,7 @@ import { Category } from "@prisma/client";
 import BaseButton from "@/components/ui/buttons/BaseButton";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-
+import { getUser } from "@/app/login/actions";
 
 export default function AddProduct() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -26,7 +26,8 @@ export default function AddProduct() {
 
 
     const fetchCategories = async () => {
-        const categories = await getCategories();
+        const user = await getUser();
+        const categories = await getCategories(user.businessId);
         setCategories(categories);
     }
 
@@ -39,7 +40,8 @@ export default function AddProduct() {
             setError("Please fill all the fields : " + name + " " + price + " " + quantity + " " + category + " " + description);
             return;
         }
-        const product = await addProduct(name, price, quantity, category, description);
+        const user = await getUser();
+        const product = await addProduct(name, price, quantity, category, description, user.businessId);
         if (product) {
             redirect("/dashboard/products");
         }
