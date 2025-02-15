@@ -51,17 +51,12 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
 
 
     const menuItems = [
-        { label: "Profile Settings", onClick: () => console.log("Profile clicked") },
         { label: "Preferences", onClick: () => console.log("Preferences clicked") },
         { label: "Switch Theme", onClick: () => handleSwitchTheme() },
-        { label: "Help Center", onClick: () => console.log("Help clicked") }
     ];
 
     if (user.email === "test@test.fr" || user.email === "lilian.bischung@gmail.com") {
         menuItems.push({ label: "Admin Panel", onClick: () => redirect("/admin") });
-    }
-    if (user.role === "Admin") {
-        menuItems.push({ label: "Manage Business", onClick: () => redirect("/dashboard/business") });
     }
 
     return (
