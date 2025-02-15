@@ -270,3 +270,11 @@
 2025-02-14 15:16:44.850 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=264 kB; lsn=0/1B16FC8, redo lsn=0/1B16F70
 2025-02-14 15:21:44.850 CET [19078] LOG:  checkpoint starting: time
 2025-02-14 15:21:45.363 CET [19078] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.509 s, sync=0.001 s, total=0.513 s; sync files=6, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=238 kB; lsn=0/1B17768, redo lsn=0/1B17710
+2025-02-15 14:28:53.116 CET [19078] LOG:  checkpoint starting: time
+2025-02-15 14:28:53.222 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.109 s; sync files=2, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=215 kB; lsn=0/1B191E0, redo lsn=0/1B19188
+2025-02-15 16:45:15.452 CET [19078] LOG:  checkpoint starting: time
+2025-02-15 16:45:15.559 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.102 s, sync=0.001 s, total=0.109 s; sync files=2, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=194 kB; lsn=0/1B1ADA0, redo lsn=0/1B1AD48
+2025-02-15 16:50:15.564 CET [19078] LOG:  checkpoint starting: time
+2025-02-15 16:50:15.670 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.106 s; sync files=2, longest=0.001 s, average=0.001 s; distance=7 kB, estimate=175 kB; lsn=0/1B1CA98, redo lsn=0/1B1CA40
+2025-02-15 17:00:15.678 CET [19078] LOG:  checkpoint starting: time
+2025-02-15 17:00:15.785 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.107 s; sync files=2, longest=0.001 s, average=0.001 s; distance=7 kB, estimate=158 kB; lsn=0/1B1E860, redo lsn=0/1B1E808

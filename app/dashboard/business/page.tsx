@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import { getBusinessFromId, getUsersFromBusinessId } from "./actions";
 import { Business, User } from "@prisma/client";
 import { getUser } from "@/app/login/actions";
-import EditUserModal from "@/components/ui/adminpanel/views/EditUserModal";
+import EditUserModal from "@/components/ui/popups/EditUserPopup";
 import { updateUser } from "./actions";
 import BaseButton from "@/components/ui/buttons/BaseButton";
 import BaseNumberInput from "@/components/ui/inputs/BaseNumberInput";
 import { createInvite } from "@/lib/invites/invites";
 import BaseToast from "@/components/ui/toasts/BaseToast";
+
 export default function BusinessPage() {
 
 
@@ -23,6 +24,8 @@ export default function BusinessPage() {
     const [maxUses, setMaxUses] = useState(1);
 
     const [toast, setToast] = useState<{ message: string, type: "success" | "error" } | null>(null);
+
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -49,6 +52,9 @@ export default function BusinessPage() {
         }, 10000);
     }
 
+    const handleSearchbarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value);
+    };
 
     return (
         <div className="w-full h-full flex flex-col overflow-auto dark:bg-backgroundSecondary-dark bg-background-light">
@@ -75,6 +81,31 @@ export default function BusinessPage() {
             )}
             {displayedView === 0 && (
                 <div className="w-full px-10">
+                    <div className="w-full mb-4 sticky top-2 z-20">
+                        <div className="relative">
+                            <input
+                                type="text"
+                                placeholder="Search employees"
+                                value={search}
+                                onChange={handleSearchbarChange}
+                                className="border-2 dark:border-line-dark border-line-light dark:bg-background-dark bg-background-light rounded-md p-2 w-full pr-10"
+                            />
+                            <svg
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                            </svg>
+                        </div>
+                    </div>
                     <table className="w-full h-fit">
                         <thead className="top-0 ">
                             <tr>
@@ -90,43 +121,48 @@ export default function BusinessPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map((user) => (
-                                <tr key={user.id} className="group">
-                                    <td className=" w-fit p-2">
-                                        <button
-                                            onClick={() => {
-                                                setSelectedUser(user);
-                                                setShowEditModal(true);
-                                            }}
-                                            className=""
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                className="h-9 w-9 p-1.5 text-foreground-light dark:text-foreground-dark opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer dark:group-hover:bg-background-dark light:group-hover:bg-backgroundTertiary-light rounded-md"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth={2}
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
+                            {users
+                                .filter(user =>
+                                    `${user.firstName} ${user.lastName}`.toLowerCase().includes(search.toLowerCase()) ||
+                                    user.email.toLowerCase().includes(search.toLowerCase()) ||
+                                    user.role.toLowerCase().includes(search.toLowerCase())
+                                )
+                                .map((user) => (
+                                    <tr key={user.id} className="group">
+                                        <td className=" w-fit px-2">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedUser(user);
+                                                    setShowEditModal(true);
+                                                }}
+                                                className=""
                                             >
-                                                <path d="M12 20h9" />
-                                                <path d="M16.5 3.5l4 4-9 9H12v-4.5l9-9z" />
-                                                <path d="M3 21v-3.5L15.5 4l3.5 3.5L7.5 21H3z" />
-                                            </svg>
-                                        </button>
-                                    </td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.firstName} {user.lastName}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.address}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.city}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.postalCode}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.country}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.phone}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.email}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.role}</td>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    className="h-9 w-9 p-1.5 text-foreground-light dark:text-foreground-dark opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer dark:group-hover:bg-background-dark light:group-hover:bg-backgroundTertiary-light rounded-md"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth={2}
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                >
+                                                    <path d="M11 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V13" />
+                                                    <path d="M9.5 11.5L17.5 3.5C18.3284 2.67157 19.6716 2.67157 20.5 3.5C21.3284 4.32843 21.3284 5.67157 20.5 6.5L12.5 14.5L8 16L9.5 11.5Z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                        <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.firstName} {user.lastName}</td>
+                                        <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.address}</td>
+                                        <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.city}</td>
+                                        <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.postalCode}</td>
+                                        <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.country}</td>
+                                        <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.phone}</td>
+                                        <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.email}</td>
+                                        <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.role}</td>
 
-                                </tr>
-                            ))}
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
 

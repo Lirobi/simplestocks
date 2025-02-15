@@ -281,8 +281,10 @@ export default function ProductsTable() {
                                 >
                                     <td className="flex justify-center items-center py-2 px-1.5 cursor-pointer rounded-md opacity-0 group-hover:opacity-100 dark:group-hover:bg-backgroundTertiary-dark light:group-hover:bg-backgroundTertiary-light transition-opacity w-fit"
                                         onClick={(e: React.MouseEvent<HTMLTableCellElement>) => handleProductsRowContextMenu(e, product)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="py-full h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="py-full h-5 w-5" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="6" r="1" transform="rotate(-90 12 6)" />
+                                            <circle cx="12" cy="12" r="1" transform="rotate(-90 12 12)" />
+                                            <circle cx="12" cy="18" r="1" transform="rotate(-90 12 18)" />
                                         </svg>
                                     </td>
                                     <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{product.id}</td>

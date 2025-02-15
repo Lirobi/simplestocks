@@ -26,7 +26,7 @@ export default function EditUserModal({
         setLoading(true);
         setError("");
 
-        const result = await updateUser(user.id, formData);
+        const result = await updateUser(user.id, formData as User);
         if (result.success) {
             onSave(result.user);
             onClose();
@@ -56,7 +56,7 @@ export default function EditUserModal({
                             <input
                                 value={formData.firstName || ""}
                                 disabled
-                                className="dark:bg-background-dark bg-background-light border border-line-light dark:border-line-dark rounded p-2"
+                                className="dark:bg-backgroundSecondary-dark bg-backgroundSecondary-light border border-line-light dark:border-line-dark rounded p-2"
                             />
                         </div>
                         <div className="flex flex-col">
@@ -64,7 +64,7 @@ export default function EditUserModal({
                             <input
                                 value={formData.lastName || ""}
                                 disabled
-                                className="dark:bg-background-dark bg-background-light border border-line-light dark:border-line-dark rounded p-2"
+                                className="dark:bg-backgroundSecondary-dark bg-backgroundSecondary-light border border-line-light dark:border-line-dark rounded p-2"
                             />
                         </div>
                     </div>

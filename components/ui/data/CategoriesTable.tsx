@@ -139,7 +139,7 @@ export default function CategoriesTable() {
                 <table className="w-full h-fit">
                     <thead className="top-0 ">
                         <tr>
-                            <th className="w-fit p-2 cursor-pointer"></th>
+                            <th className="max-w-5 p-2 cursor-pointer"></th>
                             <th className="w-fit p-2 cursor-pointer"></th>
                             <th className="w-fit p-2 cursor-pointer">id</th>
                             <th className="w-fit p-2 cursor-pointer">Name</th>
@@ -149,7 +149,7 @@ export default function CategoriesTable() {
                     <tbody>
                         {categories.map((category) => (
                             <tr key={category.id} className="border-line group relative">
-                                <td className="w-fit mr-1"
+                                <td className="w-9 mr-1"
                                     onClick={() => { handleEditCategory(category); setCategoryToEdit(category) }}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -161,12 +161,12 @@ export default function CategoriesTable() {
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                     >
-                                        <path d="M12 20h9" />
-                                        <path d="M16.5 3.5l4 4-9 9H12v-4.5l9-9z" />
-                                        <path d="M3 21v-3.5L15.5 4l3.5 3.5L7.5 21H3z" />
+                                        <path d="M11 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V13" />
+                                        <path d="M9.5 11.5L17.5 3.5C18.3284 2.67157 19.6716 2.67157 20.5 3.5C21.3284 4.32843 21.3284 5.67157 20.5 6.5L12.5 14.5L8 16L9.5 11.5Z" />
                                     </svg>
+
                                 </td>
-                                <td className="w-fit"
+                                <td className="w-9 1"
                                     onClick={() => { handleDeleteCategory(category) }}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -178,8 +178,8 @@ export default function CategoriesTable() {
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                     >
-                                        <path d="M3 6h18M9 6v12m3-12v12m-6 0h12" />
-                                        <path d="M4 6h16l-1 12H5L4 6z" />
+                                        <path d="M3 6H21M5 6V20C5 21.1046 5.89543 22 7 22H17C18.1046 22 19 21.1046 19 20V6M8 6V4C8 2.89543 8.89543 2 10 2H14C15.1046 2 16 2.89543 16 4V6" />
+                                        <path d="M14 11V17M10 11V17" />
                                     </svg>
                                 </td>
                                 <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{category.id}</td>
