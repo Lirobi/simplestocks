@@ -59,7 +59,7 @@ export default function EditUserPopup({
                     </div>
                 </div>
 
-                {['address', 'phone', 'email'].map((field) => (
+                {['phone', 'email', 'address'].map((field) => (
                     <div key={field} className="flex flex-col">
                         <label className="text-sm mb-1 capitalize">{field}</label>
                         <input
@@ -72,7 +72,7 @@ export default function EditUserPopup({
 
                 {/* New grid for city/postal/country */}
                 <div className="grid grid-cols-3 gap-4">
-                    {['city', 'postalCode', 'country'].map((field) => (
+                    {['postalCode', 'city', 'country'].map((field) => (
                         <div key={field} className="flex flex-col">
                             <label className="text-sm mb-1 capitalize">{field}</label>
                             <input

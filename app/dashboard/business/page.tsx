@@ -139,7 +139,7 @@ export default function BusinessPage() {
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    className="h-9 w-9 p-1.5 text-foreground-light dark:text-foreground-dark opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer dark:group-hover:bg-background-dark light:group-hover:bg-backgroundTertiary-light rounded-md"
+                                                    className="h-9 w-9 p-1.5 text-foreground-light dark:text-foreground-dark opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer dark:group-hover:bg-backgroundTertiary-dark light:group-hover:bg-backgroundTertiary-light rounded-md"
                                                     viewBox="0 0 24 24"
                                                     fill="none"
                                                     stroke="currentColor"

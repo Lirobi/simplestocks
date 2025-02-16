@@ -6,10 +6,15 @@ import { useState, useEffect } from "react";
 import PopupWindowContainer from './PopupWindowContainer';
 
 export default function NumberPopup({ message, allowNegative = false, onClose, setNumber, onConfirm }: { message: string, allowNegative?: boolean, onClose: () => void, setNumber: (quantity: number) => void, onConfirm: () => void }) {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            onConfirm();
+        }
+    }
     return (
         <PopupWindowContainer title={message} onClose={onClose} className="w-fit max-w-fit">
             <div className="space-y-4">
-                <BaseNumberInput label="Quantity" name="quantity" className="w-full" onChange={(e) => setNumber(parseInt(e.target.value))} />
+                <BaseNumberInput label="Quantity" name="quantity" className="w-full" onChange={(e) => setNumber(parseInt(e.target.value))} onKeyDown={handleKeyDown} focus={true} />
 
 
 

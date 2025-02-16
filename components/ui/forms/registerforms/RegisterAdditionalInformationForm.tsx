@@ -28,8 +28,8 @@ export default function RegisterAdditionalInformationForm({ nextStep, setAddress
             <form onSubmit={handleSubmit} className="flex flex-col gap-4" onKeyDown={handleKeyDown}>
                 <AuthenticateFormInput type="text" label="Address" setValue={setAddress} />
                 <div className="flex gap-4 max-md:flex-col">
-                    <AuthenticateFormInput type="text" label="City" setValue={setCity} />
                     <PostalCodeInput setValue={setPostalCode} />
+                    <AuthenticateFormInput type="text" label="City" setValue={setCity} />
                 </div>
                 <AuthenticateFormInput type="text" label="Country" setValue={setCountry} />
                 {error && <p className="text-red-500">{error}</p>}

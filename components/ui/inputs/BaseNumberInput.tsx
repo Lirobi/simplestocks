@@ -9,6 +9,8 @@ interface BaseNumberInputProps {
     disabled?: boolean;
     error?: string;
     className?: string;
+    focus?: boolean;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -23,7 +25,9 @@ export default function BaseNumberInput({
     disabled = false,
     error,
     className = '',
-    onChange
+    onChange,
+    onKeyDown,
+    focus = false
 }: BaseNumberInputProps) {
     return (
         <div className="mb-4">
@@ -40,10 +44,12 @@ export default function BaseNumberInput({
                 name={name}
                 value={value}
                 onChange={(e) => onChange(e)}
+                onKeyDown={(e) => onKeyDown?.(e)}
                 min={min}
                 max={max}
                 step={step}
                 disabled={disabled}
+                autoFocus={focus}
                 className={`
                     w-full px-3 py-2 rounded-lg
                     bg-background-light dark:bg-background-dark
