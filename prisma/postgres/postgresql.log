@@ -278,3 +278,13 @@
 2025-02-15 16:50:15.670 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.106 s; sync files=2, longest=0.001 s, average=0.001 s; distance=7 kB, estimate=175 kB; lsn=0/1B1CA98, redo lsn=0/1B1CA40
 2025-02-15 17:00:15.678 CET [19078] LOG:  checkpoint starting: time
 2025-02-15 17:00:15.785 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.107 s; sync files=2, longest=0.001 s, average=0.001 s; distance=7 kB, estimate=158 kB; lsn=0/1B1E860, redo lsn=0/1B1E808
+2025-02-15 17:53:33.053 CET [19078] LOG:  checkpoint starting: time
+2025-02-15 17:53:33.161 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.104 s, sync=0.001 s, total=0.109 s; sync files=2, longest=0.001 s, average=0.001 s; distance=7 kB, estimate=143 kB; lsn=0/1B20770, redo lsn=0/1B20718
+2025-02-16 01:28:02.825 CET [19078] LOG:  checkpoint starting: time
+2025-02-16 01:28:02.932 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=129 kB; lsn=0/1B20F98, redo lsn=0/1B20F40
+2025-02-16 01:33:16.719 CET [99114] FATAL:  sorry, too many clients already
+2025-02-16 01:33:16.734 CET [99115] FATAL:  sorry, too many clients already
+2025-02-16 01:43:02.927 CET [19078] LOG:  checkpoint starting: time
+2025-02-16 01:43:03.034 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.108 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=116 kB; lsn=0/1B21888, redo lsn=0/1B21830
+2025-02-16 01:53:02.969 CET [19078] LOG:  checkpoint starting: time
+2025-02-16 01:53:03.075 CET [19078] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.001 s, total=0.106 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=105 kB; lsn=0/1B22258, redo lsn=0/1B22200

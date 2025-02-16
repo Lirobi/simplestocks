@@ -16,11 +16,16 @@ export default function RegisterPersonalInformationForm({ nextStep, setFirstName
         e.preventDefault();
         nextStep(e);
     };
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+        if (e.key === "Enter") {
+            nextStep(e);
+        }
+    }
 
     return (
         <div>
             <h1 className="text-2xl font-bold">Personal Information</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4" onKeyDown={handleKeyDown}>
                 <div className="flex gap-4 max-md:flex-col">
                     <AuthenticateFormInput type="text" label="First Name" setValue={setFirstName} />
                     <AuthenticateFormInput type="text" label="Last Name" setValue={setLastName} />

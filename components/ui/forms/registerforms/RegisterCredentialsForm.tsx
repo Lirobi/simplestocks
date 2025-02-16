@@ -15,11 +15,16 @@ export default function RegisterCredentialsForm({ nextStep, setEmail, setPasswor
         e.preventDefault();
         nextStep(e);
     };
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+        if (e.key === "Enter") {
+            nextStep(e);
+        }
+    }
 
     return (
         <div>
             <h1 className="text-2xl font-bold">Credentials</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4" onKeyDown={handleKeyDown}>
                 <AuthenticateFormInput type="email" label="Email" setValue={setEmail} />
                 <AuthenticateFormInput type="password" label="Password" setValue={setPassword} />
                 <AuthenticateFormInput type="password" label="Confirm Password" setValue={setConfirmPassword} />
