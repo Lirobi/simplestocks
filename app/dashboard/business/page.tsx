@@ -10,6 +10,7 @@ import BaseButton from "@/components/ui/buttons/BaseButton";
 import BaseNumberInput from "@/components/ui/inputs/BaseNumberInput";
 import { createInvite } from "@/lib/invites/invites";
 import BaseToast from "@/components/ui/toasts/BaseToast";
+import PopupWindowContainer from "@/components/ui/popups/PopupWindowContainer";
 
 export default function BusinessPage() {
 
@@ -66,18 +67,12 @@ export default function BusinessPage() {
                 <BaseToast message={toast.message} type={toast.type} />
             )}
             {generateInviteLinkPopup && (
-                <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit p-10 bg-background-light shadow-md dark:bg-background-dark rounded-lg z-50">
-                    <div className="flex pb-2 gap-4 justify-between">
-                        <h1 className="text-2xl font-bold">Generate Invite Link</h1>
-                        <button onClick={() => setGenerateInviteLinkPopup(false)} className="text-foreground-light dark:text-foreground-dark">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
+                <PopupWindowContainer title="Generate Invite Link" onClose={() => setGenerateInviteLinkPopup(false)} className="w-fit max-w-fit">
+
                     <BaseNumberInput label="Max Uses" value={maxUses} onChange={(e) => setMaxUses(e.target.valueAsNumber)} />
                     <BaseButton onClick={handleGenerateInviteLink} className="w-full">Generate</BaseButton>
-                </div>
+                </PopupWindowContainer>
+
             )}
             {displayedView === 0 && (
                 <div className="w-full px-10">

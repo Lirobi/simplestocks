@@ -154,7 +154,7 @@ function RegisterForm() {
     }
 
     return (
-        <div className="flex justify-center items-center h-screen overflow-hidden">
+        <div className="flex justify-center items-center h-screen overflow-hidden w-full">
             <div className="status-bar px-4 absolute top-[5vh] rounded-md w-fit h-10 bg-background-light dark:bg-background-dark flex justify-center items-center font-bold max-md:hidden">
                 <div className="flex gap-4">
                     <p className={step >= 0 ? "text-primary cursor-pointer" : ""} onClick={() => step >= 0 && setStep(0)} >Credentials</p>
