@@ -5,7 +5,7 @@ import { logoutUser } from "../login/actions";
 export default function Logout() {
     const logout = async () => {
         await logoutUser();
-        redirect("/login");
+        redirect("/");
     }
     logout();
 }

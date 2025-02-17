@@ -8,6 +8,7 @@ import { addCategory, deleteCategory, updateCategory } from "./actions";
 import BaseToast from "../toasts/BaseToast";
 import { getUser } from "@/app/login/actions";
 import SearchBar from "../inputs/SearchBar";
+import TableContainer from "../containers/TableContainer";
 
 export default function CategoriesTable() {
     const [search, setSearch] = useState("");
@@ -103,21 +104,20 @@ export default function CategoriesTable() {
     }
 
     return (
-        <div className="w-full h-full flex flex-col overflow-auto dark:bg-backgroundSecondary-dark bg-background-light">
-            <div className="flex justify-between items-center pr-10">
-
-                <h1 className="text-3xl font-bold p-10 pb-4">Categories</h1>
-                <BaseButton onClick={() => { handleAddCategory(); setShowAddCategoryPopup(true) }}>Add Category</BaseButton>
-            </div>
-            {toast && <BaseToast message={toast.message} type={toast.type} />}
-            {showAddCategoryPopup && <EditCategoryPopup action={currentAction as "Add" | "Edit"} onClose={() => setShowAddCategoryPopup(false)} onConfirm={handleAddCategoryConfirm} name={name} description={description} setName={setName} setDescription={setDescription} />}
-            <div className="w-full px-10 mb-4 sticky top-2 z-20">
+        <TableContainer
+            title="Categories"
+            addButtonText="Add Category"
+            onAddClick={() => { handleAddCategory(); setShowAddCategoryPopup(true) }}
+            searchBar={
                 <SearchBar
                     placeholder="Search categories"
                     value={search}
                     onChange={handleSearchbarChange}
                 />
-            </div>
+            }
+        >
+            {toast && <BaseToast message={toast.message} type={toast.type} />}
+            {showAddCategoryPopup && <EditCategoryPopup action={currentAction as "Add" | "Edit"} onClose={() => setShowAddCategoryPopup(false)} onConfirm={handleAddCategoryConfirm} name={name} description={description} setName={setName} setDescription={setDescription} />}
             <div className="w-full px-10  ">
                 <table className="w-full h-fit  ">
                     <thead className="top-0 ">
@@ -173,6 +173,6 @@ export default function CategoriesTable() {
                     </tbody>
                 </table>
             </div>
-        </div>
+        </TableContainer>
     )
 }

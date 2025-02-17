@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 import BaseButton from "../buttons/BaseButton";
 import { getUser } from "@/app/login/actions";
 import SearchBar from "../inputs/SearchBar";
+import TableContainer from "../containers/TableContainer";
 
 export default function ProductsTable() {
     const [defaultProducts, setDefaultProducts] = useState<Product[]>([]);
@@ -172,116 +173,96 @@ export default function ProductsTable() {
     };
 
     return (
-        <div className="w-full h-full flex flex-col overflow-auto dark:bg-backgroundSecondary-dark bg-background-light">
-            <div className="flex justify-between items-center pr-10">
-
-                <h1 className="text-3xl font-bold p-10 pb-4">Products</h1>
-                <BaseButton onClick={() => redirect("/dashboard/products/add")}>Add Product</BaseButton>
-            </div>
-            <div className="w-full px-10 mb-4 sticky top-2 z-20">
+        <TableContainer
+            title="Products"
+            addButtonText="Add Product"
+            onAddClick={() => redirect("/dashboard/products/add")}
+            searchBar={
                 <SearchBar
                     placeholder="Search products"
                     value={search}
                     onChange={handleSearchbarChange}
                 />
-            </div>
-            <div className="flex-1 px-10 pb-32">
-                <style jsx global>{`
-                    ::-webkit-scrollbar {
-                        width: 10px;
-                    }
-                    ::-webkit-scrollbar-track {
-                        background: transparent;
-                    }
-                    ::-webkit-scrollbar-thumb {
-                        background: #888;
-                        border-radius: 10px;
-                    }
-                    ::-webkit-scrollbar-thumb:hover {
-                        background: #555;
-                    }
-                `}</style>
-                <div className="relative drop-shadow-md rounded-md pb-5 pr-4 border border-backgroundSecondary-light dark:border-backgroundSecondary-dark">
-                    {showContextMenu && selectedProduct && (
-                        <ContextMenu
-                            actions={[
-                                {
-                                    label: "Increase stock", onClick: () => {
-                                        setNumberPopupMessage("Increase stock");
-                                        setNumberPopupSign("+");
-                                        setShowNumberPopup(true);
-                                    }
-                                },
-                                {
-                                    label: "Decrease stock", onClick: () => {
-                                        setNumberPopupMessage("Decrease stock");
-                                        setNumberPopupSign("-");
-                                        setShowNumberPopup(true);
-                                    }
-                                },
-                                {
-                                    label: "Edit", onClick: () => {
-                                        redirect(`/dashboard/products/edit/${selectedProduct.id}`)
-                                    }
-                                },
-                                { label: "Delete", onClick: () => handleDeleteProduct(selectedProduct.id) }
-                            ]}
-                            coordinates={contextMenuPosition}
-                        />
-                    )}
-                    {toast && <BaseToast message={toast.message} type={toast.type} />}
-                    {showNumberPopup && <NumberPopup message={numberPopupMessage} onClose={() => setShowNumberPopup(false)} setNumber={setQuantity} onConfirm={() => handleChangeProductQuantity()} />}
-                    <table className="w-full h-fit">
-                        <thead className="top-0 ">
-                            <tr>
-                                <th className="w-fit p-2 cursor-pointer"></th>
-                                <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("id")}>
-                                    <button className="text-sm">ID{getSortIcon("id")}</button>
-                                </th>
-                                <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("name")}>
-                                    Name{getSortIcon("name")}
-                                </th>
-                                <th className="w-fit p-2 cursor-pointer text-nowrap" onClick={() => orderBy("unitPrice")}>
-                                    Unit Price{getSortIcon("unitPrice")}
-                                </th>
-                                <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("description")}>
-                                    Description{getSortIcon("description")}
-                                </th>
-                                <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("quantity")}>
-                                    Quantity{getSortIcon("quantity")}
-                                </th>
-                                <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("categoryId")}>
-                                    Category{getSortIcon("categoryId")}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {products.map((product) => (
-                                <tr
-                                    key={product.id}
-                                    className="border-line group relative"
-                                    onContextMenu={(e: React.MouseEvent<HTMLTableRowElement>) => handleProductsRowContextMenu(e, product)}
-                                >
-                                    <td className="flex justify-center items-center py-2 px-1.5 cursor-pointer rounded-md opacity-0 group-hover:opacity-100 dark:group-hover:bg-backgroundTertiary-dark light:group-hover:bg-backgroundTertiary-light transition-opacity w-fit"
-                                        onClick={(e: React.MouseEvent<HTMLTableCellElement>) => handleProductsRowContextMenu(e, product)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="py-full h-5 w-5" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <circle cx="12" cy="6" r="1" transform="rotate(-90 12 6)" />
-                                            <circle cx="12" cy="12" r="1" transform="rotate(-90 12 12)" />
-                                            <circle cx="12" cy="18" r="1" transform="rotate(-90 12 18)" />
-                                        </svg>
-                                    </td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{product.id}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-wrap break-all max-w-[25vw]">{product.name}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit text-center px-2">{product.unitPrice}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-wrap break-all max-w-[25vw]">{product.description}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit text-center px-2">{product.quantity}</td>
-                                    <td className="border border-line dark:border-line-dark border-line-light w-fit text-center px-2"><p className="text-sm bg-primary rounded-md m-2 px-2">{categories.find((category) => category.id === product.categoryId)?.name}</p></td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+            }
+        >
+            {showContextMenu && selectedProduct && (
+                <ContextMenu
+                    actions={[
+                        {
+                            label: "Increase stock", onClick: () => {
+                                setNumberPopupMessage("Increase stock");
+                                setNumberPopupSign("+");
+                                setShowNumberPopup(true);
+                            }
+                        },
+                        {
+                            label: "Decrease stock", onClick: () => {
+                                setNumberPopupMessage("Decrease stock");
+                                setNumberPopupSign("-");
+                                setShowNumberPopup(true);
+                            }
+                        },
+                        {
+                            label: "Edit", onClick: () => {
+                                redirect(`/dashboard/products/edit/${selectedProduct.id}`)
+                            }
+                        },
+                        { label: "Delete", onClick: () => handleDeleteProduct(selectedProduct.id) }
+                    ]}
+                    coordinates={contextMenuPosition}
+                />
+            )}
+            {toast && <BaseToast message={toast.message} type={toast.type} />}
+            {showNumberPopup && <NumberPopup message={numberPopupMessage} onClose={() => setShowNumberPopup(false)} setNumber={setQuantity} onConfirm={() => handleChangeProductQuantity()} />}
+            <table className="w-full h-fit">
+                <thead className="top-0 ">
+                    <tr>
+                        <th className="w-fit p-2 cursor-pointer"></th>
+                        <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("id")}>
+                            <button className="text-sm">ID{getSortIcon("id")}</button>
+                        </th>
+                        <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("name")}>
+                            Name{getSortIcon("name")}
+                        </th>
+                        <th className="w-fit p-2 cursor-pointer text-nowrap" onClick={() => orderBy("unitPrice")}>
+                            Unit Price{getSortIcon("unitPrice")}
+                        </th>
+                        <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("description")}>
+                            Description{getSortIcon("description")}
+                        </th>
+                        <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("quantity")}>
+                            Quantity{getSortIcon("quantity")}
+                        </th>
+                        <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("categoryId")}>
+                            Category{getSortIcon("categoryId")}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {products.map((product) => (
+                        <tr
+                            key={product.id}
+                            className="border-line group relative"
+                            onContextMenu={(e: React.MouseEvent<HTMLTableRowElement>) => handleProductsRowContextMenu(e, product)}
+                        >
+                            <td className="flex justify-center items-center py-2 px-1.5 cursor-pointer rounded-md opacity-0 group-hover:opacity-100 dark:group-hover:bg-backgroundTertiary-dark light:group-hover:bg-backgroundTertiary-light transition-opacity w-fit"
+                                onClick={(e: React.MouseEvent<HTMLTableCellElement>) => handleProductsRowContextMenu(e, product)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="py-full h-5 w-5" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="6" r="1" transform="rotate(-90 12 6)" />
+                                    <circle cx="12" cy="12" r="1" transform="rotate(-90 12 12)" />
+                                    <circle cx="12" cy="18" r="1" transform="rotate(-90 12 18)" />
+                                </svg>
+                            </td>
+                            <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{product.id}</td>
+                            <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-wrap break-all max-w-[25vw]">{product.name}</td>
+                            <td className="border border-line dark:border-line-dark border-line-light w-fit text-center px-2">{product.unitPrice}</td>
+                            <td className="border border-line dark:border-line-dark border-line-light w-fit px-2 text-wrap break-all max-w-[25vw]">{product.description}</td>
+                            <td className="border border-line dark:border-line-dark border-line-light w-fit text-center px-2">{product.quantity}</td>
+                            <td className="border border-line dark:border-line-dark border-line-light w-fit text-center px-2"><p className="text-sm bg-primary rounded-md m-2 px-2">{categories.find((category) => category.id === product.categoryId)?.name}</p></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </TableContainer>
     );
 }

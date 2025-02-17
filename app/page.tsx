@@ -1,26 +1,35 @@
 "use client";
 import BaseButton from "@/components/ui/buttons/BaseButton";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 export default function Home() {
   const router = useRouter();
   return (
-    <div className="w-screen h-screen flex justify-center items-center bg-white">
-      <div className="logo absolute top-2 left-2 font-bold cursor-default text-xl p-4">
-        SimpleStocks
+    <div className="w-screen h-screen flex flex-col justify-center items-center bg-white">
+      <div className="absolute w-full top-0 h-fit flex justify-between p-4 items-center border-b border-gray-200 shadow-sm">
+        <div className="logo items-center w-1/3 flex gap-2 font-bold cursor-default text-xl font-bricolage ">
+          <Image src="/logo.svg" alt=" " className="h-full" width={30} height={30} />
+          SimpleStocks
+        </div>
+        <div className="flex self-center gap-4 w-1/3 font-bold text-xl justify-center items-center bg-white rounded-md">
+          <Link className="animated-underline" href="/login">Pricing</Link>
+          <Link className="animated-underline" href="/register">FAQ</Link>
+          <Link className="animated-underline" href="/register">Reviews</Link>
+        </div>
+        <div className="w-1/3 flex justify-end">
+          <BaseButton onClick={() => router.push("/login")} className="transition-transform duration-300 hover:scale-105">Log in</BaseButton>
+        </div>
       </div>
-      <div className="flex gap-4 font-bold text-xl justify-center items-center bg-white rounded-md p-4 top-2 left-1/2 -translate-x-1/2 absolute">
-        <Link className="animated-underline" href="/login">Pricing</Link>
-        <Link className="animated-underline" href="/register">FAQ</Link>
-        <Link className="animated-underline" href="/register">Reviews</Link>
-      </div>
-      <div className="absolute top-2 right-2 ">
-        <BaseButton onClick={() => router.push("/login")} className="transition-transform duration-300 hover:scale-105">Log in</BaseButton>
-      </div>
-
-      <div className="flex flex-col justify-center items-center">
-        <h1 className="text-5xl font-extrabold tracking-tight">Stop losing time managing your stocks</h1>
-        <div className="flex flex-col p-2 mt-6">
+      <div className="flex flex-col justify-center items-center font-bricolage">
+        <div className="flex">
+          <h1 className="text-5xl font-extrabold tracking-tight cursor-default">Stop losing time managing your&nbsp;
+            <span className="relative">
+              stocks
+              <p className="text-lg absolute font-medium -bottom-4 -right-10 -rotate-[20deg] self-end font-handlee text-primary">easily 🙂</p></span>
+          </h1>
+        </div>
+        <div className="flex flex-col p-2 mt-6 cursor-default">
           <h2 className="text-2xl font-semibold tracking-tight">Simple, easy to use, and effective:</h2>
           <div className="flex flex-col py-4 text-gray-600">
             <p className="text-xl flex items-center gap-2 tracking-tight">

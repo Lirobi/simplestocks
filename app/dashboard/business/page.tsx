@@ -12,6 +12,7 @@ import { createInvite } from "@/lib/invites/invites";
 import BaseToast from "@/components/ui/toasts/BaseToast";
 import PopupWindowContainer from "@/components/ui/popups/PopupWindowContainer";
 import SearchBar from "@/components/ui/inputs/SearchBar";
+import TableContainer from "@/components/ui/containers/TableContainer";
 
 export default function BusinessPage() {
 
@@ -59,11 +60,18 @@ export default function BusinessPage() {
     };
 
     return (
-        <div className="w-full h-full flex flex-col overflow-auto dark:bg-backgroundSecondary-dark bg-background-light">
-            <div className="flex justify-between items-center pr-10">
-                <h1 className="text-3xl font-bold p-10 pb-4">Employees</h1>
-                <BaseButton onClick={() => setGenerateInviteLinkPopup(!generateInviteLinkPopup)}>Generate Invite Link</BaseButton>
-            </div>
+        <TableContainer
+            title="Employees"
+            addButtonText="Generate Invite Link"
+            onAddClick={() => setGenerateInviteLinkPopup(!generateInviteLinkPopup)}
+            searchBar={
+                <SearchBar
+                    placeholder="Search employees"
+                    value={search}
+                    onChange={handleSearchbarChange}
+                />
+            }
+        >
             {toast && (
                 <BaseToast message={toast.message} type={toast.type} />
             )}
@@ -77,13 +85,6 @@ export default function BusinessPage() {
             )}
             {displayedView === 0 && (
                 <div className="w-full px-10">
-                    <div className="w-full mb-4 sticky top-2 z-20">
-                        <SearchBar
-                            placeholder="Search employees"
-                            value={search}
-                            onChange={handleSearchbarChange}
-                        />
-                    </div>
                     <table className="w-full h-fit">
                         <thead className="top-0 ">
                             <tr>
@@ -160,6 +161,6 @@ export default function BusinessPage() {
                     />
                 )
             }
-        </div >
+        </TableContainer>
     )
 }

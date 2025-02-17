@@ -8,6 +8,13 @@ import { useState } from "react";
 export default function Login() {
 
     const [error, setError] = useState("");
+    const isLoggedIn = async () => {
+        const user = await getUser();
+        if (user) {
+            redirect("/dashboard");
+        }
+    }
+    isLoggedIn();
 
     const handleSubmit = async (email: string, password: string) => {
         const user = await loginUser(email, password);
