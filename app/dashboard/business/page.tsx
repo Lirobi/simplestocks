@@ -48,8 +48,9 @@ export default function BusinessPage() {
 
     const handleGenerateInviteLink = async () => {
         const invite = await createInvite(business.id, maxUses);
-        setToast({ message: "Invite link generated : https://" + (process.env.NEXT_PUBLIC_URL || "localhost:3000") + "/join/" + invite.url, type: "success" });
+        setToast({ message: "Invite link copied to clipboard : https://" + (process.env.NEXT_PUBLIC_URL || "localhost:3000") + "/join/" + invite.url, type: "success" });
         navigator.clipboard.writeText("https://" + (process.env.NEXT_PUBLIC_URL || "localhost:3000") + "/join/" + invite.url);
+        setGenerateInviteLinkPopup(false);
         setTimeout(() => {
             setToast(null);
         }, 10000);
@@ -146,6 +147,7 @@ export default function BusinessPage() {
                     </table>
 
                 </div>
+
             )}
             {displayedView === 1 && (
                 <div>

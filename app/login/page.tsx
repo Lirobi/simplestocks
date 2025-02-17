@@ -3,18 +3,20 @@ import AuthenticateForm from "@/components/ui/forms/LoginForm";
 import { loginUser } from "./actions";
 import { redirect } from "next/navigation";
 import { getUser } from "./actions";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Login() {
 
     const [error, setError] = useState("");
-    const isLoggedIn = async () => {
-        const user = await getUser();
-        if (user) {
-            redirect("/dashboard");
+    useEffect(() => {
+        const isLoggedIn = async () => {
+            const user = await getUser();
+            if (user) {
+                redirect("/dashboard");
+            }
         }
-    }
-    isLoggedIn();
+        isLoggedIn();
+    }, []);
 
     const handleSubmit = async (email: string, password: string) => {
         const user = await loginUser(email, password);
