@@ -304,3 +304,5 @@
 2025-02-17 12:18:54.194 CET [19078] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.205 s, sync=0.001 s, total=0.210 s; sync files=3, longest=0.001 s, average=0.001 s; distance=8 kB, estimate=58 kB; lsn=0/1B28C20, redo lsn=0/1B28BC8
 2025-02-17 12:43:53.211 CET [19078] LOG:  checkpoint starting: time
 2025-02-17 12:43:53.828 CET [19078] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.611 s, sync=0.001 s, total=0.619 s; sync files=7, longest=0.001 s, average=0.001 s; distance=5 kB, estimate=52 kB; lsn=0/1B2A340, redo lsn=0/1B2A2E8
+2025-02-17 13:24:40.155 CET [19078] LOG:  checkpoint starting: time
+2025-02-17 13:24:40.364 CET [19078] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.203 s, sync=0.001 s, total=0.210 s; sync files=3, longest=0.001 s, average=0.001 s; distance=3 kB, estimate=48 kB; lsn=0/1B2B330, redo lsn=0/1B2B2D8

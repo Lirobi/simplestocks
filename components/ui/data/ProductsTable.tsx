@@ -10,6 +10,7 @@ import NumberPopup from "../popups/NumberPopup";
 import { redirect } from "next/navigation";
 import BaseButton from "../buttons/BaseButton";
 import { getUser } from "@/app/login/actions";
+import SearchBar from "../inputs/SearchBar";
 
 export default function ProductsTable() {
     const [defaultProducts, setDefaultProducts] = useState<Product[]>([]);
@@ -177,30 +178,12 @@ export default function ProductsTable() {
                 <h1 className="text-3xl font-bold p-10 pb-4">Products</h1>
                 <BaseButton onClick={() => redirect("/dashboard/products/add")}>Add Product</BaseButton>
             </div>
-            <div className="w-full px-10 mb-4 sticky top-2 z-20 ">
-                <div className="relative">
-                    <input
-                        type="text"
-                        placeholder="Search products"
-                        value={search}
-                        onChange={handleSearchbarChange}
-                        className="border-2 dark:border-line-dark border-line-light dark:bg-background-dark bg-background-light rounded-md p-2 w-full pr-10"
-                    />
-                    <svg
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                    </svg>
-                </div>
+            <div className="w-full px-10 mb-4 sticky top-2 z-20">
+                <SearchBar
+                    placeholder="Search products"
+                    value={search}
+                    onChange={handleSearchbarChange}
+                />
             </div>
             <div className="flex-1 px-10 pb-32">
                 <style jsx global>{`
@@ -218,7 +201,7 @@ export default function ProductsTable() {
                         background: #555;
                     }
                 `}</style>
-                <div className="relative">
+                <div className="relative drop-shadow-md rounded-md pb-5 pr-4 border border-backgroundSecondary-light dark:border-backgroundSecondary-dark">
                     {showContextMenu && selectedProduct && (
                         <ContextMenu
                             actions={[

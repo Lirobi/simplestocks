@@ -15,7 +15,7 @@ export default function Home() {
         <Link className="animated-underline" href="/register">Reviews</Link>
       </div>
       <div className="absolute top-2 right-2 ">
-        <BaseButton onClick={() => router.push("/login")}>Log in</BaseButton>
+        <BaseButton onClick={() => router.push("/login")} className="transition-transform duration-300 hover:scale-105">Log in</BaseButton>
       </div>
 
       <div className="flex flex-col justify-center items-center">

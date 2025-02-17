@@ -11,6 +11,7 @@ import BaseNumberInput from "@/components/ui/inputs/BaseNumberInput";
 import { createInvite } from "@/lib/invites/invites";
 import BaseToast from "@/components/ui/toasts/BaseToast";
 import PopupWindowContainer from "@/components/ui/popups/PopupWindowContainer";
+import SearchBar from "@/components/ui/inputs/SearchBar";
 
 export default function BusinessPage() {
 
@@ -77,29 +78,11 @@ export default function BusinessPage() {
             {displayedView === 0 && (
                 <div className="w-full px-10">
                     <div className="w-full mb-4 sticky top-2 z-20">
-                        <div className="relative">
-                            <input
-                                type="text"
-                                placeholder="Search employees"
-                                value={search}
-                                onChange={handleSearchbarChange}
-                                className="border-2 dark:border-line-dark border-line-light dark:bg-background-dark bg-background-light rounded-md p-2 w-full pr-10"
-                            />
-                            <svg
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                />
-                            </svg>
-                        </div>
+                        <SearchBar
+                            placeholder="Search employees"
+                            value={search}
+                            onChange={handleSearchbarChange}
+                        />
                     </div>
                     <table className="w-full h-fit">
                         <thead className="top-0 ">

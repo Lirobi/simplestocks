@@ -7,6 +7,7 @@ import EditCategoryPopup from "../popups/EditCategoryPopup";
 import { addCategory, deleteCategory, updateCategory } from "./actions";
 import BaseToast from "../toasts/BaseToast";
 import { getUser } from "@/app/login/actions";
+import SearchBar from "../inputs/SearchBar";
 
 export default function CategoriesTable() {
     const [search, setSearch] = useState("");
@@ -110,33 +111,15 @@ export default function CategoriesTable() {
             </div>
             {toast && <BaseToast message={toast.message} type={toast.type} />}
             {showAddCategoryPopup && <EditCategoryPopup action={currentAction as "Add" | "Edit"} onClose={() => setShowAddCategoryPopup(false)} onConfirm={handleAddCategoryConfirm} name={name} description={description} setName={setName} setDescription={setDescription} />}
-            <div className="w-full px-10 mb-4 sticky top-2 z-20 ">
-                <div className="relative">
-                    <input
-                        type="text"
-                        placeholder="Search products"
-                        value={search}
-                        onChange={handleSearchbarChange}
-                        className="border-2 dark:border-line-dark border-line-light dark:bg-background-dark bg-background-light rounded-md p-2 w-full pr-10"
-                    />
-                    <svg
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                    </svg>
-                </div>
+            <div className="w-full px-10 mb-4 sticky top-2 z-20">
+                <SearchBar
+                    placeholder="Search categories"
+                    value={search}
+                    onChange={handleSearchbarChange}
+                />
             </div>
-            <div className="w-full px-10">
-                <table className="w-full h-fit">
+            <div className="w-full px-10  ">
+                <table className="w-full h-fit  ">
                     <thead className="top-0 ">
                         <tr>
                             <th className="max-w-5 p-2 cursor-pointer"></th>
