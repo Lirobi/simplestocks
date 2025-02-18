@@ -38,7 +38,7 @@ export default function EditUserPopup({
     };
 
     return (
-        <PopupWindowContainer title="Edit User Details" onClose={onClose}>
+        <PopupWindowContainer title={`Edit User Details - ${user.firstName} ${user.lastName}`} onClose={onClose}>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col">

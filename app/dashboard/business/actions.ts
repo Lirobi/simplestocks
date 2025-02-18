@@ -40,3 +40,19 @@ export async function updateUser(userId: number, data: User) {
         return { success: false, error: "Failed to update user" };
     }
 }
+
+export async function removeUserFromBusiness(userId: number) {
+    try {
+        await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                businessId: 0,
+            }
+        })
+        return { success: true };
+    } catch (error) {
+        return { success: false, error: "Failed to delete user" };
+    }
+}

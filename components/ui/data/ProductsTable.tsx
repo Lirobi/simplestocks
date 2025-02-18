@@ -215,7 +215,7 @@ export default function ProductsTable() {
             {toast && <BaseToast message={toast.message} type={toast.type} />}
             {showNumberPopup && <NumberPopup message={numberPopupMessage} onClose={() => setShowNumberPopup(false)} setNumber={setQuantity} onConfirm={() => handleChangeProductQuantity()} />}
             <table className="w-full h-fit">
-                <thead className="top-0 ">
+                <thead className="top-0">
                     <tr>
                         <th className="w-fit p-2 cursor-pointer"></th>
                         <th className="w-fit p-2 cursor-pointer" onClick={() => orderBy("id")}>

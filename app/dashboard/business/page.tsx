@@ -1,11 +1,10 @@
 "use client";
 import ClickableText from "@/components/ui/buttons/ClickableText";
 import { useState, useEffect } from "react";
-import { getBusinessFromId, getUsersFromBusinessId } from "./actions";
+import { getBusinessFromId, getUsersFromBusinessId, removeUserFromBusiness } from "./actions";
 import { Business, User } from "@prisma/client";
 import { getUser } from "@/app/login/actions";
 import EditUserModal from "@/components/ui/popups/EditUserPopup";
-import { updateUser } from "./actions";
 import BaseButton from "@/components/ui/buttons/BaseButton";
 import BaseNumberInput from "@/components/ui/inputs/BaseNumberInput";
 import { createInvite } from "@/lib/invites/invites";
@@ -23,6 +22,7 @@ export default function BusinessPage() {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [generateInviteLinkPopup, setGenerateInviteLinkPopup] = useState(false);
+    const [showDeleteUserPopup, setShowDeleteUserPopup] = useState(false);
 
     const [maxUses, setMaxUses] = useState(1);
 
@@ -60,6 +60,23 @@ export default function BusinessPage() {
         setSearch(e.target.value);
     };
 
+    const handleDeleteUser = async () => {
+        const result = await removeUserFromBusiness(selectedUser.id);
+        if (result.success) {
+            setUsers(users.filter(user => user.id !== selectedUser.id));
+            setToast({ message: "User deleted successfully", type: "success" });
+            setTimeout(() => {
+                setToast(null);
+            }, 3000);
+        } else {
+            setToast({ message: "Failed to delete user", type: "error" });
+            setTimeout(() => {
+                setToast(null);
+            }, 3000);
+        }
+        setShowDeleteUserPopup(false);
+    }
+
     return (
         <TableContainer
             title="Employees"
@@ -78,17 +95,27 @@ export default function BusinessPage() {
             )}
             {generateInviteLinkPopup && (
                 <PopupWindowContainer title="Generate Invite Link" onClose={() => setGenerateInviteLinkPopup(false)} className="w-fit max-w-fit">
-
                     <BaseNumberInput label="Max Uses" value={maxUses} onChange={(e) => setMaxUses(e.target.valueAsNumber)} />
                     <BaseButton onClick={handleGenerateInviteLink} className="w-full">Generate</BaseButton>
                 </PopupWindowContainer>
 
+            )}
+
+            {showDeleteUserPopup && (
+                <PopupWindowContainer title={`Delete User`} onClose={() => setShowDeleteUserPopup(false)} className="w-fit max-w-fit">
+                    <p className="text-md pb-4">Are you sure you want to delete <strong>{selectedUser?.firstName} {selectedUser?.lastName}</strong> ?</p>
+                    <div className="flex justify-end gap-2">
+                        <ClickableText onClick={() => setShowDeleteUserPopup(false)} text="Cancel"></ClickableText>
+                        <BaseButton onClick={handleDeleteUser} className="w-fit">Delete</BaseButton>
+                    </div>
+                </PopupWindowContainer>
             )}
             {displayedView === 0 && (
                 <div className="w-full px-10">
                     <table className="w-full h-fit">
                         <thead className="top-0 ">
                             <tr>
+                                <th className="w-fit p-2 cursor-pointer"></th>
                                 <th className="w-fit p-2 cursor-pointer"></th>
                                 <th className="w-fit p-2 cursor-pointer">Name</th>
                                 <th className="w-fit p-2 cursor-pointer">Address</th>
@@ -109,7 +136,7 @@ export default function BusinessPage() {
                                 )
                                 .map((user) => (
                                     <tr key={user.id} className="group">
-                                        <td className=" w-fit px-2">
+                                        <td className=" w-fit pl-2">
                                             <button
                                                 onClick={() => {
                                                     setSelectedUser(user);
@@ -132,6 +159,28 @@ export default function BusinessPage() {
                                                 </svg>
                                             </button>
                                         </td>
+                                        <td className="w-fit">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedUser(user);
+                                                    setShowDeleteUserPopup(true);
+                                                }}
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    className="h-9 w-9 p-1.5 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer dark:group-hover:bg-backgroundTertiary-dark light:group-hover:bg-backgroundTertiary-light rounded-md"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth={2}
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                >
+                                                    <path d="M3 6H21M5 6V20C5 21.1046 5.89543 22 7 22H17C18.1046 22 19 21.1046 19 20V6M8 6V4C8 2.89543 8.89543 2 10 2H14C15.1046 2 16 2.89543 16 4V6" />
+                                                    <path d="M14 11V17M10 11V17" />
+                                                </svg>
+                                            </button>
+                                        </td>
                                         <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.firstName} {user.lastName}</td>
                                         <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.address}</td>
                                         <td className="border border-line dark:border-line-dark border-line-light w-fit px-2">{user.city}</td>
@@ -145,7 +194,6 @@ export default function BusinessPage() {
                                 ))}
                         </tbody>
                     </table>
-
                 </div>
 
             )}
