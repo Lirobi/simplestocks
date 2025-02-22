@@ -28,7 +28,7 @@ export default function AuthenticateForm({ onSubmit, error }: AuthenticateFormPr
         <div className="flex flex-col gap-4 bg-background-light dark:bg-background-dark p-4 rounded-md justify-center items-center max-md:scale-125 scale-150">
             <h1 className="text-2xl font-bold">Login</h1>
 
-            <form className="flex flex-col gap-2 w-fit" onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+            <form className="flex flex-col gap-2 w-fit" onSubmit={handleSubmit} onKeyDown={handleKeyDown} autoComplete="on">
                 <AuthenticateFormInput label="Email" type="email" setValue={setEmail} />
                 <AuthenticateFormInput label="Password" type="password" setValue={setPassword} />
                 {error && <p className="text-red-500">{error}</p>}

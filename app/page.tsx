@@ -51,7 +51,7 @@ export default function Home() {
               Invite your team to manage your stocks together
             </p>
           </div>
-          <BaseButton className="shadow-xl drop-shadow-xl shadow-primary transition-transform duration-300 hover:scale-105">Stop losing time</BaseButton>
+          <BaseButton onClick={() => router.push("/register?invite_url=createBusiness")} className="shadow-xl drop-shadow-xl shadow-primary transition-transform duration-300 hover:scale-105">Stop losing time</BaseButton>
         </div>
       </div>
 

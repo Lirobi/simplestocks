@@ -24,7 +24,7 @@ export default function RegisterCredentialsForm({ nextStep, setEmail, setPasswor
     return (
         <div>
             <h1 className="text-2xl font-bold">Credentials</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4" onKeyDown={handleKeyDown}>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4" onKeyDown={handleKeyDown} autoComplete="on">
                 <AuthenticateFormInput type="email" label="Email" setValue={setEmail} />
                 <AuthenticateFormInput type="password" label="Password" setValue={setPassword} />
                 <AuthenticateFormInput type="password" label="Confirm Password" setValue={setConfirmPassword} />

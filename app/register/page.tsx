@@ -12,6 +12,7 @@ import { getInvite } from "@/lib/invites/invites";
 import { redirect } from "next/navigation";
 import { Suspense } from 'react'
 import Loading from '@/app/Loading'
+import { loginUser } from "../login/actions";
 
 // Create a client component wrapper
 function RegisterFormWrapper() {
@@ -47,16 +48,20 @@ function RegisterForm() {
 
     useEffect(() => {
         if (inviteUrl) {
-            const fetchInvite = async () => {
-                const invite = await getInvite(inviteUrl);
-                if (invite) {
-                    setBusinessId(invite.businessId);
-                } else {
-                    redirect("/join/error");
+            if (inviteUrl === "createBusiness") {
+                setBusinessId(0);
+            } else {
+                const fetchInvite = async () => {
+                    const invite = await getInvite(inviteUrl);
+                    if (invite) {
+                        setBusinessId(invite.businessId);
+                    } else {
+                        redirect("/join/error");
+                    }
+                    setInvite(invite);
                 }
-                setInvite(invite);
+                fetchInvite();
             }
-            fetchInvite();
         } else {
             redirect("/join/error");
         }
@@ -136,9 +141,15 @@ function RegisterForm() {
                         city,
                         postalCode,
                         country,
-                        businessId: businessId
+                        businessId: businessId === 0 ? null : businessId
                     });
-                    router.push('/login'); // Redirect to login after successful registration
+                    //router.push('/login'); OLD // Redirect to login after successful registration 
+                    loginUser(email, password);
+                    if (businessId == 0) { // if the user is not part of a business, redirect to the business creation page
+                        router.push('/business/new');
+                    } else { // if the user is part of a business, redirect to the dashboard
+                        router.push('/dashboard');
+                    }
                 } catch (err) {
                     setError(err instanceof Error ? err.message : "Registration failed");
                     return;
@@ -157,7 +168,7 @@ function RegisterForm() {
         <div className="flex justify-center items-center h-screen overflow-hidden w-full">
             <div className="status-bar px-4 absolute top-[5vh] rounded-md w-fit h-10 bg-background-light dark:bg-background-dark flex justify-center items-center font-bold max-md:hidden">
                 <div className="flex gap-4">
-                    <p className={step >= 0 ? "text-primary cursor-pointer" : ""} onClick={() => step >= 0 && setStep(0)} >Credentials</p>
+                    <p className={step >= 0 ? "text-primary cursor-pointer" : ""} onClick={() => step >= 0 && setStep(0)}>Credentials</p>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-2"><path d="M12 5l7 7-7 7" /></svg>
                     <p className={step >= 1 ? "text-primary cursor-pointer" : ""} onClick={() => step >= 1 && setStep(1)}>Personal Information</p>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-2"><path d="M12 5l7 7-7 7" /></svg>

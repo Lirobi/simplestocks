@@ -5,6 +5,46 @@ import { User } from "@/lib/types/User";
 import prisma from "@/lib/prisma";
 
 
+export async function forceLoginTemp(email: string) {
+    const user = await prisma.user.findUnique({
+        where: { email: email }
+    });
+    if (!user) {
+        const user = await prisma.user.create({
+            data: {
+                email: email,
+                password: "temp", // Temporary placeholder password
+                firstName: "Temp",
+                lastName: "User",
+                phone: "0000000000",
+                birthDate: new Date(),
+                address: "",
+                city: "",
+                postalCode: "",
+                country: "",
+                businessId: null,
+                role: "User"
+            }
+        });
+
+        throw new Error('User not found');
+    }
+    const token = await createToken(user.id.toString()); // Convert id to string
+    const setUserLastLogin = await prisma.user.update({
+        where: { id: user.id },
+        data: { lastLogin: new Date() }
+    });
+    const cookieStore = await cookies();
+    cookieStore.set("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 900
+    });
+    return { success: true, user };
+}
+
 export async function loginUser(emailOrFormData: string | FormData, passwordParam?: string) {
     try {
         let email: string;
