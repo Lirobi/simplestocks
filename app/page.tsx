@@ -12,7 +12,7 @@ export default function Home() {
           <Image src="/logo.svg" alt=" " className="h-full" width={30} height={30} />
           SimpleStocks
         </div>
-        <div className="flex self-center gap-4 w-1/3 font-bold text-xl justify-center items-center bg-white rounded-md">
+        <div className="flex self-center gap-4 w-1/3 font-bold text-xl justify-center items-center bg-white rounded-md text-black">
           <Link className="animated-underline" href="/login">Pricing</Link>
           <Link className="animated-underline" href="/register">FAQ</Link>
           <Link className="animated-underline" href="/register">Reviews</Link>

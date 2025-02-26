@@ -441,3 +441,5 @@
 2025-02-26 11:05:58.326 CET [11063] LOG:  could not receive data from client: Connection reset by peer
 2025-02-26 11:08:13.220 CET [8518] LOG:  checkpoint starting: time
 2025-02-26 11:08:15.049 CET [8518] LOG:  checkpoint complete: wrote 19 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.826 s, sync=0.001 s, total=1.829 s; sync files=14, longest=0.001 s, average=0.001 s; distance=75 kB, estimate=169 kB; lsn=0/1BAC130, redo lsn=0/1BAC0D8
+2025-02-26 11:13:13.049 CET [8518] LOG:  checkpoint starting: time
+2025-02-26 11:13:13.564 CET [8518] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.510 s, sync=0.002 s, total=0.516 s; sync files=6, longest=0.001 s, average=0.001 s; distance=11 kB, estimate=153 kB; lsn=0/1BAF008, redo lsn=0/1BAEFB0
