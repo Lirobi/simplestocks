@@ -499,3 +499,5 @@
 2025-02-26 13:34:18.199 CET [19047] FATAL:  sorry, too many clients already
 2025-02-26 13:34:18.710 CET [19048] FATAL:  sorry, too many clients already
 2025-02-26 13:34:18.711 CET [19049] FATAL:  sorry, too many clients already
+2025-02-26 13:58:13.755 CET [8518] LOG:  checkpoint starting: time
+2025-02-26 13:58:16.204 CET [8518] LOG:  checkpoint complete: wrote 25 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.443 s, sync=0.003 s, total=2.450 s; sync files=18, longest=0.001 s, average=0.001 s; distance=71 kB, estimate=116 kB; lsn=0/1C2E548, redo lsn=0/1C2E4F0

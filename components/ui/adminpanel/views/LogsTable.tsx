@@ -71,6 +71,7 @@ export default function LogsTable() {
             <table className="w-full">
                 <thead>
                     <tr>
+                        <th>User</th>
                         <th>Action</th>
                         <th>Description</th>
                         <th>Date</th>
@@ -80,6 +81,7 @@ export default function LogsTable() {
                 <tbody>
                     {logs.filter((log) => selectedUser ? log.userId === selectedUser.id : true).filter((log) => !hideActions.includes(log.action)).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).map((log) => (
                         <tr key={log.id}>
+                            <td className="text-center border-black border">{users.find((user) => user.id === log.userId)?.email}</td>
                             <td className={`text-center border-black border ${log.action === "LOGIN" ? "bg-green-500" : log.action === "LOGOUT" ? "bg-red-500" : "bg-gray-500"}`}>{log.action}</td>
                             <td className="text-center border-black border">{log.description}</td>
                             <td className="text-center border-black border">{log.createdAt.toLocaleString()}</td>
