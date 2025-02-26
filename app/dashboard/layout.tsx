@@ -10,6 +10,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
     if (!user) {
         redirect("/login");
     }
+    if (user.businessId === 0 || user.businessId === null) {
+        redirect("/business/new");
+    }
     try {
         const appStatus = await prisma.appStatus.findUnique({
             where: {
