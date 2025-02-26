@@ -3,7 +3,7 @@ import BusinessesTable from "@/components/ui/adminpanel/views/BusinessesTable";
 import UsersTable from "@/components/ui/adminpanel/views/UsersTable";
 import { useState } from "react";
 import { redirect } from "next/navigation";
-
+import LogsTable from "@/components/ui/adminpanel/views/LogsTable";
 export default function AdminPage() {
     const [displayedView, setDisplayedView] = useState(0);
     return (
@@ -13,9 +13,11 @@ export default function AdminPage() {
             <div className="flex gap-4 z-50 border-b justify-center border-black w-full shadow-md">
                 <button className={`${displayedView === 0 ? "underline" : ""} p-2 rounded-md`} onClick={() => setDisplayedView(0)}>Users</button>
                 <button className={`${displayedView === 1 ? "underline" : ""} p-2 rounded-md`} onClick={() => setDisplayedView(1)}>Businesses</button>
+                <button className={`${displayedView === 2 ? "underline" : ""} p-2 rounded-md`} onClick={() => setDisplayedView(2)}>Logs</button>
             </div>
             {displayedView === 0 && <UsersTable />}
             {displayedView === 1 && <BusinessesTable />}
+            {displayedView === 2 && <LogsTable />}
         </div>
     )
 }

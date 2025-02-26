@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getUsers, getBusinesses, updateUser } from "./actions";
+import { getUsers, getBusinesses, updateUser, getUserData } from "./actions";
 import Link from "next/link";
-import { Business } from "@prisma/client";
+import { Business, UserData } from "@prisma/client";
+
+
 
 interface User {
     id: number;
@@ -27,6 +29,10 @@ export default function UsersTable() {
     const [businesses, setBusinesses] = useState([]);
     const [count, setCount] = useState(10);
     const [editingUser, setEditingUser] = useState<User | null>(null);
+    const [userData, setUserData] = useState<UserData[]>([]);
+    const [showUserData, setShowUserData] = useState(false);
+    const [userToShow, setUserToShow] = useState<User | null>(null);
+
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -40,6 +46,12 @@ export default function UsersTable() {
             setBusinesses(businesses as Business[]);
         }
         fetchBusinesses();
+
+        const fetchUserData = async () => {
+            const userData = await getUserData();
+            setUserData(userData as UserData[]);
+        }
+        fetchUserData();
     }, []);
 
     const handleCountChange = (count: number) => {
@@ -295,6 +307,15 @@ export default function UsersTable() {
                                         >
                                             Edit
                                         </button>
+                                        <button
+                                            onClick={() => {
+                                                setShowUserData(true);
+                                                setUserToShow(user);
+                                            }}
+                                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-sm"
+                                        >
+                                            Show User Data
+                                        </button>
                                     </td>
                                 </>
                             )}
@@ -302,6 +323,43 @@ export default function UsersTable() {
                     ))}
                 </tbody>
             </table>
+            <div className="flex flex-col gap-2">
+                {
+                    showUserData && userToShow && (
+                        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-1/3 bg-white rounded-md shadow-md flex flex-col justify-center items-center">
+                            <h1>{userToShow.firstName} {userToShow.lastName}</h1>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Last IP</th>
+                                        <th>Last Login</th>
+                                        <th>Last Login Device</th>
+                                        <th>Last Login Browser</th>
+                                        <th>Last Login OS</th>
+                                        <th>Last Login GPS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{userToShow.email}</td>
+                                        <td>{userData.find((userData) => userData.userId === userToShow.id)?.lastLoginIp}</td>
+                                        <td>{userData.find((userData) => userData.userId === userToShow.id)?.lastLoginDate.toString()}</td>
+                                        <td>{userData.find((userData) => userData.userId === userToShow.id)?.lastLoginDevice}</td>
+                                        <td>{userData.find((userData) => userData.userId === userToShow.id)?.lastLoginBrowser}</td>
+                                        <td>{userData.find((userData) => userData.userId === userToShow.id)?.lastLoginOs}</td>
+                                        <td>{userData.find((userData) => userData.userId === userToShow.id)?.lastLoginGPS}</td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+
+                            <button onClick={() => setShowUserData(false)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm top-4">Close</button>
+
+                        </div>
+                    )
+                }
+            </div>
         </div>
     )
 }

@@ -1,9 +1,20 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { Business, User } from "@prisma/client";
+import { Business, User, Log } from "@prisma/client";
 
 
+export async function getLogs(count?: number) {
+    if (!count) {
+        const logs = await prisma.log.findMany();
+        return logs;
+    }
+}
+
+export async function getUserData() {
+    const userData = await prisma.userData.findMany();
+    return userData;
+}
 
 export async function getUsers(count?: number) {
     if (!count) {

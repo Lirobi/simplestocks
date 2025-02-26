@@ -2,7 +2,7 @@
 
 import { hash } from 'bcrypt';
 import prisma from '@/lib/prisma';
-
+import { createLog } from '@/lib/log/log';
 interface RegisterUserParams {
     email: string;
     password: string;
@@ -88,6 +88,7 @@ export async function registerUser(params: {
 
         // Remove password from response
         const { password: _, ...userWithoutPassword } = user;
+        await createLog(user.id, 'REGISTER', `Created account for ${user.email}`);
         return userWithoutPassword;
     } catch (error) {
         console.error('Error registering user:', error);

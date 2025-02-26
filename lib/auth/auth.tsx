@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
 import { compare } from 'bcrypt';
 import { redirect } from 'next/navigation';
+import { createLog } from '@/lib/log/log';
 
 // Updated JWT secret key handling
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -54,7 +55,7 @@ export async function login(email: string, password: string) {
             throw new Error('Invalid email or password');
         }
 
-        // Set session/token here
+
         return user;
     } catch (error) {
         console.error('Login error:', error);

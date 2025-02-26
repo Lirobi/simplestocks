@@ -31,10 +31,22 @@ export default function NewBusinessPage() {
     const [postalCode, setPostalCode] = useState("");
     const [country, setCountry] = useState("");
 
-    const handleCreateBusiness = () => {
+    const handleCreateBusiness = async (e: React.FormEvent) => {
+        e.preventDefault();
         try {
-            createBusiness({ name, address, city, postalCode, country }, user?.id.toString() ?? "");
-            router.push("/dashboard");
+            const result = await createBusiness({
+                name,
+                address,
+                city,
+                postalCode,
+                country
+            });
+
+            if (result.success) {
+                router.push("/dashboard");
+            } else {
+                console.error(result.error);
+            }
         } catch (error) {
             console.error(error);
         }
@@ -43,7 +55,7 @@ export default function NewBusinessPage() {
     return (
         <div className="flex flex-col gap-4 justify-center items-center h-screen">
             <h1 className="text-2xl font-bold">New Business</h1>
-            <form className="flex flex-col gap-4">
+            <form onSubmit={handleCreateBusiness} className="flex flex-col gap-4">
                 <BaseFormInput label="Name" onChange={(e) => setName(e.target.value)} />
                 <BaseFormInput label="Address" onChange={(e) => setAddress(e.target.value)} />
                 <div className="flex gap-2">
@@ -51,7 +63,7 @@ export default function NewBusinessPage() {
                     <BaseFormInput label="Postal Code" onChange={(e) => setPostalCode(e.target.value)} />
                     <BaseFormInput label="Country" onChange={(e) => setCountry(e.target.value)} />
                 </div>
-                <BaseButton onClick={handleCreateBusiness}>Create</BaseButton>
+                <BaseButton type="submit">Create</BaseButton>
             </form>
         </div>
     )
