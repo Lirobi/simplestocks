@@ -34,7 +34,7 @@ export async function getCpuUsage() {
 
 export async function getMemoryUsage() {
     const memoryUsageValue = await memoryUsage().heapUsed;
-    const finalMemoryUsage = Math.round(memoryUsageValue / 1024 / 1024, 2);
+    const finalMemoryUsage = Math.round(memoryUsageValue / 1024 / 1024);
 
     return finalMemoryUsage;
 }
@@ -69,6 +69,16 @@ export async function getLogs(count?: number) {
         const logs = await prisma.log.findMany();
         return logs;
     }
+    const logs = await prisma.log.findMany({
+        take: count,
+        skip: count ? count * 10 : 0
+    });
+    return logs;
+}
+
+export async function getVisits() {
+    const visits = await prisma.visit.findMany();
+    return visits;
 }
 
 export async function getUserData() {

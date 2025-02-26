@@ -4,7 +4,7 @@ import SidebarDropdown from "./SidebarDropdown";
 import { redirect } from "next/navigation";
 import SidebarButton from "./SidebarButton";
 import { getUser } from "@/app/login/actions";
-export default function DashboardSidebar(defaultOpen: boolean = false) {
+export default function DashboardSidebar(defaultOpen: boolean | undefined = false) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(defaultOpen);
 
     const [isAdmin, setIsAdmin] = useState(false);

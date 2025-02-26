@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Bricolage_Grotesque, Handlee } from "next/font/google";
 import "./globals.css";
+import { addVisit } from "./actions";
+import { headers } from "next/headers";
 
 const inter = Inter({ subsets: ['latin'] });
 const bricolage = Bricolage_Grotesque({ subsets: ['latin'] });
@@ -16,6 +18,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  const handleAddVisit = async () => {
+    const headersList = await headers();
+    addVisit(headersList.get("x-forwarded-for") || headersList.get("x-real-ip") || "");
+  }
+
+  handleAddVisit();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

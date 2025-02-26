@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { toggleMaintenance, getAppStatus, getUsers, getBusinesses, getProductsCount, getCpuUsage, getMemoryUsage } from "./actions";
+import { toggleMaintenance, getAppStatus, getUsers, getBusinesses, getProductsCount, getCpuUsage, getMemoryUsage, getLogs, getVisits } from "./actions";
+import { Log, User, Visit } from "@prisma/client";
 
 const cpuUsageHistory = [];
 const memoryUsageHistory = [];
@@ -49,16 +50,64 @@ function NumberGraph({ data, type }: { data: number[], type: "cpu" | "memory" })
                 {data.map((usage, index) => (
                     <div
                         key={index}
-                        className="w-2 bg-blue-600 rounded-t-sm mx-0.5 transition-all duration-300"
+                        className="w-2 bg-blue-600 rounded-t-sm mx-0.5 transition-all duration-300 group"
                         style={{
                             height: `${type === "cpu" ? `${Math.max(5, (usage / maxValue) * 100)}%` : `${Math.max(5, (usage / maxValue) * 100)}%`}`
                         }}
-                    />
+                    >
+                        <p className="hidden group-hover:block cursor-default border border-gray-300 shadow-md rounded-md p-0.5 w-fit ml-3">{usage} {type === "cpu" ? "%" : "MB"}</p>
+                    </div>
                 ))}
             </div>
             <div className="absolute left-0 -top-5 w-full flex justify-between text-xs text-gray-500 px-1">
                 <span>0</span>
                 <span>{maxValue} {type === "cpu" ? "%" : "MB"}</span>
+            </div>
+        </div>
+    )
+}
+
+function VisitsGraph({ data }: { data: Visit[] }) {
+    // Group visits by day
+    const visitsByDay = data.reduce((acc, visit) => {
+        const dateStr = visit.createdAt.toLocaleDateString();
+        if (!acc[dateStr]) {
+            acc[dateStr] = [];
+        }
+        acc[dateStr].push(visit);
+        return acc;
+    }, {} as Record<string, Visit[]>);
+
+    // Convert to array of [date, count] pairs and sort by date
+    const dailyVisits = Object.entries(visitsByDay)
+        .map(([date, visits]) => ({
+            date: new Date(date),
+            count: visits.length
+        }))
+        .sort((a, b) => a.date.getTime() - b.date.getTime());
+
+    const maxValue = dailyVisits.length > 0 ? Math.max(...dailyVisits.map(day => day.count)) : 1;
+
+    return (
+        <div className="relative w-full h-[100px] border-b border-l border-gray-300 mt-5">
+            <div className="absolute bottom-0 left-0 w-full h-full flex items-end justify-start overflow-hidden">
+                {dailyVisits.map((day, index) => (
+                    <div
+                        key={index}
+                        className="w-2 bg-blue-600 rounded-t-sm mx-0.5 transition-all duration-300 group"
+                        style={{
+                            height: `${Math.max(5, (day.count / maxValue) * 100)}%`
+                        }}
+                    >
+                        <p className="hidden group-hover:block cursor-default border border-gray-300 shadow-md rounded-md p-0.5 w-fit ml-3 ">
+                            {day.date.toLocaleDateString()} - {day.count} visits
+                        </p>
+                    </div>
+                ))}
+            </div>
+            <div className="absolute left-0 -top-5 w-full flex justify-between text-xs text-gray-500 px-1">
+                <span>0</span>
+                <span>{maxValue} visits</span>
             </div>
         </div>
     )
@@ -79,6 +128,11 @@ export default function ManageApp() {
     const [memoryUsageData, setMemoryUsageData] = useState(0);
     const [cpuHistory, setCpuHistory] = useState<number[]>([]);
     const [memoryHistory, setMemoryHistory] = useState<number[]>([]);
+
+    const [logs, setLogs] = useState<Log[]>([]);
+    const [usersList, setUsersList] = useState<User[]>([]);
+
+    const [visits, setVisits] = useState<Visit[]>([]);
 
     useEffect(() => {
         const fetchAppStatus = async () => {
@@ -105,6 +159,26 @@ export default function ManageApp() {
         }
         fetchProducts();
 
+
+        const fetchLogs = async () => {
+            const logs = await getLogs(5);
+            setLogs(logs);
+            setTimeout(fetchLogs, 1000);
+        }
+        fetchLogs();
+
+        const fetchUsersList = async () => {
+            const users = await getUsers();
+            setUsersList(users);
+        }
+        fetchUsersList();
+
+        const fetchAnalytics = async () => {
+            const visits = await getVisits();
+            setVisits(visits);
+            setTimeout(fetchAnalytics, 1000);
+        }
+        fetchAnalytics();
 
     }, []);
 
@@ -193,6 +267,49 @@ export default function ManageApp() {
                 <Card title="Memory Usage History">
                     <div className="flex flex-col w-full">
                         <NumberGraph data={memoryHistory} type="memory" />
+                    </div>
+                </Card>
+            </div>
+            <div className="grid gap-4">
+                <Card title="Latest Logs">
+                    <div className="flex flex-col w-full">
+                        <table className="w-full">
+                            <tbody className="flex flex-col gap-1 w-full">
+
+                                {logs.map((log) => (
+                                    <tr key={log.id} className="w-full border-b border-black">
+                                        <td className="px-2">{usersList.find((user) => user.id === log.userId)?.email}</td>
+                                        <td className="px-2">{log.action}</td>
+                                        <td className="px-2">{log.createdAt.toLocaleString()}</td>
+                                        <td className="px-2">{log.ipAddress}</td>
+                                    </tr>
+
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </Card>
+            </div>
+            <div className="grid gap-4">
+                <Card title="Analytics">
+                    <div className="flex flex-col gap-2 w-full">
+                        <div className="flex flex-row justify-between w-full">
+                            <div className="flex flex-col">
+                                <p>Total visitors: {visits.filter((visit, index, self) =>
+                                    index === self.findIndex((t) => t.ipAddress === visit.ipAddress)
+                                ).length}</p>
+                            </div>
+                            <div className="flex flex-col">
+                                <p>Visitors today: {visits.filter((visit, index, self) =>
+                                    index === self.findIndex((t) => t.ipAddress === visit.ipAddress) && visit.createdAt.toLocaleDateString() === new Date().toLocaleDateString()
+                                ).length}</p>
+                            </div>
+                        </div>
+                        <h1 className="text-lg font-bold">Visits per day</h1>
+
+                        <VisitsGraph data={visits.filter((visit, index, self) =>
+                            index === self.findIndex((t) => t.ipAddress === visit.ipAddress)
+                        )} />
                     </div>
                 </Card>
             </div>
