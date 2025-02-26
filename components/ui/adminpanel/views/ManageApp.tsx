@@ -59,9 +59,9 @@ function NumberGraph({ data, type }: { data: number[], type: "cpu" | "memory" })
                     </div>
                 ))}
             </div>
-            <div className="absolute left-0 -top-5 w-full flex justify-between text-xs text-gray-500 px-1">
-                <span>0</span>
+            <div className="absolute -left-4 -top-5 h-[120%] flex flex-col justify-between text-xs text-gray-500 px-1">
                 <span>{maxValue} {type === "cpu" ? "%" : "MB"}</span>
+                <span>0</span>
             </div>
         </div>
     )
@@ -105,9 +105,9 @@ function VisitsGraph({ data }: { data: Visit[] }) {
                     </div>
                 ))}
             </div>
-            <div className="absolute left-0 -top-5 w-full flex justify-between text-xs text-gray-500 px-1">
-                <span>0</span>
+            <div className="absolute -left-4 -top-5 h-[120%] flex flex-col justify-between text-xs text-gray-500 px-1">
                 <span>{maxValue} visits</span>
+                <span>0</span>
             </div>
         </div>
     )
