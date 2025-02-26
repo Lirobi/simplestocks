@@ -1,7 +1,7 @@
 "use server"
 
+import { getUser } from "@/app/login/actions"
 import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth/auth";
 
 interface Business {
     name: string;
@@ -13,8 +13,8 @@ interface Business {
 
 export async function createBusiness(business: Business) {
     try {
-        const session = await auth();
-        if (!session?.user?.id) throw new Error("Unauthorized");
+        const user = await getUser();
+        if (!user?.id) throw new Error("Unauthorized");
 
         const newBusiness = await prisma.business.create({
             data: {
@@ -27,7 +27,7 @@ export async function createBusiness(business: Business) {
         });
 
         await prisma.user.update({
-            where: { id: session.user.id },
+            where: { id: user.id },
             data: {
                 businessId: newBusiness.id,
                 role: "Admin"
