@@ -2,7 +2,42 @@
 
 import prisma from "@/lib/prisma";
 import { Business, User, Log } from "@prisma/client";
+import { cpuUsage, memoryUsage } from "process";
 
+
+
+export async function getCpuUsage() {
+    const cpuUsageValue = await cpuUsage().system;
+    const finalCPUUsage = Math.round(cpuUsageValue * 100) / 100; // Round to 2 decimal places
+    // Calculate CPU usage percentage based on the difference between measurements
+    const startUsage = cpuUsage();
+
+    // Wait a small interval to measure difference
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Get the CPU usage after the interval
+    const endUsage = cpuUsage();
+
+    // Calculate the percentage based on the difference
+    const userDiff = endUsage.user - startUsage.user;
+    const systemDiff = endUsage.system - startUsage.system;
+    const totalDiff = userDiff + systemDiff;
+
+    // Convert to percentage (microseconds to percentage)
+    const percentage = (totalDiff / 1000 / 100);
+
+    // Use the calculated percentage instead of the raw value
+    return Math.min(100, Math.max(0, Math.round(percentage * 100)));
+
+    return finalCPUUsage;
+}
+
+export async function getMemoryUsage() {
+    const memoryUsageValue = await memoryUsage().heapUsed;
+    const finalMemoryUsage = Math.round(memoryUsageValue / 1024 / 1024, 2);
+
+    return finalMemoryUsage;
+}
 
 export async function toggleMaintenance() {
     const appStatus = await prisma.appStatus.findFirst();
@@ -17,6 +52,11 @@ export async function toggleMaintenance() {
             data: { status: "Active" }
         });
     }
+}
+
+export async function getProductsCount() {
+    const products = await prisma.product.findMany();
+    return products.length;
 }
 
 export async function getAppStatus() {

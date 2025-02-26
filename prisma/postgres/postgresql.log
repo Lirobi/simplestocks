@@ -463,3 +463,39 @@
 2025-02-26 12:23:14.389 CET [8518] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.611 s, sync=0.001 s, total=0.616 s; sync files=7, longest=0.001 s, average=0.001 s; distance=16 kB, estimate=196 kB; lsn=0/1C0CD18, redo lsn=0/1C0CCC0
 2025-02-26 12:28:13.387 CET [8518] LOG:  checkpoint starting: time
 2025-02-26 12:28:13.497 CET [8518] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.104 s, sync=0.001 s, total=0.111 s; sync files=2, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=176 kB; lsn=0/1C0D148, redo lsn=0/1C0D0F0
+2025-02-26 12:38:13.492 CET [8518] LOG:  checkpoint starting: time
+2025-02-26 12:38:14.110 CET [8518] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.611 s, sync=0.002 s, total=0.618 s; sync files=7, longest=0.001 s, average=0.001 s; distance=17 kB, estimate=160 kB; lsn=0/1C11860, redo lsn=0/1C11808
+2025-02-26 12:38:26.286 CET [15694] FATAL:  sorry, too many clients already
+2025-02-26 12:38:26.289 CET [15695] FATAL:  sorry, too many clients already
+2025-02-26 12:38:34.053 CET [15708] FATAL:  sorry, too many clients already
+2025-02-26 12:38:34.054 CET [15709] FATAL:  sorry, too many clients already
+2025-02-26 12:38:36.441 CET [15721] FATAL:  sorry, too many clients already
+2025-02-26 12:38:36.443 CET [15722] FATAL:  sorry, too many clients already
+2025-02-26 12:38:47.327 CET [15751] FATAL:  sorry, too many clients already
+2025-02-26 12:38:47.328 CET [15752] FATAL:  sorry, too many clients already
+2025-02-26 12:38:53.194 CET [15776] FATAL:  sorry, too many clients already
+2025-02-26 12:38:53.195 CET [15777] FATAL:  sorry, too many clients already
+2025-02-26 12:38:55.097 CET [15782] FATAL:  sorry, too many clients already
+2025-02-26 12:38:55.098 CET [15783] FATAL:  sorry, too many clients already
+2025-02-26 12:38:56.324 CET [15784] FATAL:  sorry, too many clients already
+2025-02-26 12:38:56.325 CET [15785] FATAL:  sorry, too many clients already
+2025-02-26 12:53:13.045 CET [8518] LOG:  checkpoint starting: time
+2025-02-26 12:53:13.564 CET [8518] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.512 s, sync=0.002 s, total=0.520 s; sync files=6, longest=0.001 s, average=0.001 s; distance=18 kB, estimate=146 kB; lsn=0/1C16140, redo lsn=0/1C160E8
+2025-02-26 13:08:13.542 CET [8518] LOG:  checkpoint starting: time
+2025-02-26 13:08:14.154 CET [8518] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.607 s, sync=0.001 s, total=0.613 s; sync files=7, longest=0.001 s, average=0.001 s; distance=11 kB, estimate=132 kB; lsn=0/1C19088, redo lsn=0/1C19030
+2025-02-26 13:09:00.634 CET [17533] FATAL:  sorry, too many clients already
+2025-02-26 13:09:00.636 CET [17534] FATAL:  sorry, too many clients already
+2025-02-26 13:09:01.230 CET [17535] FATAL:  sorry, too many clients already
+2025-02-26 13:09:01.231 CET [17536] FATAL:  sorry, too many clients already
+2025-02-26 13:09:01.627 CET [17537] FATAL:  sorry, too many clients already
+2025-02-26 13:09:01.631 CET [17538] FATAL:  sorry, too many clients already
+2025-02-26 13:09:02.101 CET [17543] FATAL:  sorry, too many clients already
+2025-02-26 13:09:02.104 CET [17544] FATAL:  sorry, too many clients already
+2025-02-26 13:09:03.309 CET [17546] FATAL:  sorry, too many clients already
+2025-02-26 13:09:03.315 CET [17547] FATAL:  sorry, too many clients already
+2025-02-26 13:23:13.236 CET [8518] LOG:  checkpoint starting: time
+2025-02-26 13:23:13.751 CET [8518] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.509 s, sync=0.001 s, total=0.515 s; sync files=6, longest=0.001 s, average=0.001 s; distance=13 kB, estimate=120 kB; lsn=0/1C1C570, redo lsn=0/1C1C518
+2025-02-26 13:34:18.197 CET [19046] FATAL:  sorry, too many clients already
+2025-02-26 13:34:18.199 CET [19047] FATAL:  sorry, too many clients already
+2025-02-26 13:34:18.710 CET [19048] FATAL:  sorry, too many clients already
+2025-02-26 13:34:18.711 CET [19049] FATAL:  sorry, too many clients already
