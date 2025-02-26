@@ -32,7 +32,7 @@ export default function AuthenticateForm({ onSubmit, error }: AuthenticateFormPr
                 <AuthenticateFormInput label="Email" type="email" setValue={setEmail} />
                 <AuthenticateFormInput label="Password" type="password" setValue={setPassword} />
                 {error && <p className="text-red-500">{error}</p>}
-                <AuthenticateFormButton text="Login" onSubmit={handleSubmit} />
+                <AuthenticateFormButton text="Login" onSubmit={handleSubmit} type="submit" />
             </form>
             <ClickableText text="Forgot Password?" onClick={() => { }} />
         </div>

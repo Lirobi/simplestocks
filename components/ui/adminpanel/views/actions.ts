@@ -4,6 +4,26 @@ import prisma from "@/lib/prisma";
 import { Business, User, Log } from "@prisma/client";
 
 
+export async function toggleMaintenance() {
+    const appStatus = await prisma.appStatus.findFirst();
+    if (appStatus?.status === "Active") {
+        await prisma.appStatus.update({
+            where: { id: appStatus.id },
+            data: { status: "Maintenance" }
+        });
+    } else {
+        await prisma.appStatus.update({
+            where: { id: appStatus.id },
+            data: { status: "Active" }
+        });
+    }
+}
+
+export async function getAppStatus() {
+    const appStatus = await prisma.appStatus.findFirst();
+    return appStatus;
+}
+
 export async function getLogs(count?: number) {
     if (!count) {
         const logs = await prisma.log.findMany();

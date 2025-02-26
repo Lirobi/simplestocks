@@ -18,6 +18,7 @@ export default function AuthenticateFormInput({ label, type, color = "primary", 
                 <input
                     className="w-full px-4 py-2 border rounded outline-none focus:ring-2 focus:ring-primary bg-background-light dark:bg-background-dark text-foreground-light dark:text-foreground-dark border-line-light dark:border-line-dark"
                     type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
+                    autoComplete={type === "email" ? "email" : type === "password" ? "current-password" : ""}
                     placeholder={label}
                     onChange={(e) => setValue(e.target.value)}
                 />
