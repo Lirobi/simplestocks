@@ -160,9 +160,9 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     }, []);
 
     // Function to fetch messages
-    const fetchMessages = async () => {
+    const fetchMessages = async (count: number = 1000) => {
         let fetchedUsers: User[] = [];
-        const fetchedMessages = await getTicketMessages(ticket.id);
+        const fetchedMessages = await getTicketMessages(ticket.id, count, 0);
         const messagesWithUser: TicketMessageWithUser[] = [];
 
         for (const message of fetchedMessages) {
@@ -186,11 +186,15 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
 
     useEffect(() => {
         // Initial fetch
-        fetchMessages();
+        fetchMessages(6); // Only fetch 6 messages initially for performance
+
+        setTimeout(() => { // Fetch all messages after 2 seconds
+            fetchMessages();
+        }, 2000);
 
         // Set up polling for new messages every 3 seconds
         const intervalId = setInterval(async () => {
-            const newMessages = await getTicketMessages(ticket.id);
+            const newMessages = await getTicketMessages(ticket.id, 1, messages.length);
 
             // Check if there are new messages
             const hasNewMessages = newMessages.some(msg => msg.id > lastMessageId);

@@ -24,8 +24,8 @@ export async function deleteTicket(id: number) {
     return await prisma.ticket.delete({ where: { id } });
 }
 
-export async function getTicketMessages(ticketId: number) {
-    return await prisma.ticketMessage.findMany({ where: { ticketId } });
+export async function getTicketMessages(ticketId: number, count: number, offset: number) {
+    return await prisma.ticketMessage.findMany({ where: { ticketId }, take: count, skip: offset });
 }
 
 export async function createTicketMessage(message: string, ticketId: number, userId: string) {
