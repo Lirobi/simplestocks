@@ -147,6 +147,11 @@ export async function getAdmins() {
     return await prisma.admins.findMany();
 }
 
+export async function getAdminsIds() {
+    const admins = await prisma.admins.findMany();
+    return admins.map(admin => admin.userId);
+}
+
 export async function addAdmin(userId: number) {
     return await prisma.admins.create({
         data: {

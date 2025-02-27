@@ -6,12 +6,12 @@ import BaseFormInput from "@/components/ui/inputs/BaseFormInput";
 import BaseTextArea from "@/components/ui/inputs/BaseTextArea";
 import PopupWindowContainer from "@/components/ui/popups/PopupWindowContainer";
 import { useState, useEffect, useRef } from "react";
-import { createTicket, getTickets, updateTicket } from "@/lib/actions/tickets";
-import { getAdmins, getUser } from "@/lib/actions/user";
+import { createTicket, getTicket, getTickets, updateTicket } from "@/lib/actions/tickets";
+import { getAdmins, getAdminsIds, getUser } from "@/lib/actions/user";
 import { User } from "@/lib/types/User";
 import { Ticket, TicketMessage, Admins } from "@prisma/client";
 import { getTicketsByUserId, getTicketMessages, createTicketMessage } from "@/lib/actions/tickets";
-
+import { redirect, useSearchParams } from "next/navigation";
 
 
 function TicketPopup({ onClose }: { onClose: () => void }) {
@@ -341,25 +341,53 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
         </PopupWindowContainer >
     )
 }
+
 export default function TicketsPage() {
     const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
     const [showTicketDetails, setShowTicketDetails] = useState(false);
     const [showTicketPopup, setShowTicketPopup] = useState(false);
 
+
+
     const handleClickTicket = (ticket: Ticket) => {
         setSelectedTicket(ticket);
         setShowTicketDetails(true);
+        redirect(`/dashboard/tickets?id=${ticket.id}`);
     }
 
     const handleCloseTicketCreation = () => {
         setShowTicketPopup(false);
     }
 
+    const urlParams = useSearchParams();
+    useEffect(() => {
+        const fetchTicket = async () => {
+            const ticketId = urlParams.get("id");
+            if (ticketId) {
+                const user = await getUser();
+                const adminsIds = await getAdminsIds();
+                const ticket = await getTicket(parseInt(ticketId || "0"));
+                if (ticket && (ticket.userId === user?.id || adminsIds.includes(user?.id || 0))) {
+                    setSelectedTicket(ticket);
+                    setShowTicketDetails(true);
+                } else {
+                    redirect(`/dashboard/tickets`);
+                }
+            }
+        }
+        fetchTicket();
+    }, []);
+
+
+
     return (
         <TableContainer title="Tickets" addButtonText="New Ticket" onAddClick={() => setShowTicketPopup(true)}>
             {showTicketPopup && <TicketPopup onClose={handleCloseTicketCreation} />}
             <TicketList handleClickTicket={handleClickTicket} />
-            {showTicketDetails && <TicketDetails ticket={selectedTicket} onClose={() => setShowTicketDetails(false)} />}
+            {showTicketDetails && <TicketDetails ticket={selectedTicket} onClose={() => {
+                setShowTicketDetails(false);
+                redirect(`/dashboard/tickets`); // Pour que si l'user reload apres avoir fermé la popup, elle ne se réaffiche pas
+            }} />}
         </TableContainer>
     )
 }

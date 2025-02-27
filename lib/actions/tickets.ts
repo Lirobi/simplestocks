@@ -3,6 +3,10 @@
 import prisma from "@/lib/prisma";
 import { Ticket } from "@prisma/client";
 
+export async function getTicket(id: number) {
+    return await prisma.ticket.findUnique({ where: { id } });
+}
+
 export async function createTicket(title: string, description: string, userId: number) {
     return await prisma.ticket.create({ data: { title, description, userId } });
 }
