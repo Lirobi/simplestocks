@@ -4,10 +4,9 @@ import { usePathname } from "next/navigation";
 export default function SwitchThemeButton() {
     const pathname = usePathname();
     const handleSwitchTheme = () => {
-        <
-            // Get current theme from cookie or system preference
-            const currentTheme = document.cookie.split('; ').find(row => row.startsWith('theme='))?.split('=')[1] ||
-                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        // Get current theme from cookie or system preference
+        const currentTheme = document.cookie.split('; ').find(row => row.startsWith('theme='))?.split('=')[1] ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
         // Toggle to opposite theme
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
