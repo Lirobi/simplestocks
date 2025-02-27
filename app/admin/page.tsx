@@ -7,6 +7,7 @@ import LogsTable from "@/components/ui/adminpanel/views/LogsTable";
 import ManageApp from "@/components/ui/adminpanel/views/ManageApp";
 import { useRouter } from "next/navigation";
 import TicketsPage from "@/app/dashboard/tickets/page";
+import Articles from "@/components/ui/adminpanel/views/Articles";
 export default function AdminPage() {
     const router = useRouter();
     const [displayedView, setDisplayedView] = useState(-1);
@@ -21,12 +22,14 @@ export default function AdminPage() {
                 <button className={`${displayedView === 1 ? "underline" : ""} p-2 rounded-md`} onClick={() => setDisplayedView(1)}>Businesses</button>
                 <button className={`${displayedView === 2 ? "underline" : ""} p-2 rounded-md`} onClick={() => setDisplayedView(2)}>Logs</button>
                 <button className={`${displayedView === 3 ? "underline" : ""} p-2 rounded-md`} onClick={() => setDisplayedView(3)}>Tickets</button>
+                <button className={`${displayedView === 4 ? "underline" : ""} p-2 rounded-md`} onClick={() => setDisplayedView(4)}>Articles</button>
             </div>
             {displayedView === -1 && <ManageApp />}
             {displayedView === 0 && <UsersTable />}
             {displayedView === 1 && <BusinessesTable />}
             {displayedView === 2 && <LogsTable />}
             {displayedView === 3 && <TicketsPage />}
+            {displayedView === 4 && <Articles />}
         </div>
     )
 }
