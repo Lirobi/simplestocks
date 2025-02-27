@@ -38,7 +38,7 @@ export async function loginUser(emailOrFormData: string | FormData, passwordPara
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
             path: "/",
-            maxAge: 900
+            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
         });
 
 
