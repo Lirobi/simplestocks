@@ -14,6 +14,29 @@ model AppStatus {
   updatedAt          DateTime @updatedAt
 }
 
+model Ticket {
+  id                 Int @id @default(autoincrement())
+  title              String
+  description        String
+  status             String @default("Open") // Open/Closed/Pending
+  user               User @relation(fields: [userId], references: [id])
+  userId             Int
+  messages           TicketMessage[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model TicketMessage {
+  id                 Int @id @default(autoincrement())
+  message            String
+  ticket             Ticket @relation(fields: [ticketId], references: [id])
+  ticketId           Int
+  user               User @relation(fields: [userId], references: [id])
+  userId             Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
 model Visit {
   id                 Int @id @default(autoincrement())
   ipAddress          String
@@ -38,12 +61,14 @@ model User {
   city        String
   postalCode  String
   country     String
+  tickets     Ticket[]
   inventoryTransactions InventoryTransaction[]
   sales       Sale[]
   notifications Notification[]
   auditLogs    AuditLog[]
   userData UserData?
   logs Log[]
+  ticketMessages TicketMessage[]
 }
 
 model UserData {

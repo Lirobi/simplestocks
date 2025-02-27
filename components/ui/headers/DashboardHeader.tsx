@@ -3,11 +3,14 @@ import { User } from "@/lib/types/User";
 import { getBusinessNameFromUserId } from "./actions";
 import { redirect } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+
 interface DashboardHeaderProps {
     user: User;
 }
 
 export default function DashboardHeader({ user }: DashboardHeaderProps) {
+    const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const [businessName, setBusinessName] = useState<string | null>(null);
@@ -60,12 +63,12 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
 
 
     const menuItems = [
-        { label: "Preferences", onClick: () => console.log("Preferences clicked") },
+        { label: "Tickets", onClick: () => router.push("/dashboard/tickets") },
         { label: "Switch Theme", onClick: () => handleSwitchTheme() },
     ];
 
     if (user.email === "test@test.fr" || user.email === "lilian.bischung@gmail.com") {
-        menuItems.push({ label: "Admin Panel", onClick: () => redirect("/admin") });
+        menuItems.push({ label: "Admin Panel", onClick: () => router.push("/admin") });
     }
 
     return (
