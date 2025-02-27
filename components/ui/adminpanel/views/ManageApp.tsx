@@ -2,7 +2,9 @@
 import { useState, useEffect } from "react";
 import { toggleMaintenance, getAppStatus, getUsers, getBusinesses, getProductsCount, getCpuUsage, getMemoryUsage, getLogs, getVisits } from "./actions";
 import { Log, User, Visit } from "@prisma/client";
-
+import { addAdmin, getAdmins, removeAdmin } from "@/lib/actions/user";
+import BaseButton from "@/components/ui/buttons/BaseButton";
+import BaseFormInput from "@/components/ui/inputs/BaseFormInput";
 const cpuUsageHistory = [];
 const memoryUsageHistory = [];
 
@@ -134,6 +136,12 @@ export default function ManageApp() {
 
     const [visits, setVisits] = useState<Visit[]>([]);
 
+    const [admins, setAdmins] = useState<number[]>([]);
+    const [newAdminEmail, setNewAdminEmail] = useState<string>("");
+    const [showNewAdminPopup, setShowNewAdminPopup] = useState<boolean>(false);
+    const [showRemoveAdminPopup, setShowRemoveAdminPopup] = useState<boolean>(false);
+    const [adminToRemove, setAdminToRemove] = useState<number>(0);
+
     useEffect(() => {
         const fetchAppStatus = async () => {
             const appStatus = await getAppStatus();
@@ -179,6 +187,12 @@ export default function ManageApp() {
             setTimeout(fetchAnalytics, 1000);
         }
         fetchAnalytics();
+
+        const fetchAdmins = async () => {
+            const admins = await getAdmins();
+            setAdmins(admins.map((admin) => admin.userId));
+        }
+        fetchAdmins();
 
     }, []);
 
@@ -235,6 +249,19 @@ export default function ManageApp() {
         };
     }, []);
 
+
+    const handleAddAdmin = async () => {
+        const user = usersList.find((user) => user.email === newAdminEmail);
+        if (user) {
+            await addAdmin(user.id);
+            setShowNewAdminPopup(false);
+        }
+    }
+
+    const handleRemoveAdmin = async () => {
+        await removeAdmin(adminToRemove);
+        setShowRemoveAdminPopup(false);
+    }
     return (
         <div className="flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-4">
@@ -313,6 +340,30 @@ export default function ManageApp() {
                     </div>
                 </Card>
             </div>
+            <div className="grid gap-4">
+                <Card title="Admins">
+                    <div className="flex justify-between w-full">
+                        <div className="flex flex-col gap-2">
+                            {admins.map((admin) => (
+                                <div key={admin} className="flex justify-between w-full">
+                                    <p>{usersList.find((user) => user.id === admin)?.email}</p>
+                                    <BaseButton onClick={() => { setAdminToRemove(admin); setShowRemoveAdminPopup(true); handleRemoveAdmin(); }}>Remove</BaseButton>
+                                </div>
+                            ))}
+                        </div>
+                        <BaseButton onClick={() => setShowNewAdminPopup(true)}>Add Admin</BaseButton>
+                    </div>
+                </Card>
+            </div>
+            {showNewAdminPopup && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-4 rounded-lg">
+                        <p>Add Admin</p>
+                        <BaseFormInput label="Email" value={newAdminEmail} onChange={(e) => setNewAdminEmail(e.target.value)} />
+                        <BaseButton onClick={handleAddAdmin}>Add</BaseButton>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

@@ -141,3 +141,32 @@ export async function updateUser(userId: number, user: User) {
     });
     return { success: true, user: updatedUser };
 }
+
+
+export async function getAdmins() {
+    return await prisma.admins.findMany();
+}
+
+export async function addAdmin(userId: number) {
+    return await prisma.admins.create({
+        data: {
+            userId: userId
+        }
+    });
+}
+
+export async function removeAdmin(userId: number) {
+    // First find the admin record by userId to get its id
+    const admin = await prisma.admins.findFirst({
+        where: { userId: userId }
+    });
+
+    if (!admin) {
+        throw new Error(`Admin with userId ${userId} not found`);
+    }
+
+    // Then delete using the id field which is the primary key
+    return await prisma.admins.delete({
+        where: { id: admin.id }
+    });
+}

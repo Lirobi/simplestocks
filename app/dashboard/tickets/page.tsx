@@ -7,9 +7,9 @@ import BaseTextArea from "@/components/ui/inputs/BaseTextArea";
 import PopupWindowContainer from "@/components/ui/popups/PopupWindowContainer";
 import { useState, useEffect, useRef } from "react";
 import { createTicket, getTickets, updateTicket } from "@/lib/actions/tickets";
-import { getUser } from "@/lib/actions/user";
+import { getAdmins, getUser } from "@/lib/actions/user";
 import { User } from "@/lib/types/User";
-import { Ticket, TicketMessage } from "@prisma/client";
+import { Ticket, TicketMessage, Admins } from "@prisma/client";
 import { getTicketsByUserId, getTicketMessages, createTicketMessage } from "@/lib/actions/tickets";
 
 
@@ -220,7 +220,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
         }
 
         // Send the message
-        const createdMessage = await createTicketMessage(newMessage, ticket.id, user?.id);
+        const createdMessage = await createTicketMessage(newMessage, ticket.id, user?.id.toString() || "");
 
         // Immediately update UI with the new message
         if (createdMessage && user) {
@@ -244,6 +244,16 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
         setStatus(status);
     }
 
+    const [adminsIds, setAdminsIds] = useState<number[]>([]);
+
+    useEffect(() => {
+        const fetchAdmins = async () => {
+            const admins = await getAdmins();
+            setAdminsIds(admins.map((admin) => admin.userId));
+        }
+        fetchAdmins();
+    }, []);
+
     return (
         <PopupWindowContainer title={`Ticket #${ticket.id}`} onClose={onClose}>
             <div className="flex flex-col gap-2 p-4 max-h-[90vh] ">
@@ -251,11 +261,17 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                     <h2 className="text-xl font-bold">Title: {ticket.title}</h2>
                     <div className="flex gap-2">
                         <p className="font-bold">Status:</p>
-                        <select className={`px-5 p-0.5 h-fit cursor-pointer rounded-md ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`} defaultValue={status} onChange={(e) => handleChangeStatus(ticket.id, e.target.value)}>
-                            <option value="open">Open</option>
-                            <option value="pending">Pending</option>
-                            <option value="closed">Closed</option>
-                        </select>
+
+                        {adminsIds.includes(user?.id || 0) ? (
+                            <select className={`px-5 p-0.5 h-fit cursor-pointer rounded-md ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`} defaultValue={status} onChange={(e) => handleChangeStatus(ticket.id, e.target.value)}>
+                                <option value="open">Open</option>
+                                <option value="pending">Pending</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        )
+                            :
+                            <p className={`px-5 p-0.5 h-fit cursor-pointer rounded-md ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`}>{status}</p>
+                        }
                     </div>
                 </div>
                 <div className="flex flex-col gap-2">

@@ -4,7 +4,7 @@ import { getBusinessNameFromUserId } from "./actions";
 import { redirect } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-
+import { getAdmins } from "@/lib/actions/user";
 interface DashboardHeaderProps {
     user: User;
 }
@@ -14,6 +14,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const [businessName, setBusinessName] = useState<string | null>(null);
+    const [isAdmin, setIsAdmin] = useState(false);
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -29,10 +30,15 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
 
     useEffect(() => {
         const fetchBusinessName = async () => {
-            const name = await getBusinessNameFromUserId(user.id);
+            const name = await getBusinessNameFromUserId(user.id.toString());
             setBusinessName(name);
         };
         fetchBusinessName();
+        const fetchAdmins = async () => {
+            const admins = await getAdmins();
+            setIsAdmin(admins.some((admin) => admin.userId === user.id));
+        }
+        fetchAdmins();
     }, [user.id]);
 
     const handleLogout = async () => {
@@ -67,7 +73,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
         { label: "Switch Theme", onClick: () => handleSwitchTheme() },
     ];
 
-    if (user.email === "test@test.fr" || user.email === "lilian.bischung@gmail.com") {
+    if (isAdmin) {
         menuItems.push({ label: "Admin Panel", onClick: () => router.push("/admin") });
     }
 
