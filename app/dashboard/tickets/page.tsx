@@ -35,16 +35,23 @@ function TicketPopup({ onClose }: { onClose: () => void }) {
             setError("Title is required");
             setTimeout(() => setError(""), 3000);
             return;
+        } else if (title.length > 50) {
+            setError("Title must be less than 50 characters");
+            setTimeout(() => setError(""), 3000);
+            return;
         }
         if (description.length === 0) {
             setError("Description is required");
+            setTimeout(() => setError(""), 3000);
+            return;
+        } else if (description.length > 1000) {
+            setError("Description must be less than 1000 characters");
             setTimeout(() => setError(""), 3000);
             return;
         }
         await createTicket(title, description, user?.id);
         onClose();
     }
-
     return (
         <PopupWindowContainer title="New Ticket" onClose={onClose}>
             <BaseFormInput label="Title" onChange={(e) => setTitle(e.target.value)} />
