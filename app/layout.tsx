@@ -3,14 +3,18 @@ import { Inter, Bricolage_Grotesque, Handlee } from "next/font/google";
 import "./globals.css";
 import { addVisit } from "./actions";
 import { headers } from "next/headers";
-
+import SwitchThemeButton from "@/components/ui/buttons/SwitchThemeButton";
 const inter = Inter({ subsets: ['latin'] });
 const bricolage = Bricolage_Grotesque({ subsets: ['latin'] });
 const handlee = Handlee({ subsets: ['latin'], weight: "400" });
+
+
+
 export const metadata: Metadata = {
   title: "SimpleStocks",
   description: "SimpleStocks",
 };
+
 
 // TODO: Add Header and Footer here
 export default function RootLayout({
@@ -33,7 +37,9 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              try {
+              
+            function setTheme() {
+            try {
                 // Get current theme from cookie or system preference
                 const currentTheme = document.cookie.split('; ').find(row => row.startsWith('theme='))?.split('=')[1] ||
                   (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -54,13 +60,19 @@ export default function RootLayout({
               } catch (e) {
                 console.log('Theme detection failed');
               }
+          }
+              setTheme();
+
             `,
           }}
         />
       </head>
       <body className={inter.className}>
+        <div className="fixed bottom-5 right-5 z-50">
+          <SwitchThemeButton />
+        </div>
         {children}
       </body>
-    </html>
+    </html >
   );
 }

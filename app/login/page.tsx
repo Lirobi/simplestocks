@@ -20,10 +20,13 @@ export default function Login() {
 
     const handleSubmit = async (email: string, password: string) => {
         const user = await loginUser(email, password);
-        if (user) {
+        if (user.success == true) {
             redirect("/dashboard");
         } else {
             setError("Invalid email or password");
+            setTimeout(() => {
+                setError("");
+            }, 3000);
         }
     }
 

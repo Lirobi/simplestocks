@@ -13,14 +13,17 @@ interface AuthenticateFormProps {
 export default function AuthenticateForm({ onSubmit, error }: AuthenticateFormProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
+        setIsLoading(true);
         e.preventDefault();
-        onSubmit(email, password);
+        await onSubmit(email, password);
+        setIsLoading(false);
     }
     const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
         if (e.key === "Enter") {
-            onSubmit(email, password);
+            handleSubmit(e);
         }
     }
 
@@ -32,7 +35,14 @@ export default function AuthenticateForm({ onSubmit, error }: AuthenticateFormPr
                 <AuthenticateFormInput label="Email" type="email" setValue={setEmail} />
                 <AuthenticateFormInput label="Password" type="password" setValue={setPassword} />
                 {error && <p className="text-red-500">{error}</p>}
-                <AuthenticateFormButton text="Login" onSubmit={handleSubmit} type="submit" />
+                {isLoading ?
+                    <button className="font-bold text-white p-2 rounded-md w-full bg-primary flex items-center justify-center gap-2" onClick={() => { }} type="button">
+                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white" />
+                        Logging in...
+                    </button>
+                    :
+                    <AuthenticateFormButton text="Login" onSubmit={handleSubmit} type="submit" />
+                }
             </form>
             <ClickableText text="Forgot Password?" onClick={() => { }} />
         </div>
