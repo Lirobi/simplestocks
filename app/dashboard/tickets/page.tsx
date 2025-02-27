@@ -5,7 +5,7 @@ import TableContainer from "@/components/ui/containers/TableContainer";
 import BaseFormInput from "@/components/ui/inputs/BaseFormInput";
 import BaseTextArea from "@/components/ui/inputs/BaseTextArea";
 import PopupWindowContainer from "@/components/ui/popups/PopupWindowContainer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createTicket, getTickets, updateTicket } from "@/lib/actions/tickets";
 import { getUser } from "@/lib/actions/user";
 import { User } from "@/lib/types/User";
@@ -107,10 +107,21 @@ interface TicketMessageWithUser extends TicketMessage {
 
 function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => void }) {
     const [status, setStatus] = useState(ticket.status);
-
     const [messages, setMessages] = useState<TicketMessageWithUser[]>([]);
-
     const [user, setUser] = useState<User | null>(null);
+    const [newMessage, setNewMessage] = useState("");
+    const [messageTimestamps, setMessageTimestamps] = useState<Date[]>([]);
+    const [cooldownActive, setCooldownActive] = useState(false);
+
+    // Add a ref for the messages container
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+    // Function to scroll to bottom of messages
+    const scrollToBottom = () => {
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+    };
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -119,6 +130,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
         }
         fetchUser();
     }, []);
+
     useEffect(() => {
         const fetchMessages = async () => {
             const messages = await getTicketMessages(ticket.id);
@@ -128,20 +140,58 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                 messagesWithUser.push({ ...message, user });
             }
             setMessages(messagesWithUser);
+
+            // Scroll to bottom after messages are loaded
+            setTimeout(scrollToBottom, 100);
         }
         fetchMessages();
     }, []);
 
-
-    const [newMessage, setNewMessage] = useState("");
+    // Add effect to scroll to bottom when messages change
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const handleSendMessage = async () => {
+        if (newMessage.length === 0) return;
+
+        // Check for cooldown (3 messages in 3 seconds)
+        const now = new Date();
+        const threeSecondsAgo = new Date(now.getTime() - 3000);
+
+        // Filter timestamps within the last 3 seconds
+        const recentMessages = messageTimestamps.filter(
+            timestamp => timestamp > threeSecondsAgo
+        );
+
+        if (recentMessages.length >= 2 && !cooldownActive) {
+            // This would be the 3rd message in 3 seconds
+            setCooldownActive(true);
+            setTimeout(() => setCooldownActive(false), 6000);
+            return;
+        }
+
+        if (cooldownActive) {
+            return;
+        }
+
+        // Send the message
         await createTicketMessage(newMessage, ticket.id, user?.id);
-        setMessages([...messages, { id: messages.length + 1, message: newMessage, ticketId: ticket.id, userId: user?.id, createdAt: new Date(), updatedAt: new Date(), user: user }]);
+
+        // Update messages and timestamps
+        setMessages([...messages, {
+            id: messages.length + 1,
+            message: newMessage,
+            ticketId: ticket.id,
+            userId: user?.id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            user: user
+        }]);
+
+        setMessageTimestamps([...messageTimestamps, now]);
         setNewMessage("");
     }
-
-
 
     const handleChangeStatus = async (id: number, status: string) => {
         await updateTicket(id, { status });
@@ -150,7 +200,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
 
     return (
         <PopupWindowContainer title={`Ticket #${ticket.id}`} onClose={onClose}>
-            <div className="flex flex-col gap-2 p-4 ">
+            <div className="flex flex-col gap-2 p-4 max-h-[90vh] ">
                 <div className="flex justify-between gap-2">
                     <h2 className="text-xl font-bold">Title: {ticket.title}</h2>
                     <div className="flex gap-2">
@@ -167,9 +217,12 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                     <p>{ticket.description}</p>
                 </div>
                 <div className="border-t border-line-light my-4 dark:border-line-dark w-full"></div>
-                <div className="flex flex-col gap-2 w-full   ">
+                <div className="flex flex-col gap-2 w-full">
                     <h2 className="text-xl font-bold ">Messages:</h2>
-                    <div className="flex flex-col gap-2 max-h-[40vh] overflow-y-auto py-2">
+                    <div
+                        ref={messagesContainerRef}
+                        className="flex flex-col gap-2 max-h-[40vh] overflow-y-auto py-2"
+                    >
                         {messages.map((message) => (
                             <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col ${message.userId === user?.id ? "self-end" : "self-start"}`}>
                                 <h3 className="text-lg font-semibold">{user?.id === message.userId ? "You" : message.user.firstName + " " + message.user.lastName}   - <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span></h3>
@@ -178,6 +231,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                         ))}
                     </div>
                 </div>
+                {cooldownActive && <p className="text-red-500">Please slow down. You're sending messages too quickly.</p>}
                 <div className="flex gap-2">
                     <input type="text" placeholder="New message" className="w-full rounded-md p-2 shadow-md" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => {
                         if (e.key === "Enter") {
