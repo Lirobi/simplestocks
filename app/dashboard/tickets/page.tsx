@@ -52,7 +52,8 @@ function TicketPopup({ onClose }: { onClose: () => void }) {
 function TicketList({ handleClickTicket }: { handleClickTicket: (ticket: Ticket) => void }) {
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const [user, setUser] = useState<User | null>(null);
-
+    const [order, setOrder] = useState<"date" | "status">("date");
+    const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
     useEffect(() => {
         const fetchData = async () => {
             const user = await getUser();
@@ -76,18 +77,20 @@ function TicketList({ handleClickTicket }: { handleClickTicket: (ticket: Ticket)
                     <tr className="w-full">
                         <th className="text-center w-fit">Ticket ID</th>
                         <th className="text-center w-fit">Title</th>
-                        <th className="text-center w-fit">Status</th>
+                        <th className="text-center w-fit cursor-pointer" onClick={() => (setOrder("status"), setSortDirection(sortDirection === "asc" ? "desc" : "asc"))}>Status {sortDirection && order === "status" ? (sortDirection === "asc" ? "↑" : "↓") : ""}</th>
+                        <th className="text-center w-fit cursor-pointer" onClick={() => (setOrder("date"), setSortDirection(sortDirection === "asc" ? "desc" : "asc"))}>Updated At {sortDirection && order === "date" ? (sortDirection === "asc" ? "↑" : "↓") : ""}</th>
                         <th className="text-center w-fit">Created At</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {tickets.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()).map((ticket) => (
+                    {tickets.sort((a, b) => order === "date" ? (sortDirection === "asc" ? b.updatedAt.getTime() - a.updatedAt.getTime() : a.updatedAt.getTime() - b.updatedAt.getTime()) : (sortDirection === "asc" ? a.status.localeCompare(b.status) : b.status.localeCompare(a.status))).map((ticket) => (
                         <tr key={ticket.id} className=" shadow-md border border-gray-200 p-2 rounded-md hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-all duration-300" onClick={() => handleClickTicket(ticket)}>
                             <td className="w-fit text-center p-2">{ticket.id}</td>
                             <td className="w-fit text-center p-2">{ticket.title}</td>
                             <td className="w-full flex justify-center items-center p-2">
                                 <p className={`w-fit px-10 p-0.5 rounded-md ${ticket.status.toLowerCase() === "open" ? "bg-green-500" : ticket.status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`}>{ticket.status}</p>
                             </td>
+                            <td className="w-fit text-center p-2">{ticket.updatedAt.toLocaleString()}</td>
                             <td className="w-fit text-center p-2">{ticket.createdAt.toLocaleString()}</td>
                         </tr>
                     ))}
@@ -200,10 +203,15 @@ export default function TicketsPage() {
         setShowTicketDetails(true);
     }
 
+    const handleCloseTicketCreation = () => {
+
+        setShowTicketPopup(false);
+    }
+
     const [showTicketPopup, setShowTicketPopup] = useState(false);
     return (
         <TableContainer title="Tickets" addButtonText="New Ticket" onAddClick={() => setShowTicketPopup(true)}>
-            {showTicketPopup && <TicketPopup onClose={() => setShowTicketPopup(false)} />}
+            {showTicketPopup && <TicketPopup onClose={handleCloseTicketCreation} />}
             <TicketList handleClickTicket={handleClickTicket} />
             {showTicketDetails && <TicketDetails ticket={selectedTicket} onClose={() => setShowTicketDetails(false)} />}
         </TableContainer>
