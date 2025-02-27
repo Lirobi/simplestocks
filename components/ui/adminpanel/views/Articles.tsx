@@ -7,6 +7,21 @@ import PopupWindowContainer from "@/components/ui/popups/PopupWindowContainer";
 import { getUser } from "@/lib/actions/user";
 import { User } from "@/lib/types/User";
 import RichTextEditor from "@/components/ui/views/RichTextEditor";
+import ClickableText from "../../buttons/ClickableText";
+import BaseButton from "../../buttons/BaseButton";
+
+function ConfirmPopup({ onClose, onConfirm }: { onClose: () => void, onConfirm: () => void }) {
+    return (
+        <PopupWindowContainer onClose={onClose} title="Confirm" className="max-w-fit">
+            <p>Are you sure you want to delete this article?</p>
+            <div className="flex flex-row gap-2 p-2 w-full">
+                <ClickableText onClick={onClose} text="Cancel" />
+                <BaseButton onClick={onConfirm} className="w-full">Confirm</BaseButton>
+            </div>
+        </PopupWindowContainer>
+    )
+}
+
 function ArticlePopup({ onClose, article }: { onClose: () => void, article?: NewsArticle }) {
     const [user, setUser] = useState<User | null>(null);
 
@@ -50,6 +65,7 @@ export default function Articles() {
 
     const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
 
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     useEffect(() => {
         const fetchArticles = async () => {
             const articles = await getNewsArticles();
@@ -59,15 +75,19 @@ export default function Articles() {
     }, []);
 
     async function handleDelete(id: string) {
-        await deleteNewsArticle(parseInt(id));
-        setArticles(articles.filter((article) => article.id !== parseInt(id)));
+        setShowConfirmDelete(true);
     }
 
+    async function confirmDelete() {
+        await deleteNewsArticle(selectedArticle.id);
+        setArticles(articles.filter((article) => article.id !== selectedArticle.id));
+        setShowConfirmDelete(false);
+    }
     return (
         <div className="flex flex-col gap-2 justify-center items-center">
             <button onClick={() => setShowArticlePopup(true)} className="bg-primary text-white p-2 rounded-md w-fit">New Article</button>
             {showArticlePopup && <ArticlePopup onClose={() => { setShowArticlePopup(false); setSelectedArticle(null) }} article={selectedArticle} />}
-
+            {showConfirmDelete && <ConfirmPopup onClose={() => setShowConfirmDelete(false)} onConfirm={confirmDelete} />}
             <div className="flex flex-col gap-2 p-4">
                 {
                     articles.map((article) => (
