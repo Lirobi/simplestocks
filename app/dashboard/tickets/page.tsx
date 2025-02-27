@@ -14,7 +14,6 @@ import { getTicketsByUserId, getTicketMessages, createTicketMessage } from "@/li
 
 
 
-
 function TicketPopup({ onClose }: { onClose: () => void }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -51,6 +50,7 @@ function TicketPopup({ onClose }: { onClose: () => void }) {
         }
         await createTicket(title, description, user?.id);
         onClose();
+        window.location.reload();
     }
     return (
         <PopupWindowContainer title="New Ticket" onClose={onClose}>
@@ -131,6 +131,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     const [newMessage, setNewMessage] = useState("");
     const [messageTimestamps, setMessageTimestamps] = useState<Date[]>([]);
     const [cooldownActive, setCooldownActive] = useState(false);
+    const [lastMessageId, setLastMessageId] = useState<number>(0);
 
     // Add a ref for the messages container
     const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -150,21 +151,45 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
         fetchUser();
     }, []);
 
-    useEffect(() => {
-        const fetchMessages = async () => {
-            const messages = await getTicketMessages(ticket.id);
-            const messagesWithUser: TicketMessageWithUser[] = [];
-            for (const message of messages) {
-                const user = await getUser(message.userId.toString());
-                messagesWithUser.push({ ...message, user });
-            }
-            setMessages(messagesWithUser);
+    // Function to fetch messages
+    const fetchMessages = async () => {
+        const fetchedMessages = await getTicketMessages(ticket.id);
+        const messagesWithUser: TicketMessageWithUser[] = [];
 
-            // Scroll to bottom after messages are loaded
-            setTimeout(scrollToBottom, 100);
+        for (const message of fetchedMessages) {
+            const user = await getUser(message.userId.toString());
+            messagesWithUser.push({ ...message, user });
+
+            // Update the last message ID
+            if (message.id > lastMessageId) {
+                setLastMessageId(message.id);
+            }
         }
+
+        setMessages(messagesWithUser);
+    };
+
+    useEffect(() => {
+        // Initial fetch
         fetchMessages();
-    }, []);
+
+        // Set up polling for new messages every 3 seconds
+        const intervalId = setInterval(async () => {
+            const newMessages = await getTicketMessages(ticket.id);
+
+            // Check if there are new messages
+            const hasNewMessages = newMessages.some(msg => msg.id > lastMessageId);
+
+            if (hasNewMessages) {
+                fetchMessages();
+                // Scroll to bottom when new messages arrive
+                setTimeout(scrollToBottom, 100);
+            }
+        }, 3000);
+
+        // Clean up interval on unmount
+        return () => clearInterval(intervalId);
+    }, [ticket.id, lastMessageId]);
 
     // Add effect to scroll to bottom when messages change
     useEffect(() => {
@@ -195,18 +220,20 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
         }
 
         // Send the message
-        await createTicketMessage(newMessage, ticket.id, user?.id);
+        const createdMessage = await createTicketMessage(newMessage, ticket.id, user?.id);
 
-        // Update messages and timestamps
-        setMessages([...messages, {
-            id: messages.length + 1,
-            message: newMessage,
-            ticketId: ticket.id,
-            userId: user?.id,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            user: user
-        }]);
+        // Immediately update UI with the new message
+        if (createdMessage && user) {
+            setMessages([...messages, {
+                ...createdMessage,
+                user: user
+            }]);
+
+            // Update lastMessageId if needed
+            if (createdMessage.id > lastMessageId) {
+                setLastMessageId(createdMessage.id);
+            }
+        }
 
         setMessageTimestamps([...messageTimestamps, now]);
         setNewMessage("");
@@ -270,6 +297,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
 export default function TicketsPage() {
     const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
     const [showTicketDetails, setShowTicketDetails] = useState(false);
+    const [showTicketPopup, setShowTicketPopup] = useState(false);
 
     const handleClickTicket = (ticket: Ticket) => {
         setSelectedTicket(ticket);
@@ -277,11 +305,9 @@ export default function TicketsPage() {
     }
 
     const handleCloseTicketCreation = () => {
-
         setShowTicketPopup(false);
     }
 
-    const [showTicketPopup, setShowTicketPopup] = useState(false);
     return (
         <TableContainer title="Tickets" addButtonText="New Ticket" onAddClick={() => setShowTicketPopup(true)}>
             {showTicketPopup && <TicketPopup onClose={handleCloseTicketCreation} />}

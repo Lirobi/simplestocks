@@ -28,9 +28,20 @@ export async function getTicketMessages(ticketId: number) {
     return await prisma.ticketMessage.findMany({ where: { ticketId } });
 }
 
-export async function createTicketMessage(message: string, ticketId: number, userId: number) {
-    const updateTicket = await prisma.ticket.update({ where: { id: ticketId }, data: { updatedAt: new Date() } });
-    return await prisma.ticketMessage.create({ data: { message, ticketId, userId } });
+export async function createTicketMessage(message: string, ticketId: number, userId: string) {
+    try {
+        const createdMessage = await prisma.ticketMessage.create({
+            data: {
+                message,
+                ticketId,
+                userId
+            }
+        });
+        return createdMessage;
+    } catch (error) {
+        console.error("Error creating ticket message:", error);
+        return null;
+    }
 }
 
 export async function deleteTicketMessage(id: number) {
