@@ -90,7 +90,7 @@ export default function Articles() {
             {showConfirmDelete && <ConfirmPopup onClose={() => setShowConfirmDelete(false)} onConfirm={confirmDelete} />}
             <div className="flex flex-col gap-2 p-4">
                 {
-                    articles.map((article) => (
+                    articles.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((article) => (
                         <div key={article.id} className="dark:bg-background-dark bg-background-light p-4 rounded-md">
                             <div className="flex flex-row justify-between items-center">
                                 <button className="bg-primary text-white p-2 rounded-md" onClick={() => { setSelectedArticle(article); setShowArticlePopup(true) }}>Edit</button>
