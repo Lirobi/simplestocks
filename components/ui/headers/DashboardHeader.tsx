@@ -1,5 +1,6 @@
 "use client";
 import { User } from "@/lib/types/User";
+import { getBusinessNameFromUserId } from "./actions";
 import { redirect } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 interface DashboardHeaderProps {
@@ -9,7 +10,7 @@ interface DashboardHeaderProps {
 export default function DashboardHeader({ user }: DashboardHeaderProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
-
+    const [businessName, setBusinessName] = useState<string | null>(null);
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -22,6 +23,14 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    useEffect(() => {
+        const fetchBusinessName = async () => {
+            const name = await getBusinessNameFromUserId(user.id);
+            setBusinessName(name);
+        };
+        fetchBusinessName();
+    }, [user.id]);
 
     const handleLogout = async () => {
         redirect("/logout");
@@ -62,7 +71,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
     return (
         <div className="flex justify-between items-center p-4 dark:bg-background-dark bg-background-light h-fit shadow-lg">
             <div className="flex items-center gap-4">
-                <h1 className="text-2xl font-bold dark:text-foreground-dark text-foreground-light cursor-pointer" onClick={() => redirect("/dashboard")}>Dashboard</h1>
+                <h1 className="text-2xl font-bold dark:text-foreground-dark text-foreground-light cursor-pointer" onClick={() => redirect("/dashboard")}>Dashboard - {businessName}</h1>
             </div>
             <div className="relative " ref={menuRef}>
                 <div className="flex items-center font-bold justify-center cursor-pointer dark:bg-backgroundSecondary-dark bg-backgroundSecondary-light text-foreground p-2 rounded-lg shadow-sm hover:scale-105 hover:bg-backgroundTertiary transition-all duration-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>

@@ -658,3 +658,5 @@
 2025-02-27 14:56:00.462 CET [36619] FATAL:  sorry, too many clients already
 2025-02-27 15:00:34.047 CET [8518] LOG:  checkpoint starting: time
 2025-02-27 15:00:34.362 CET [8518] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.305 s, sync=0.001 s, total=0.316 s; sync files=4, longest=0.001 s, average=0.001 s; distance=9 kB, estimate=125 kB; lsn=0/1CEA898, redo lsn=0/1CEA840
+2025-02-27 15:05:34.358 CET [8518] LOG:  checkpoint starting: time
+2025-02-27 15:05:35.179 CET [8518] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.815 s, sync=0.001 s, total=0.821 s; sync files=9, longest=0.001 s, average=0.001 s; distance=24 kB, estimate=115 kB; lsn=0/1CF0AB0, redo lsn=0/1CF0A58
