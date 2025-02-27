@@ -133,6 +133,8 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     const [cooldownActive, setCooldownActive] = useState(false);
     const [lastMessageId, setLastMessageId] = useState<number>(0);
 
+    const [ticketOwner, setTicketOwner] = useState<User | null>(null);
+
     // Add a ref for the messages container
     const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -149,6 +151,12 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
             setUser(user);
         }
         fetchUser();
+
+        const fetchTicketOwner = async () => {
+            const ticketOwner = await getUser(ticket.userId.toString());
+            setTicketOwner(ticketOwner);
+        }
+        fetchTicketOwner();
     }, []);
 
     // Function to fetch messages
@@ -257,21 +265,33 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     return (
         <PopupWindowContainer title={`Ticket #${ticket.id}`} onClose={onClose}>
             <div className="flex flex-col gap-2 p-4 max-h-[90vh] ">
-                <div className="flex justify-between gap-2">
-                    <h2 className="text-xl font-bold">Title: {ticket.title}</h2>
-                    <div className="flex gap-2">
-                        <p className="font-bold">Status:</p>
+                <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between gap-2">
+                        <h2 className="flex items-center gap-2">
+                            <div className="h-10 w-10 rounded-full bg-primary flex justify-center items-center">
+                                <p className="text-lg font-bold">{ticketOwner?.firstName.charAt(0) + ticketOwner?.lastName.charAt(0)}</p>
+                            </div>
+                            <p className="text-lg font-bold">{ticketOwner?.firstName + " " + ticketOwner?.lastName}</p>
+                        </h2>
+                        <div className="flex items-center gap-2">
+                            <p className="font-bold text-lg">Status:</p>
 
-                        {adminsIds.includes(user?.id || 0) ? (
-                            <select className={`px-5 p-0.5 h-fit cursor-pointer rounded-md ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`} defaultValue={status} onChange={(e) => handleChangeStatus(ticket.id, e.target.value)}>
-                                <option value="open">Open</option>
-                                <option value="pending">Pending</option>
-                                <option value="closed">Closed</option>
-                            </select>
-                        )
-                            :
-                            <p className={`px-5 p-0.5 h-fit cursor-pointer rounded-md ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`}>{status}</p>
-                        }
+                            {adminsIds.includes(user?.id || 0) ? (
+                                <select className={`px-5 p-0.5 h-fit cursor-pointer rounded-md font-semibold ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`} defaultValue={status} onChange={(e) => handleChangeStatus(ticket.id, e.target.value)}>
+                                    <option value="open">Open</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="closed">Closed</option>
+                                </select>
+                            )
+                                :
+                                <p className={`px-5 p-0.5 h-fit cursor-pointer rounded-md ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`}>{status}</p>
+                            }
+                        </div>
+
+                    </div>
+                    <div className="flex justify-between gap-2">
+                        <h2 className="text-xl font-bold">Title: {ticket.title}</h2>
+                        <p className="text-sm text-gray-500 font-semibold">{ticket.createdAt.toLocaleString()}</p>
                     </div>
                 </div>
                 <div className="flex flex-col gap-2">
