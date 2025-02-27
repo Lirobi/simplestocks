@@ -28,6 +28,10 @@ export async function getUser(userId?: string): Promise<User | null> {
     return null;
 }
 
+export async function getUsers(): Promise<User[]> {
+    return await prisma.user.findMany();
+}
+
 export async function loginUser(emailOrFormData: string | FormData, passwordParam?: string) {
     try {
         let email: string;
@@ -130,6 +134,7 @@ export async function logoutUser() {
 }
 
 export async function updateUser(userId: number, user: User) {
+    user.updatedAt = new Date();
     const updatedUser = await prisma.user.update({
         where: { id: userId },
         data: user

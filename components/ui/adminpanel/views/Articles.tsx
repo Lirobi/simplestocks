@@ -78,7 +78,7 @@ export default function Articles() {
                             </div>
                             <div className="flex flex-col gap-2">
                                 <h1>{article.title}</h1>
-                                <p>{article.content}</p>
+                                <p dangerouslySetInnerHTML={{ __html: article.content }}></p>
                             </div>
                         </div>
                     ))
