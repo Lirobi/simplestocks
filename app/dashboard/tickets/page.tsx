@@ -18,6 +18,7 @@ import { getTicketsByUserId, getTicketMessages, createTicketMessage } from "@/li
 function TicketPopup({ onClose }: { onClose: () => void }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [error, setError] = useState("");
 
     const [user, setUser] = useState<User | null>(null);
 
@@ -30,6 +31,16 @@ function TicketPopup({ onClose }: { onClose: () => void }) {
     }, []);
 
     const handleCreateTicket = async () => {
+        if (title.length === 0) {
+            setError("Title is required");
+            setTimeout(() => setError(""), 3000);
+            return;
+        }
+        if (description.length === 0) {
+            setError("Description is required");
+            setTimeout(() => setError(""), 3000);
+            return;
+        }
         await createTicket(title, description, user?.id);
         onClose();
     }
@@ -38,6 +49,7 @@ function TicketPopup({ onClose }: { onClose: () => void }) {
         <PopupWindowContainer title="New Ticket" onClose={onClose}>
             <BaseFormInput label="Title" onChange={(e) => setTitle(e.target.value)} />
             <BaseTextArea label="Tell us more about the issue" onChange={(e) => setDescription(e.target.value)} />
+            {error && <p className="text-red-500">{error}</p>}
             <div className="flex justify-end gap-2">
                 <ClickableText onClick={onClose} text="Cancel" />
                 <BaseButton onClick={handleCreateTicket}>Create</BaseButton>
