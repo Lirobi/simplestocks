@@ -161,12 +161,19 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
 
     // Function to fetch messages
     const fetchMessages = async () => {
+        let fetchedUsers: User[] = [];
         const fetchedMessages = await getTicketMessages(ticket.id);
         const messagesWithUser: TicketMessageWithUser[] = [];
 
         for (const message of fetchedMessages) {
-            const user = await getUser(message.userId.toString());
-            messagesWithUser.push({ ...message, user });
+            if (!fetchedUsers.some(user => user.id === message.userId)) {
+                const user = await getUser(message.userId.toString());
+                fetchedUsers.push(user);
+                messagesWithUser.push({ ...message, user });
+            } else {
+                const user = fetchedUsers.find(user => user.id === message.userId);
+                messagesWithUser.push({ ...message, user });
+            }
 
             // Update the last message ID
             if (message.id > lastMessageId) {
