@@ -34,7 +34,7 @@ export async function createTicketMessage(message: string, ticketId: number, use
             data: {
                 message,
                 ticketId,
-                userId
+                userId: parseInt(userId)
             }
         });
         return createdMessage;
