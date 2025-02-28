@@ -356,6 +356,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                                     </button>
                                 </div>
                             }
+
                             <div className="flex flex-col" onClick={() => { setLineClampDesc(!lineClampDesc) }}>
                                 <p className={`overflow-y-auto ${lineClampDesc ? "line-clamp-3" : "line-clamp-none"}`}>
                                     {ticket.description}
@@ -364,41 +365,41 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                                     {lineClampDesc === true ? "View more" : "View less"}
                                 </p>
                             </div>
-                            <div className="border-t border-line-light my-4 dark:border-line-dark w-full"></div>
-                            <div className="flex flex-col gap-2 w-full max-w-full">
-                                <h2 className="text-xl font-bold ">Messages:</h2>
-                                <div
-                                    ref={messagesContainerRef}
-                                    className="flex flex-col gap-2 max-h-[30vh] overflow-y-auto py-2"
-                                >
-                                    {messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()).map((message) => (
-                                        <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col max-w-[66%] text-wrap whitespace-normal dark:bg-backgroundSecondary-dark ${message.userId === user?.id ? "self-end" : "self-start"}`}>
-                                            <h3 className="text-lg font-semibold flex justify-between items-center gap-4">
-                                                <span className="flex items-center gap-2">
-                                                    <div className="h-6 w-6 rounded-full bg-primary flex justify-center items-center">
-                                                        <p className="text-sm font-bold">{message.user.firstName.charAt(0).toUpperCase() + message.user.lastName.charAt(0).toUpperCase()}</p>
-                                                    </div>
-                                                    {user?.id === message.userId ? "You" : message.user.firstName + " " + message.user.lastName}
-                                                </span>
-                                                <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span>
-                                            </h3>
-                                            <p className="text-wrap break-words">{message.message}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            {cooldownActive && <p className="text-red-500">Please slow down. You're sending messages too quickly.</p>}
-                            <div className="flex gap-2">
-                                <input type="text" placeholder="New message" className="w-full rounded-md p-2 shadow-md dark:bg-backgroundSecondary-dark" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        handleSendMessage();
-                                    }
-                                }} />
-                                <BaseButton className="w-fit shadow-md" onClick={handleSendMessage}>Send</BaseButton>
-                            </div>
-
-
                         </div>
+                        <div className="border-t border-line-light my-4 dark:border-line-dark w-full"></div>
+                        <div className="flex flex-col gap-2 w-full max-w-full">
+                            <h2 className="text-xl font-bold ">Messages:</h2>
+                            <div
+                                ref={messagesContainerRef}
+                                className="flex flex-col gap-2 max-h-[30vh] overflow-y-auto py-2"
+                            >
+                                {messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()).map((message) => (
+                                    <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col max-w-[66%] text-wrap whitespace-normal dark:bg-backgroundSecondary-dark ${message.userId === user?.id ? "self-end" : "self-start"}`}>
+                                        <h3 className="text-lg font-semibold flex justify-between items-center gap-4">
+                                            <span className="flex items-center gap-2">
+                                                <div className="h-6 w-6 rounded-full bg-primary flex justify-center items-center">
+                                                    <p className="text-sm font-bold">{message.user.firstName.charAt(0).toUpperCase() + message.user.lastName.charAt(0).toUpperCase()}</p>
+                                                </div>
+                                                {user?.id === message.userId ? "You" : message.user.firstName + " " + message.user.lastName}
+                                            </span>
+                                            <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span>
+                                        </h3>
+                                        <p className="text-wrap break-words">{message.message}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        {cooldownActive && <p className="text-red-500">Please slow down. You're sending messages too quickly.</p>}
+                        <div className="flex gap-2">
+                            <input type="text" placeholder="New message" className="w-full rounded-md p-2 shadow-md dark:bg-backgroundSecondary-dark" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSendMessage();
+                                }
+                            }} />
+                            <BaseButton className="w-fit shadow-md" onClick={handleSendMessage}>Send</BaseButton>
+                        </div>
+
+
                     </div>
                 )}
             </div>
