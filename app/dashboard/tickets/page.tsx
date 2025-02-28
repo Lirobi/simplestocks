@@ -13,7 +13,7 @@ import { Ticket, TicketMessage, Admins } from "@prisma/client";
 import { getTicketsByUserId, getTicketMessages, createTicketMessage } from "@/lib/actions/tickets";
 import { redirect, useSearchParams } from "next/navigation";
 import { createLog } from "@/lib/log/log";
-
+import ProfilePictureWithInitials from "@/components/ui/icons/ProfilePictureWithInitials";
 function TicketPopup({ onClose }: { onClose: () => void }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -318,9 +318,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center justify-between gap-2">
                                 <h2 className="flex items-center gap-2">
-                                    <div className="h-10 w-10 rounded-full bg-primary flex justify-center items-center">
-                                        <p className="text-lg font-bold">{ticketOwner?.firstName.charAt(0) + ticketOwner?.lastName.charAt(0)}</p>
-                                    </div>
+                                    <ProfilePictureWithInitials firstName={ticketOwner?.firstName} lastName={ticketOwner?.lastName} className="text-xl" />
                                     <p className="text-lg font-bold">{ticketOwner?.firstName + " " + ticketOwner?.lastName}</p>
                                 </h2>
                                 <div className="flex items-center gap-2">
@@ -377,9 +375,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                                     <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col max-w-[66%] text-wrap whitespace-normal dark:bg-backgroundSecondary-dark ${message.userId === user?.id ? "self-end" : "self-start"}`}>
                                         <h3 className="text-lg font-semibold flex justify-between items-center gap-4">
                                             <span className="flex items-center gap-2">
-                                                <div className="h-6 w-6 rounded-full bg-primary flex justify-center items-center">
-                                                    <p className="text-sm font-bold">{message.user.firstName.charAt(0).toUpperCase() + message.user.lastName.charAt(0).toUpperCase()}</p>
-                                                </div>
+                                                <ProfilePictureWithInitials firstName={message.user.firstName} lastName={message.user.lastName} className="w-6 h-6 text-sm" />
                                                 {user?.id === message.userId ? "You" : message.user.firstName + " " + message.user.lastName}
                                             </span>
                                             <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span>

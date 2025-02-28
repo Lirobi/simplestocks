@@ -4,7 +4,7 @@ import { getNewsArticles } from "@/lib/actions/news";
 import { getUsers } from "@/lib/actions/user";
 import { NewsArticle, User } from "@prisma/client";
 import { useEffect, useState } from "react";
-
+import ProfilePictureWithInitials from "@/components/ui/icons/ProfilePictureWithInitials";
 export default function Dashboard() {
     const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
     const [users, setUsers] = useState<Partial<User>[]>([]);
@@ -34,9 +34,7 @@ export default function Dashboard() {
                         <div key={article.id} className="flex flex-col gap-2">
                             <div className="flex flex-row justify-between items-center">
                                 <p className="font-bold flex gap-2 items-center text-2xl">
-                                    <div className="bg-primary rounded-full w-10 h-10 flex items-center justify-center">
-                                        <p className="text-white">{users.find((user) => user.id === article.userId)?.firstName.charAt(0) + users.find((user) => user.id === article.userId)?.lastName.charAt(0)}</p>
-                                    </div>
+                                    <ProfilePictureWithInitials firstName={users.find((user) => user.id === article.userId)?.firstName} lastName={users.find((user) => user.id === article.userId)?.lastName} />
                                     {users.find((user) => user.id === article.userId)?.firstName + " " + users.find((user) => user.id === article.userId)?.lastName}
                                 </p>
                                 <p className="text-sm bg-primary text-white p-2 rounded-md">Published {new Date(article.createdAt).toLocaleDateString() + " at " + new Date(article.createdAt).toLocaleTimeString()}</p>
