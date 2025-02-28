@@ -134,6 +134,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     const [lastMessageId, setLastMessageId] = useState<number>(0);
 
     const [ticketOwner, setTicketOwner] = useState<User | null>(null);
+    const [lineClampDesc, setLineClampDesc] = useState<boolean>(true);
 
     // Add a ref for the messages container
     const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -305,16 +306,34 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                         <p className="text-sm text-gray-500 font-semibold">{ticket.createdAt.toLocaleString()}</p>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                    <p className="font-bold">Description:</p>
-                    <p>{ticket.description}</p>
+                <div className={`flex flex-col gap-2 transition-all duration-500 rounded-md  bg-background-light ${lineClampDesc ? "" : " p-4  shadow-md scale-150 max-w-2xl  dark:bg-background-dark "} `}>
+                    {lineClampDesc ?
+
+                        <p className="font-bold">Description:</p>
+                        :
+                        <div className="flex justify-between">
+                            <p className="font-bold">Description:</p>
+                            <button onClick={() => { setLineClampDesc(!lineClampDesc) }}>
+                                <span className="text-3xl">&times;</span>
+                            </button>
+                        </div>
+                    }
+
+                    <div className="flex flex-col" onClick={() => { setLineClampDesc(!lineClampDesc) }}>
+                        <p className={`overflow-y-auto ${lineClampDesc ? "line-clamp-3" : "line-clamp-none"}`}>
+                            {ticket.description}
+                        </p>
+                        <p className="text-nowrap w-fit underline-offset-2 cursor-pointer opacity-90 hover:underline hover:opacity-100 transition-all duration-300" onClick={() => { setLineClampDesc(!lineClampDesc) }}>
+                            {lineClampDesc === true ? "View more" : "View less"}
+                        </p>
+                    </div>
                 </div>
                 <div className="border-t border-line-light my-4 dark:border-line-dark w-full"></div>
                 <div className="flex flex-col gap-2 w-full">
                     <h2 className="text-xl font-bold ">Messages:</h2>
                     <div
                         ref={messagesContainerRef}
-                        className="flex flex-col gap-2 max-h-[40vh] overflow-y-auto py-2"
+                        className="flex flex-col gap-2 max-h-[30vh] overflow-y-auto py-2"
                     >
                         {messages.map((message) => (
                             <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col ${message.userId === user?.id ? "self-end" : "self-start"}`}>
