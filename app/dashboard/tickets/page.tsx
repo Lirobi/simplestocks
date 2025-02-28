@@ -135,7 +135,9 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     const [lastMessage, setLastMessage] = useState<TicketMessageWithUser | null>(null);
     const [ticketOwner, setTicketOwner] = useState<User | null>(null);
     const [lineClampDesc, setLineClampDesc] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
+    const [adminsIds, setAdminsIds] = useState<number[]>([]);
     // Add a ref for the messages container
     const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -147,18 +149,24 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     };
 
     useEffect(() => {
-        const fetchUser = async () => {
+        setIsLoading(true);
+        const fetchData = async () => {
             const user = await getUser();
             setUser(user);
-        }
-        fetchUser();
-
-        const fetchTicketOwner = async () => {
             const ticketOwner = await getUser(ticket.userId.toString());
             setTicketOwner(ticketOwner);
+            const admins = await getAdmins();
+            setAdminsIds(admins.map((admin) => admin.userId));
+            setIsLoading(false);
         }
-        fetchTicketOwner();
+        fetchData();
+
+
+
+
     }, []);
+
+
 
     // Function to fetch messages
     const fetchMessages = async (count: number = 1000, skip: number = 0) => {
@@ -176,6 +184,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                 messagesWithUser.push({ ...message, user });
             }
 
+
             // Update the last message ID
             if (message.createdAt > lastMessage?.createdAt) {
                 setLastMessage(messagesWithUser[messagesWithUser.length - 1]);
@@ -183,7 +192,11 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
         }
 
         setMessages(messagesWithUser);
+
+        // Scroll to bottom when new messages arrive
+        setTimeout(scrollToBottom, 100);
     };
+
 
     useEffect(() => {
         // Initial fetch
@@ -213,11 +226,12 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
         return () => clearInterval(intervalId);
     }, [ticket.id, lastMessage?.createdAt]);
 
+
+
     // Add effect to scroll to bottom when messages change
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
-
 
 
     const handleSendMessage = async () => {
@@ -290,103 +304,103 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
         setStatus(status);
     }
 
-    const [adminsIds, setAdminsIds] = useState<number[]>([]);
-
-    useEffect(() => {
-        const fetchAdmins = async () => {
-            const admins = await getAdmins();
-            setAdminsIds(admins.map((admin) => admin.userId));
-        }
-        fetchAdmins();
-    }, []);
 
     return (
         <PopupWindowContainer title={`Ticket #${ticket.id}`} onClose={onClose}>
-            <div className="flex flex-col gap-2 p-4 max-h-[90vh] ">
-                <div className="flex flex-col gap-4">
-                    <div className="flex items-center justify-between gap-2">
-                        <h2 className="flex items-center gap-2">
-                            <div className="h-10 w-10 rounded-full bg-primary flex justify-center items-center">
-                                <p className="text-lg font-bold">{ticketOwner?.firstName.charAt(0) + ticketOwner?.lastName.charAt(0)}</p>
-                            </div>
-                            <p className="text-lg font-bold">{ticketOwner?.firstName + " " + ticketOwner?.lastName}</p>
-                        </h2>
-                        <div className="flex items-center gap-2">
-                            <p className="font-bold text-lg">Status:</p>
+            <div className="flex flex-col gap-2 p-4 max-h-[90vh] min-h-[70vh]">
+                {isLoading ? (
+                    <div className="h-full w-full flex flex-col gap-4 items-center justify-center">
+                        <div className="w-10 h-10 animate-spin rounded-full border-t-2 border-b-2 border-primary"></div>
+                        <p className="text-lg font-bold">Loading...</p>
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center justify-between gap-2">
+                                <h2 className="flex items-center gap-2">
+                                    <div className="h-10 w-10 rounded-full bg-primary flex justify-center items-center">
+                                        <p className="text-lg font-bold">{ticketOwner?.firstName.charAt(0) + ticketOwner?.lastName.charAt(0)}</p>
+                                    </div>
+                                    <p className="text-lg font-bold">{ticketOwner?.firstName + " " + ticketOwner?.lastName}</p>
+                                </h2>
+                                <div className="flex items-center gap-2">
+                                    <p className="font-bold text-lg">Status:</p>
 
-                            {adminsIds.includes(user?.id || 0) ? (
-                                <select className={`px-5 p-0.5 h-fit cursor-pointer rounded-md font-semibold ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`} defaultValue={status} onChange={(e) => handleChangeStatus(ticket.id, e.target.value)}>
-                                    <option value="open">Open</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="closed">Closed</option>
-                                </select>
-                            )
+                                    {adminsIds.includes(user?.id || 0) ? (
+                                        <select className={`px-5 p-0.5 h-fit cursor-pointer rounded-md font-semibold ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`} defaultValue={status} onChange={(e) => handleChangeStatus(ticket.id, e.target.value)}>
+                                            <option value="open">Open</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="closed">Closed</option>
+                                        </select>
+                                    )
+                                        :
+                                        <p className={`px-5 p-0.5 h-fit cursor-pointer rounded-md ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`}>{status}</p>
+                                    }
+                                </div>
+
+                            </div>
+                            <div className="flex justify-between gap-2">
+                                <h2 className="text-xl font-bold">Title: {ticket.title}</h2>
+                                <p className="text-sm text-gray-500 font-semibold">{ticket.createdAt.toLocaleString()}</p>
+                            </div>
+                        </div>
+                        <div className={`flex flex-col gap-2 transition-all duration-500 rounded-md  bg-background-light dark:bg-background-dark ${lineClampDesc ? "" : " p-4  shadow-md scale-150 max-w-2xl   "} `}>
+                            {lineClampDesc ?
+
+                                <p className="font-bold">Description:</p>
                                 :
-                                <p className={`px-5 p-0.5 h-fit cursor-pointer rounded-md ${status.toLowerCase() === "open" ? "bg-green-500" : status.toLowerCase() === "pending" ? "bg-yellow-500" : "bg-red-500"}`}>{status}</p>
+                                <div className="flex justify-between">
+                                    <p className="font-bold">Description:</p>
+                                    <button onClick={() => { setLineClampDesc(!lineClampDesc) }}>
+                                        <span className="text-3xl">&times;</span>
+                                    </button>
+                                </div>
                             }
-                        </div>
-
-                    </div>
-                    <div className="flex justify-between gap-2">
-                        <h2 className="text-xl font-bold">Title: {ticket.title}</h2>
-                        <p className="text-sm text-gray-500 font-semibold">{ticket.createdAt.toLocaleString()}</p>
-                    </div>
-                </div>
-                <div className={`flex flex-col gap-2 transition-all duration-500 rounded-md  bg-background-light dark:bg-background-dark ${lineClampDesc ? "" : " p-4  shadow-md scale-150 max-w-2xl   "} `}>
-                    {lineClampDesc ?
-
-                        <p className="font-bold">Description:</p>
-                        :
-                        <div className="flex justify-between">
-                            <p className="font-bold">Description:</p>
-                            <button onClick={() => { setLineClampDesc(!lineClampDesc) }}>
-                                <span className="text-3xl">&times;</span>
-                            </button>
-                        </div>
-                    }
-
-                    <div className="flex flex-col" onClick={() => { setLineClampDesc(!lineClampDesc) }}>
-                        <p className={`overflow-y-auto ${lineClampDesc ? "line-clamp-3" : "line-clamp-none"}`}>
-                            {ticket.description}
-                        </p>
-                        <p className="text-nowrap w-fit underline-offset-2 cursor-pointer opacity-90 hover:underline hover:opacity-100 transition-all duration-300" onClick={() => { setLineClampDesc(!lineClampDesc) }}>
-                            {lineClampDesc === true ? "View more" : "View less"}
-                        </p>
-                    </div>
-                </div>
-                <div className="border-t border-line-light my-4 dark:border-line-dark w-full"></div>
-                <div className="flex flex-col gap-2 w-full max-w-full">
-                    <h2 className="text-xl font-bold ">Messages:</h2>
-                    <div
-                        ref={messagesContainerRef}
-                        className="flex flex-col gap-2 max-h-[30vh] overflow-y-auto py-2"
-                    >
-                        {messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()).map((message) => (
-                            <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col max-w-[66%] text-wrap whitespace-normal dark:bg-backgroundSecondary-dark ${message.userId === user?.id ? "self-end" : "self-start"}`}>
-                                <h3 className="text-lg font-semibold flex justify-between items-center gap-4">
-                                    <span className="flex items-center gap-2">
-                                        <div className="h-6 w-6 rounded-full bg-primary flex justify-center items-center">
-                                            <p className="text-sm font-bold">{message.user.firstName.charAt(0).toUpperCase() + message.user.lastName.charAt(0).toUpperCase()}</p>
-                                        </div>
-                                        {user?.id === message.userId ? "You" : message.user.firstName + " " + message.user.lastName}
-                                    </span>
-                                    <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span>
-                                </h3>
-                                <p className="text-wrap break-words">{message.message}</p>
+                            <div className="flex flex-col" onClick={() => { setLineClampDesc(!lineClampDesc) }}>
+                                <p className={`overflow-y-auto ${lineClampDesc ? "line-clamp-3" : "line-clamp-none"}`}>
+                                    {ticket.description}
+                                </p>
+                                <p className="text-nowrap w-fit underline-offset-2 cursor-pointer opacity-90 hover:underline hover:opacity-100 transition-all duration-300" onClick={() => { setLineClampDesc(!lineClampDesc) }}>
+                                    {lineClampDesc === true ? "View more" : "View less"}
+                                </p>
                             </div>
-                        ))}
-                    </div>
-                </div>
-                {cooldownActive && <p className="text-red-500">Please slow down. You're sending messages too quickly.</p>}
-                <div className="flex gap-2">
-                    <input type="text" placeholder="New message" className="w-full rounded-md p-2 shadow-md dark:bg-backgroundSecondary-dark" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            handleSendMessage();
-                        }
-                    }} />
-                    <BaseButton className="w-fit shadow-md" onClick={handleSendMessage}>Send</BaseButton>
-                </div>
+                            <div className="border-t border-line-light my-4 dark:border-line-dark w-full"></div>
+                            <div className="flex flex-col gap-2 w-full max-w-full">
+                                <h2 className="text-xl font-bold ">Messages:</h2>
+                                <div
+                                    ref={messagesContainerRef}
+                                    className="flex flex-col gap-2 max-h-[30vh] overflow-y-auto py-2"
+                                >
+                                    {messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()).map((message) => (
+                                        <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col max-w-[66%] text-wrap whitespace-normal dark:bg-backgroundSecondary-dark ${message.userId === user?.id ? "self-end" : "self-start"}`}>
+                                            <h3 className="text-lg font-semibold flex justify-between items-center gap-4">
+                                                <span className="flex items-center gap-2">
+                                                    <div className="h-6 w-6 rounded-full bg-primary flex justify-center items-center">
+                                                        <p className="text-sm font-bold">{message.user.firstName.charAt(0).toUpperCase() + message.user.lastName.charAt(0).toUpperCase()}</p>
+                                                    </div>
+                                                    {user?.id === message.userId ? "You" : message.user.firstName + " " + message.user.lastName}
+                                                </span>
+                                                <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span>
+                                            </h3>
+                                            <p className="text-wrap break-words">{message.message}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            {cooldownActive && <p className="text-red-500">Please slow down. You're sending messages too quickly.</p>}
+                            <div className="flex gap-2">
+                                <input type="text" placeholder="New message" className="w-full rounded-md p-2 shadow-md dark:bg-backgroundSecondary-dark" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        handleSendMessage();
+                                    }
+                                }} />
+                                <BaseButton className="w-fit shadow-md" onClick={handleSendMessage}>Send</BaseButton>
+                            </div>
 
+
+                        </div>
+                    </div>
+                )}
             </div>
         </PopupWindowContainer >
     )
