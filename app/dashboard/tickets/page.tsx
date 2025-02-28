@@ -336,7 +336,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                         className="flex flex-col gap-2 max-h-[30vh] overflow-y-auto py-2"
                     >
                         {messages.map((message) => (
-                            <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col ${message.userId === user?.id ? "self-end" : "self-start"}`}>
+                            <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col dark:bg-backgroundSecondary-dark ${message.userId === user?.id ? "self-end" : "self-start"}`}>
                                 <h3 className="text-lg font-semibold">{user?.id === message.userId ? "You" : message.user.firstName + " " + message.user.lastName}   - <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span></h3>
                                 <p>{message.message}</p>
                             </div>
@@ -345,7 +345,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                 </div>
                 {cooldownActive && <p className="text-red-500">Please slow down. You're sending messages too quickly.</p>}
                 <div className="flex gap-2">
-                    <input type="text" placeholder="New message" className="w-full rounded-md p-2 shadow-md" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => {
+                    <input type="text" placeholder="New message" className="w-full rounded-md p-2 shadow-md dark:bg-backgroundSecondary-dark" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => {
                         if (e.key === "Enter") {
                             handleSendMessage();
                         }
@@ -353,9 +353,6 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                     <BaseButton className="w-fit shadow-md" onClick={handleSendMessage}>Send</BaseButton>
                 </div>
 
-            </div>
-            <div className="flex justify-end gap-2">
-                <ClickableText onClick={onClose} text="Close" />
             </div>
         </PopupWindowContainer >
     )
