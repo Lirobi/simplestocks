@@ -12,7 +12,7 @@ import { User } from "@/lib/types/User";
 import { Ticket, TicketMessage, Admins } from "@prisma/client";
 import { getTicketsByUserId, getTicketMessages, createTicketMessage } from "@/lib/actions/tickets";
 import { redirect, useSearchParams } from "next/navigation";
-
+import { createLog } from "@/lib/log/log";
 
 function TicketPopup({ onClose }: { onClose: () => void }) {
     const [title, setTitle] = useState("");
@@ -49,6 +49,7 @@ function TicketPopup({ onClose }: { onClose: () => void }) {
             return;
         }
         await createTicket(title, description, user?.id);
+        await createLog(user?.id || 0, "Ticket Created", `Ticket "${title}" created by ${user?.email}`);
         onClose();
         window.location.reload();
     }
@@ -131,8 +132,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     const [newMessage, setNewMessage] = useState("");
     const [messageTimestamps, setMessageTimestamps] = useState<Date[]>([]);
     const [cooldownActive, setCooldownActive] = useState(false);
-    const [lastMessageId, setLastMessageId] = useState<number>(0);
-
+    const [lastMessage, setLastMessage] = useState<TicketMessageWithUser | null>(null);
     const [ticketOwner, setTicketOwner] = useState<User | null>(null);
     const [lineClampDesc, setLineClampDesc] = useState<boolean>(true);
 
@@ -161,9 +161,9 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     }, []);
 
     // Function to fetch messages
-    const fetchMessages = async (count: number = 1000) => {
+    const fetchMessages = async (count: number = 1000, skip: number = 0) => {
         let fetchedUsers: User[] = [];
-        const fetchedMessages = await getTicketMessages(ticket.id, count, 0);
+        const fetchedMessages = await getTicketMessages(ticket.id, count, skip);
         const messagesWithUser: TicketMessageWithUser[] = [];
 
         for (const message of fetchedMessages) {
@@ -177,8 +177,8 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
             }
 
             // Update the last message ID
-            if (message.id > lastMessageId) {
-                setLastMessageId(message.id);
+            if (message.createdAt > lastMessage?.createdAt) {
+                setLastMessage(messagesWithUser[messagesWithUser.length - 1]);
             }
         }
 
@@ -187,21 +187,23 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
 
     useEffect(() => {
         // Initial fetch
-        fetchMessages(6); // Only fetch 6 messages initially for performance
+        fetchMessages(3); // Only fetch 6 messages initially for performance
 
         setTimeout(() => { // Fetch all messages after 2 seconds
-            fetchMessages();
+            fetchMessages(12);
+        }, 1000);
+        setTimeout(() => { // Fetch all messages after 2 seconds
+            fetchMessages(30);
         }, 2000);
-
         // Set up polling for new messages every 3 seconds
         const intervalId = setInterval(async () => {
-            const newMessages = await getTicketMessages(ticket.id, 1, messages.length);
+            const newMessages = await getTicketMessages(ticket.id, 1, 0);
 
             // Check if there are new messages
-            const hasNewMessages = newMessages.some(msg => msg.id > lastMessageId);
+            const hasNewMessages = newMessages.some(msg => msg.createdAt > lastMessage?.createdAt);
 
             if (hasNewMessages) {
-                fetchMessages();
+                fetchMessages(1000);
                 // Scroll to bottom when new messages arrive
                 setTimeout(scrollToBottom, 100);
             }
@@ -209,12 +211,14 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
 
         // Clean up interval on unmount
         return () => clearInterval(intervalId);
-    }, [ticket.id, lastMessageId]);
+    }, [ticket.id, lastMessage?.createdAt]);
 
     // Add effect to scroll to bottom when messages change
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+
 
     const handleSendMessage = async () => {
         if (newMessage.length === 0) return;
@@ -250,8 +254,8 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
             }]);
 
             // Update lastMessageId if needed
-            if (createdMessage.id > lastMessageId) {
-                setLastMessageId(createdMessage.id);
+            if (createdMessage.createdAt > lastMessage?.createdAt) {
+                setLastMessage({ ...createdMessage, user });
             }
         }
 
@@ -260,7 +264,29 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
     }
 
     const handleChangeStatus = async (id: number, status: string) => {
+        await createLog(user?.id || 0, "Ticket Status Changed", `Ticket #${id} status changed from ${status.toLowerCase()} to ${status.toLowerCase()}`);
         await updateTicket(id, { status });
+
+        const newMessage = `Status changed to ${status}`;
+
+        // Send the message
+        const createdMessage = await createTicketMessage(newMessage, ticket.id, user?.id.toString() || "");
+
+        // Immediately update UI with the new message
+        if (createdMessage && user) {
+            setMessages([...messages, {
+                ...createdMessage,
+                user: user
+            }]);
+
+            // Update lastMessageId if needed
+            if (createdMessage.createdAt > lastMessage?.createdAt) {
+                setLastMessage({ ...createdMessage, user });
+            }
+        }
+
+        setMessageTimestamps([...messageTimestamps, new Date()]);
+
         setStatus(status);
     }
 
@@ -329,14 +355,14 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                     </div>
                 </div>
                 <div className="border-t border-line-light my-4 dark:border-line-dark w-full"></div>
-                <div className="flex flex-col gap-2 w-full">
+                <div className="flex flex-col gap-2 w-full max-w-full">
                     <h2 className="text-xl font-bold ">Messages:</h2>
                     <div
                         ref={messagesContainerRef}
                         className="flex flex-col gap-2 max-h-[30vh] overflow-y-auto py-2"
                     >
-                        {messages.map((message) => (
-                            <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col dark:bg-backgroundSecondary-dark ${message.userId === user?.id ? "self-end" : "self-start"}`}>
+                        {messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()).map((message) => (
+                            <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col max-w-[66%] text-wrap whitespace-normal dark:bg-backgroundSecondary-dark ${message.userId === user?.id ? "self-end" : "self-start"}`}>
                                 <h3 className="text-lg font-semibold flex justify-between items-center gap-4">
                                     <span className="flex items-center gap-2">
                                         <div className="h-6 w-6 rounded-full bg-primary flex justify-center items-center">
@@ -346,7 +372,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                                     </span>
                                     <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span>
                                 </h3>
-                                <p>{message.message}</p>
+                                <p className="text-wrap break-words">{message.message}</p>
                             </div>
                         ))}
                     </div>

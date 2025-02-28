@@ -29,7 +29,7 @@ export async function deleteTicket(id: number) {
 }
 
 export async function getTicketMessages(ticketId: number, count: number, offset: number) {
-    return await prisma.ticketMessage.findMany({ where: { ticketId }, take: count, skip: offset });
+    return await prisma.ticketMessage.findMany({ where: { ticketId }, take: count, skip: offset, orderBy: { createdAt: "desc" } });
 }
 
 export async function createTicketMessage(message: string, ticketId: number, userId: string) {
