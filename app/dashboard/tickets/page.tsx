@@ -337,7 +337,15 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                     >
                         {messages.map((message) => (
                             <div key={message.id} className={`rounded-md p-2 shadow-md w-fit flex flex-col dark:bg-backgroundSecondary-dark ${message.userId === user?.id ? "self-end" : "self-start"}`}>
-                                <h3 className="text-lg font-semibold">{user?.id === message.userId ? "You" : message.user.firstName + " " + message.user.lastName}   - <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span></h3>
+                                <h3 className="text-lg font-semibold flex justify-between items-center gap-4">
+                                    <span className="flex items-center gap-2">
+                                        <div className="h-6 w-6 rounded-full bg-primary flex justify-center items-center">
+                                            <p className="text-sm font-bold">{message.user.firstName.charAt(0).toUpperCase() + message.user.lastName.charAt(0).toUpperCase()}</p>
+                                        </div>
+                                        {user?.id === message.userId ? "You" : message.user.firstName + " " + message.user.lastName}
+                                    </span>
+                                    <span className="text-sm text-gray-500">{message.createdAt.toLocaleString()}</span>
+                                </h3>
                                 <p>{message.message}</p>
                             </div>
                         ))}
