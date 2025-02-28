@@ -306,7 +306,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                         <p className="text-sm text-gray-500 font-semibold">{ticket.createdAt.toLocaleString()}</p>
                     </div>
                 </div>
-                <div className={`flex flex-col gap-2 transition-all duration-500 rounded-md  bg-background-light ${lineClampDesc ? "" : " p-4  shadow-md scale-150 max-w-2xl  dark:bg-background-dark "} `}>
+                <div className={`flex flex-col gap-2 transition-all duration-500 rounded-md  bg-background-light dark:bg-background-dark ${lineClampDesc ? "" : " p-4  shadow-md scale-150 max-w-2xl   "} `}>
                     {lineClampDesc ?
 
                         <p className="font-bold">Description:</p>
