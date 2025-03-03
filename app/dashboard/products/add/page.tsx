@@ -18,7 +18,7 @@ export default function AddProduct() {
 
     const [name, setName] = useState("");
     const [price, setPrice] = useState(0);
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
     const [error, setError] = useState("");
@@ -29,6 +29,7 @@ export default function AddProduct() {
         const user = await getUser();
         const categories = await getCategories(user.businessId);
         setCategories(categories);
+        setCategory(categories[0].id.toString());
     }
 
     useEffect(() => {
@@ -36,14 +37,23 @@ export default function AddProduct() {
     }, []);
 
     const handleAddProduct = async () => {
-        if (name === "" || price === 0 || quantity === 0 || description === "") {
-            setError("Please fill all the fields : " + name + " " + price + " " + quantity + " " + category + " " + description);
-            return;
-        }
-        const user = await getUser();
-        const product = await addProduct(name, price, quantity, category, description, user.businessId);
-        if (product) {
-            redirect("/dashboard/products");
+        if (name.length < 1 || name.length > 50 || price === null || quantity === 0 || description.length < 1 || description.length > 1000) {
+            if (name.length < 1) {
+                setError("Name must be between 1 and 50 characters");
+            } else if (price === null) {
+                setError("Price must be a number");
+            } else if (quantity === null) {
+                setError("Quantity must be greater than 0");
+            } else if (description.length < 1) {
+                setError("Description must be between 1 and 1000 characters");
+            }
+
+        } else {
+            const user = await getUser();
+            const product = await addProduct(name, price, quantity, category, description, user.businessId);
+            if (product) {
+                redirect("/dashboard/products");
+            }
         }
     }
 
@@ -68,8 +78,8 @@ export default function AddProduct() {
             <form className="w-full px-10">
                 <div className="flex w-full gap-4">
                     <BaseFormInput label="Name" name="name" type="text" className="w-full" placeholder="Enter product name" onChange={(e) => setName(e.target.value)} />
-                    <BaseNumberInput label="Price" name="price" className="max-w-fit" onChange={(e) => setPrice(parseInt(e.target.value))} />
-                    <BaseNumberInput label="Quantity" name="quantity" className="max-w-fit" onChange={(e) => setQuantity(parseInt(e.target.value))} />
+                    <BaseNumberInput label="Price" name="price" className="max-w-fit" value={price} onChange={(e) => setPrice(parseInt(e.target.value))} />
+                    <BaseNumberInput label="Quantity" name="quantity" className="max-w-fit" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} />
                     <BaseSelect label="Category" name="category" className="max-w-fit" options={categories.map((category) => ({ label: category.name, value: category.id.toString() }))} onChange={(e) => {
                         setCategory(e.target.value);
 

@@ -29,6 +29,17 @@ export default function BaseNumberInput({
     onKeyDown,
     focus = false
 }: BaseNumberInputProps) {
+
+    const invalidChars = ["-", "+", "e"];
+
+    const inputBox = document.getElementById(name) as HTMLInputElement;
+
+    inputBox?.addEventListener("keydown", (e) => {
+        if (invalidChars.includes(e.key.toLowerCase())) {
+            e.preventDefault();
+        }
+    });
+
     return (
         <div className="mb-4">
             <label
