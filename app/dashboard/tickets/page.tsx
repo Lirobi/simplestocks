@@ -356,7 +356,7 @@ function TicketDetails({ ticket, onClose }: { ticket: Ticket, onClose: () => voi
                             }
 
                             <div className="flex flex-col" onClick={() => { setLineClampDesc(!lineClampDesc) }}>
-                                <p className={`overflow-y-auto ${lineClampDesc ? "line-clamp-3" : "line-clamp-none"}`}>
+                                <p className={`overflow-y-clip ${lineClampDesc ? "line-clamp-3" : "line-clamp-none"}`}>
                                     {ticket.description}
                                 </p>
                                 <p className="text-nowrap w-fit underline-offset-2 cursor-pointer opacity-90 hover:underline hover:opacity-100 transition-all duration-300" onClick={() => { setLineClampDesc(!lineClampDesc) }}>
