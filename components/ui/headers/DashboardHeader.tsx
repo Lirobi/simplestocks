@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getAdmins } from "@/lib/actions/user";
+import PopupWindowContainer from "../popups/PopupWindowContainer";
+import BaseButton from "../buttons/BaseButton";
 interface DashboardHeaderProps {
     user: User;
 }
@@ -15,6 +17,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
     const menuRef = useRef<HTMLDivElement>(null);
     const [businessName, setBusinessName] = useState<string | null>(null);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [showPreferencesUpcomingUpdatePopup, setShowPreferencesUpcomingUpdatePopup] = useState(false);
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -70,7 +73,8 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
 
     const menuItems = [
         { label: "Tickets", onClick: () => router.push("/dashboard/tickets") },
-        { label: "Switch Theme", onClick: () => handleSwitchTheme() },
+        { label: "Settings (Coming Soon)", onclick: () => { setShowPreferencesUpcomingUpdatePopup(true) } }
+        /* { label: "Switch Theme", onClick: () => handleSwitchTheme() },*/
     ];
 
     if (isAdmin) {
@@ -90,12 +94,12 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
                         <path d="M7 17l5 5 5-5" />
                     </svg>
                 </div>
-                <div className={`absolute  right-0 mt-2 w-48 dark:bg-background-dark bg-background-light text-foreground rounded-lg shadow-lg py-2 transition-all duration-300 origin-top ${isMenuOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}`}>
+                <div className={`absolute  right-0 mt-2 w-48 min-w-fit dark:bg-background-dark bg-background-light text-foreground rounded-lg shadow-lg py-2 transition-all duration-300 origin-top ${isMenuOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}`}>
                     {menuItems.map((item, index) => (
                         <div
                             key={index}
                             onClick={item.onClick}
-                            className="px-4 py-2 dark:hover:bg-backgroundTertiary-dark hover:bg-backgroundTertiary-light cursor-pointer transition-all duration-300"
+                            className="text-nowrap px-4 py-2 dark:hover:bg-backgroundTertiary-dark hover:bg-backgroundTertiary-light cursor-pointer transition-all duration-300"
                         >
                             {item.label}
                         </div>
