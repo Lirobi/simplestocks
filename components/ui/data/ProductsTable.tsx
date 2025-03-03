@@ -12,6 +12,8 @@ import BaseButton from "../buttons/BaseButton";
 import { getUser } from "@/app/login/actions";
 import SearchBar from "../inputs/SearchBar";
 import TableContainer from "../containers/TableContainer";
+import PopupWindowContainer from "../popups/PopupWindowContainer";
+import ClickableText from "@/components/ui/buttons/ClickableText";
 
 export default function ProductsTable() {
     const [defaultProducts, setDefaultProducts] = useState<Product[]>([]);
@@ -31,6 +33,7 @@ export default function ProductsTable() {
     const [showNumberPopup, setShowNumberPopup] = useState(false);
     const [numberPopupMessage, setNumberPopupMessage] = useState("");
     const [numberPopupSign, setNumberPopupSign] = useState<"+" | "-">("+");
+    const [showConfirmDeletePopup, setShowConfirmDeletePopup] = useState(false);
 
 
     const handleProductsRowContextMenu = (e: React.MouseEvent<HTMLTableCellElement> | React.MouseEvent<HTMLTableRowElement>, product: Product) => {
@@ -207,13 +210,36 @@ export default function ProductsTable() {
                                 redirect(`/dashboard/products/edit/${selectedProduct.id}`)
                             }
                         },
-                        { label: "Delete", onClick: () => handleDeleteProduct(selectedProduct.id) }
+                        {
+                            label: "Delete", onClick: () => {
+                                setShowConfirmDeletePopup(true);
+                            }
+                        }
                     ]}
                     coordinates={contextMenuPosition}
                 />
             )}
             {toast && <BaseToast message={toast.message} type={toast.type} />}
             {showNumberPopup && <NumberPopup message={numberPopupMessage} onClose={() => setShowNumberPopup(false)} setNumber={setQuantity} onConfirm={() => handleChangeProductQuantity()} />}
+            {showConfirmDeletePopup &&
+                <PopupWindowContainer
+                    title="Delete Product"
+                    onClose={() => setShowConfirmDeletePopup(false)}
+                    className="max-w-fit"
+                >
+                    <div className="flex flex-col gap-5">
+
+                        <p className="pr-5">Are you sure you want to delete <span className="font-bold">{selectedProduct?.name}</span>?</p>
+                        <div className="flex flex-row gap-5 justify-end">
+                            <ClickableText onClick={() => setShowConfirmDeletePopup(false)} text="Cancel" />
+                            <BaseButton onClick={() => {
+                                handleDeleteProduct(selectedProduct.id);
+                                setShowConfirmDeletePopup(false);
+                            }}>Delete</BaseButton>
+                        </div>
+                    </div>
+                </PopupWindowContainer>
+            }
             <table className="w-full h-fit">
                 <thead className="top-0">
                     <tr>
