@@ -26,7 +26,7 @@ export default function Home() {
           <h1 className="text-5xl font-extrabold tracking-tight cursor-default text-black">Stop losing time managing your&nbsp;
             <span className="relative">
               stocks
-              <p className="text-lg absolute font-medium -bottom-4 -right-10 -rotate-[20deg] self-end font-handlee text-primary">easily 🙂</p></span>
+              {/*<p className="text-lg absolute font-medium -bottom-4 -right-10 -rotate-[20deg] self-end font-handlee text-primary">easily 🙂</p></span>*/}</span>
           </h1>
         </div>
         <div className="flex flex-col p-2 mt-6 cursor-default">
