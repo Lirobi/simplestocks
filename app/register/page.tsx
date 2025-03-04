@@ -11,7 +11,7 @@ import { Invite } from "@prisma/client";
 import { getInvite } from "@/lib/invites/invites";
 import { redirect } from "next/navigation";
 import { Suspense } from 'react'
-import Loading from '@/app/Loading'
+import Loading from '@/components/ui/icons/Loading'
 import { loginUser } from "../login/actions";
 
 // Create a client component wrapper

@@ -13,9 +13,9 @@ export default function Home() {
           SimpleStocks
         </div>
         <div className="flex self-center gap-4 w-1/3 font-bold text-xl justify-center items-center bg-white rounded-md text-black">
-          <Link className="animated-underline" href="/login">Pricing</Link>
-          <Link className="animated-underline" href="/register">FAQ</Link>
-          <Link className="animated-underline" href="/register">Reviews</Link>
+          <Link className="animated-underline" href="/">Pricing</Link>
+          <Link className="animated-underline" href="/">FAQ</Link>
+          <Link className="animated-underline" href="/">Reviews</Link>
         </div>
         <div className="w-1/3 flex justify-end">
           <BaseButton onClick={() => router.push("/login")} className="transition-transform duration-300 hover:scale-105">Log in</BaseButton>

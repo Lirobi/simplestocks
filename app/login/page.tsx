@@ -4,15 +4,18 @@ import { loginUser } from "./actions";
 import { redirect } from "next/navigation";
 import { getUser } from "./actions";
 import { useState, useEffect } from "react";
-
+import Loading from "@/components/ui/icons/Loading";
 export default function Login() {
 
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const isLoggedIn = async () => {
             const user = await getUser();
             if (user) {
                 redirect("/dashboard");
+            } else {
+                setIsLoading(false);
             }
         }
         isLoggedIn();
@@ -32,8 +35,14 @@ export default function Login() {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
-            <div className="flex flex-col gap-4 bg-gray-100 p-4 rounded-md justify-center items-center scale-125">
-                <AuthenticateForm onSubmit={handleSubmit} error={error} />
+            <div className="flex flex-col gap-4 p-4 rounded-md justify-center items-center scale-125">
+                {
+                    isLoading ? (
+                        <Loading />
+                    ) : (
+                        <AuthenticateForm onSubmit={handleSubmit} error={error} />
+                    )
+                }
             </div>
         </div>
     );
