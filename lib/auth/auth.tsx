@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
 import { compare } from 'bcrypt';
-import { redirect } from 'next/navigation';
 import { createLog } from '@/lib/log/log';
 
 // Updated JWT secret key handling
@@ -12,18 +11,26 @@ if (!SECRET_KEY) {
 
 export async function verifyToken(token: string) {
     try {
+        let decoded = null;
         // Verify the token using the secret key
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const user = await prisma.user.findUnique({
-            where: { id: parseInt(decoded.userId) }
-        });
-        return user; // Return the decoded payload (e.g., user data)
+        try {
+            decoded = jwt.verify(token, SECRET_KEY);
+        } catch (error) {
+            invalidateToken(token);
+            return null;
+        }
+        if (decoded) {
+            const user = await prisma.user.findUnique({
+                where: { id: parseInt(decoded.userId) }
+            });
+            return user; // Return the decoded payload (e.g., user data)
+        } else {
+            return null;
+        }
     } catch (error) {
         console.error('Token verification failed:', error);
-        if (error instanceof jwt.JsonWebTokenError) {
-            redirect('/login');
-        }
-        return null; // Return null if the token is invalid
+        invalidateToken(token);
+        return null
     }
 }
 

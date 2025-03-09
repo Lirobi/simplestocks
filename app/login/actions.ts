@@ -105,11 +105,15 @@ export async function getUser(): Promise<User | null> {
     const token = cookieStore.get("token");
     if (token) {
         const user = await verifyToken(token.value);
-        return {
-            ...user,
-            updatedAt: new Date(),
-            business: user.businessId || null,
-        } as User;
+        if (user) {
+            return {
+                ...user,
+                updatedAt: new Date(),
+                business: user.businessId || null,
+            } as User;
+        } else {
+            return null;
+        }
     }
     return null;
 }
